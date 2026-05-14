@@ -78,6 +78,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .tab-btn[data-card="hazard-nature"].active{background:linear-gradient(135deg,#2E7D32,#388E3C);color:#fff;border-color:transparent;}
 .tab-btn[data-card="hazard-hazmat"].active{background:linear-gradient(135deg,#BF360C,#D84315);color:#fff;border-color:transparent;}
 .tab-btn[data-card="readiness-check"].active{background:linear-gradient(135deg,#1B5E20,#2E7D32);color:#fff;border-color:transparent;}
+.tab-btn[data-card="hazard-human"].active{background:linear-gradient(135deg,#7B1FA2,#9C27B0);color:#fff;border-color:transparent;}
+.tab-btn[data-card="hazard-tech"].active{background:linear-gradient(135deg,#1565C0,#1976D2);color:#fff;border-color:transparent;}
+.tab-btn[data-card="hazard-nature"].active{background:linear-gradient(135deg,#2E7D32,#388E3C);color:#fff;border-color:transparent;}
+.tab-btn[data-card="hazard-hazmat"].active{background:linear-gradient(135deg,#BF360C,#D84315);color:#fff;border-color:transparent;}
 
 /* ===== CARD PANEL ===== */
 .card-panel{display:none;}
@@ -268,13 +272,23 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   .settings-overlay{display:none!important;}
   .top-bar{display:none!important;}
   .tab-nav{display:none!important;}
+  .card-panel{display:none!important;}
+  .card-panel.active{display:block!important;}
+  #panel-home{display:none!important;}
+  .a4-page{width:297mm;min-height:210mm;box-shadow:none;border-radius:0;margin:0;}
+  .a4-header,.a4-title-bar,.a4-footer,.total-row,.t-black,.t-red,.t-yellow,.t-green,.triage-box{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .form-section{display:none!important;}
+  body::before{display:none;}
+  .no-print{display:none!important;}
+  .settings-overlay{display:none!important;}
+  .top-bar{display:none!important;}
+  .tab-nav{display:none!important;}
   /* Hide ALL panels, then show only the active one */
   .card-panel{display:none!important;}
   .card-panel.active{display:block!important;}
   /* Home panel must not appear in print */
   #panel-home{display:none!important;}
   .a4-page{width:297mm;min-height:210mm;box-shadow:none;border-radius:0;margin:0;}
-  @page{size:A4 landscape;margin:0;}
   .a4-header,.a4-title-bar,.a4-footer,.total-row,.t-black,.t-red,.t-yellow,.t-green,.triage-box{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   /* Hide form section in print, show only the report */
   .form-section{display:none!important;}
@@ -310,7 +324,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <button class="tab-btn"        data-card="hazard-tech"   onclick="switchCard('hazard-tech')"  style="">💻 تكنولوجية</button>
   <button class="tab-btn"        data-card="hazard-nature" onclick="switchCard('hazard-nature')" style="">🌿 طبيعية</button>
   <button class="tab-btn"        data-card="hazard-hazmat" onclick="switchCard('hazard-hazmat')" style="">☣️ مواد خطرة</button>
-  <button class="tab-btn"        data-card="readiness-check" onclick="switchCard('readiness-check')">✅ تحقق التأهب</button>
 </div>
 
 <!-- ================================================================
@@ -318,473 +331,376 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 ================================================================ -->
 <div id="panel-home" class="card-panel home-panel active">
 <style>
-/* ══ HOME DASHBOARD ══ */
-.hd-wrap{display:flex;height:100vh;overflow:hidden;font-family:'Cairo',sans-serif;direction:rtl;}
+/* ══ HOME PAGE — New Layout ══ */
+.hp-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #001828 0%, #002D48 40%, #003D5C 70%, #004E72 100%);
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+  position: relative;
+  overflow: hidden;
+}
+/* Background circles */
+.hp-wrap::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: -120px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: rgba(0,174,239,0.07);
+  pointer-events: none;
+}
+.hp-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(0,120,168,0.08);
+  pointer-events: none;
+}
 
-/* Sidebar */
-.hd-sidebar{width:220px;flex-shrink:0;background:linear-gradient(180deg,#0A1628 0%,#0D2140 60%,#0A1628 100%);display:flex;flex-direction:column;overflow-y:auto;}
-.hd-sb-brand{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,0.07);}
-.hd-sb-logo{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
-.hd-sb-logo img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(0,174,239,0.4));}
-.hd-sb-org{color:#fff;font-size:12px;font-weight:800;line-height:1.3;}
-.hd-sb-sub{color:rgba(255,255,255,0.45);font-size:9px;font-weight:600;margin-top:2px;}
-.hd-sb-section{padding:10px 16px 4px;color:rgba(255,255,255,0.3);font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;}
-.hd-sb-nav{list-style:none;padding:0 10px;margin:0 0 8px;}
-.hd-sb-nav li{margin-bottom:2px;}
-.hd-sb-nav li a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;}
-.hd-sb-nav li a:hover{background:rgba(255,255,255,0.07);color:#fff;}
-.hd-sb-nav li.active a{background:linear-gradient(135deg,#0078A8,#00AEEF);color:#fff;box-shadow:0 4px 14px rgba(0,174,239,0.3);}
-.hd-sb-nav li .sb-badge{background:#00AEEF;color:#fff;font-size:9px;font-weight:800;padding:1px 6px;border-radius:10px;margin-right:auto;}
-.hd-sb-nav li .sb-badge.new{background:#22c55e;}
-.hd-sb-icon{width:16px;height:16px;flex-shrink:0;opacity:0.8;}
-.hd-sb-nav li.active a .hd-sb-icon{opacity:1;}
+/* ── Header ── */
+.hp-header {
+  padding: 28px 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  border-bottom: 1px solid rgba(0,174,239,0.2);
+  position: relative; z-index: 1;
+}
+.hp-logo-ring {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 2.5px solid rgba(0,174,239,0.5);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+.hp-logo-ring img { width: 60px; height: 60px; object-fit: contain; }
+.hp-org { text-align: right; }
+.hp-org-main { color: #fff; font-size: 24px; font-weight: 900; line-height: 1.2; }
+.hp-org-sub  { color: rgba(0,174,239,0.8); font-size: 12px; font-weight: 700; margin-top: 3px; }
 
-/* Main content */
-.hd-main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F1F5F9;}
+/* ── Body ── */
+.hp-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 60px;
+  gap: 28px;
+  position: relative; z-index: 1;
+}
 
-/* Top bar */
-.hd-topbar{background:#fff;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E2E8F0;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-.hd-topbar-title{font-size:16px;font-weight:800;color:#0F172A;}
-.hd-topbar-right{display:flex;align-items:center;gap:14px;}
-.hd-status-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;margin-left:6px;box-shadow:0 0 0 2px rgba(34,197,94,0.25);}
-.hd-status-txt{font-size:11px;font-weight:600;color:#475569;}
-.hd-time{font-size:11px;font-weight:700;color:#64748B;background:#F8FAFC;padding:4px 10px;border-radius:6px;border:1px solid #E2E8F0;}
-.hd-topbar-btn{background:linear-gradient(135deg,#005B82,#00AEEF);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;}
-.hd-topbar-btn:hover{opacity:0.9;transform:translateY(-1px);}
-.hd-topbar-btn-ghost{background:transparent;color:#475569;border:1.5px solid #E2E8F0;border-radius:8px;padding:6px 14px;font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;}
-.hd-topbar-btn-ghost:hover{background:#F8FAFC;border-color:#CBD5E1;}
+/* ── 3 Category buttons ── */
+.hp-cats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 900px;
+}
+.hp-cat-btn {
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(0,174,239,0.25);
+  border-radius: 20px;
+  padding: 28px 20px 24px;
+  cursor: pointer;
+  transition: all .3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.hp-cat-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,174,239,0.08), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.hp-cat-btn:hover { 
+  border-color: #00AEEF;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,174,239,0.2);
+}
+.hp-cat-btn:hover::before { opacity: 1; }
+.hp-cat-btn.hp-active {
+  border-color: #00AEEF;
+  background: rgba(0,174,239,0.12);
+  box-shadow: 0 0 0 3px rgba(0,174,239,0.2), 0 16px 40px rgba(0,174,239,0.2);
+}
+.hp-cat-icon {
+  width: 64px; height: 64px;
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  position: relative; z-index: 1;
+}
+.hp-cat-name {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 900;
+  text-align: center;
+  position: relative; z-index: 1;
+}
+.hp-cat-count {
+  color: rgba(0,174,239,0.8);
+  font-size: 11px;
+  font-weight: 700;
+  position: relative; z-index: 1;
+}
 
-/* Scrollable content */
-.hd-content{flex:1;overflow-y:auto;padding:20px 24px 24px;}
+/* ── Sub-cards area ── */
+.hp-sub-area {
+  width: 100%;
+  max-width: 900px;
+  display: none;
+}
+.hp-sub-area.hp-sub-vis { display: block; }
 
-/* Stats row */
-.hd-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-.hd-stat{background:#fff;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;border:1px solid #E2E8F0;box-shadow:0 1px 4px rgba(0,0,0,0.04);cursor:default;}
-.hd-stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.hd-stat-icon svg{width:22px;height:22px;}
-.hd-stat-lbl{font-size:10px;font-weight:700;color:#64748B;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px;}
-.hd-stat-val{font-size:22px;font-weight:900;color:#0F172A;line-height:1;}
-.hd-stat-sub{font-size:9px;color:#94A3B8;margin-top:2px;font-weight:600;}
+.hp-sub-title {
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.hp-sub-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.hp-sub-card {
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 16px 14px;
+  cursor: pointer;
+  transition: all .22s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.hp-sub-card:hover {
+  background: rgba(0,174,239,0.15);
+  border-color: rgba(0,174,239,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,174,239,0.15);
+}
+.hp-sub-card-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.hp-sub-card-name {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.hp-sub-card-code {
+  color: rgba(255,255,255,0.4);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
 
-/* Section header */
-.hd-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.hd-section-title{font-size:15px;font-weight:800;color:#0F172A;display:flex;align-items:center;gap:8px;}
-.hd-section-sub{font-size:11px;color:#64748B;font-weight:600;margin-top:2px;}
-.hd-section-badge{background:#EFF6FF;color:#1D4ED8;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;border:1px solid #BFDBFE;}
-
-/* Report cards grid */
-.hd-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
-.hd-card{background:#fff;border-radius:14px;padding:0;border:1px solid #E2E8F0;box-shadow:0 1px 4px rgba(0,0,0,0.05);cursor:pointer;transition:all .25s;overflow:hidden;display:flex;flex-direction:column;}
-.hd-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.1);transform:translateY(-3px);border-color:transparent;}
-.hd-card-accent{height:4px;width:100%;}
-.hd-card-body{padding:16px 16px 14px;flex:1;display:flex;flex-direction:column;}
-.hd-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
-.hd-card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;}
-.hd-card-icon svg{width:24px;height:24px;}
-.hd-card-tag{font-size:9px;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;padding:3px 8px;border-radius:6px;}
-.hd-card-name{font-size:15px;font-weight:800;color:#0F172A;margin-bottom:5px;line-height:1.3;}
-.hd-card-desc{font-size:11px;color:#64748B;font-weight:600;line-height:1.6;flex:1;}
-
-/* System info bar */
-.hd-sysbar{background:#fff;border-radius:12px;padding:12px 20px;border:1px solid #E2E8F0;display:flex;align-items:center;gap:20px;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-.hd-sys-item{display:flex;align-items:center;gap:8px;font-size:11px;color:#475569;font-weight:600;}
-.hd-sys-item strong{color:#0F172A;}
-.hd-sys-sep{width:1px;height:20px;background:#E2E8F0;}
+/* ── Footer ── */
+.hp-footer {
+  padding: 14px 40px;
+  border-top: 1px solid rgba(0,174,239,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative; z-index: 1;
+}
+.hp-footer-left { color: rgba(255,255,255,0.35); font-size: 10px; font-weight: 600; }
+.hp-footer-right { color: rgba(0,174,239,0.6); font-size: 10px; font-weight: 700; }
+.hp-time-badge {
+  background: rgba(0,174,239,0.1);
+  border: 1px solid rgba(0,174,239,0.25);
+  border-radius: 20px;
+  padding: 4px 14px;
+  color: rgba(255,255,255,0.6);
+  font-size: 11px;
+  font-weight: 700;
+}
 </style>
 
-<div class="hd-wrap">
-  <!-- ══ SIDEBAR ══ -->
-  <div class="hd-sidebar">
-    <div class="hd-sb-brand">
-      <div class="hd-sb-logo">
-        <img src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
-        <div>
-          <div class="hd-sb-org">تجمع حائل الصحي</div>
-          <div class="hd-sb-sub">مركز إدارة الأزمات</div>
-        </div>
-      </div>
+<div class="hp-wrap">
+
+  <!-- Header -->
+  <div class="hp-header">
+    <div class="hp-logo-ring">
+      <img src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
     </div>
-
-    <div class="hd-sb-section">الرئيسية</div>
-    <ul class="hd-sb-nav">
-      <li class="active">
-        <a onclick="void(0)">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-          الرئيسية
-        </a>
-      </li>
-    </ul>
-
-    <div class="hd-sb-section">البطاقات</div>
-    <ul class="hd-sb-nav">
-      <li>
-        <a onclick="switchCard('readiness')">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          بطاقة الجاهزية
-          <span class="sb-badge new">جاهز</span>
-        </a>
-      </li>
-      <li>
-        <a onclick="switchCard('electricity')">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          انقطاع الكهرباء
-        </a>
-      </li>
-      <li>
-        <a onclick="switchCard('oxygen')">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1M4.22 4.22l.707.707m12.728 12.728l.707.707M1 12h2m18 0h2M4.22 19.778l.707-.707M18.95 5.636l.707-.707"/></svg>
-          انقطاع الأكسجين
-        </a>
-      </li>
-      <li>
-        <a onclick="switchCard('fire')">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
-          حادثة حريق
-        </a>
-      </li>
-      <li>
-        <a onclick="switchCard('injuries')">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-          الإصابات الجماعية
-        </a>
-      </li>
-      <li>
-        <a onclick="switchCard('hypothesis')">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          بطاقة الفرضية
-        </a>
-      </li>
-    </ul>
-
-    <div class="hd-sb-section">الإعدادات</div>
-    <ul class="hd-sb-nav">
-      <li>
-        <a onclick="openSettings()">
-          <svg class="hd-sb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          الإعدادات
-          <span class="sb-badge" id="sb-settings-count">0</span>
-        </a>
-      </li>
-    </ul>
+    <div class="hp-org">
+      <div class="hp-org-main">تجمع حائل الصحي</div>
+      <div class="hp-org-sub">مركز إدارة الأزمات والكوارث الصحية — Hail Health Cluster</div>
+    </div>
   </div>
 
-  <!-- ══ MAIN CONTENT ══ -->
-  <div class="hd-main">
-    <!-- Top bar -->
-    <div class="hd-topbar">
-      <div class="hd-topbar-title">لوحة تحكم البطاقات</div>
-      <div class="hd-topbar-right">
-        <span class="hd-status-txt"><span class="hd-status-dot"></span>النظام يعمل</span>
-        <div class="hd-time" id="hd-clock">—</div>
-        <button class="hd-topbar-btn-ghost" onclick="openSettings()">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-          مسح البيانات
-        </button>
-        <button class="hd-topbar-btn" onclick="alert('لطباعة تقرير، يرجى الانتقال إلى التقرير المطلوب أولاً ثم الضغط على زر الطباعة.')">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          طباعة A4
-        </button>
+  <!-- Body -->
+  <div class="hp-body">
+
+    <!-- 3 Main Category Buttons -->
+    <div class="hp-cats">
+
+      <!-- إدارة الاستعداد -->
+      <div class="hp-cat-btn" id="hp-cat-readiness" onclick="hpSelectCat('readiness')">
+        <div class="hp-cat-icon" style="background:rgba(0,174,239,0.15);border:1.5px solid rgba(0,174,239,0.3);">🛡️</div>
+        <div class="hp-cat-name">إدارة الاستعداد</div>
+        <div class="hp-cat-count">2 تقارير</div>
+      </div>
+
+      <!-- إدارة العمليات -->
+      <div class="hp-cat-btn" id="hp-cat-operations" onclick="hpSelectCat('operations')">
+        <div class="hp-cat-icon" style="background:rgba(239,68,68,0.12);border:1.5px solid rgba(239,68,68,0.25);">⚡</div>
+        <div class="hp-cat-name">إدارة العمليات</div>
+        <div class="hp-cat-count">10 تقارير</div>
+      </div>
+
+      <!-- الإحصائيات -->
+      <div class="hp-cat-btn" id="hp-cat-stats" onclick="hpSelectCat('stats')">
+        <div class="hp-cat-icon" style="background:rgba(34,197,94,0.12);border:1.5px solid rgba(34,197,94,0.25);">📊</div>
+        <div class="hp-cat-name">الإحصائيات</div>
+        <div class="hp-cat-count">قريباً</div>
       </div>
     </div>
 
-    <!-- Scrollable content -->
-    <div class="hd-content">
-
-      <!-- Stats -->
-      <div class="hd-stats">
-        <div class="hd-stat">
-          <div class="hd-stat-icon" style="background:#EFF6FF;">
-            <svg fill="none" stroke="#1D4ED8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          </div>
-          <div>
-            <div class="hd-stat-lbl">أنواع البطاقات</div>
-            <div class="hd-stat-val">6</div>
-            <div class="hd-stat-sub">بطاقة تقريرية</div>
-          </div>
+    <!-- Sub-cards: إدارة الاستعداد -->
+    <div class="hp-sub-area" id="hp-sub-readiness">
+      <div class="hp-sub-title">▸ إدارة الاستعداد</div>
+      <div class="hp-sub-grid" style="grid-template-columns:repeat(2,1fr);max-width:420px;margin:0 auto;">
+        <div class="hp-sub-card" onclick="switchCard('readiness')">
+          <div class="hp-sub-card-icon" style="background:rgba(0,174,239,0.15);">📋</div>
+          <div class="hp-sub-card-name">بطاقة الاستعداد</div>
+          <div class="hp-sub-card-code">READINESS</div>
         </div>
-        <div class="hd-stat">
-          <div class="hd-stat-icon" style="background:#F0FDF4;">
-            <svg fill="none" stroke="#16A34A" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          </div>
-          <div>
-            <div class="hd-stat-lbl">صيغة الطباعة</div>
-            <div class="hd-stat-val">A4</div>
-            <div class="hd-stat-sub">جاهز للطباعة</div>
-          </div>
-        </div>
-        <div class="hd-stat">
-          <div class="hd-stat-icon" style="background:#FFF7ED;">
-            <svg fill="none" stroke="#EA580C" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-          </div>
-          <div>
-            <div class="hd-stat-lbl">قائمة للتخصيص</div>
-            <div class="hd-stat-val">13</div>
-            <div class="hd-stat-sub">عنصر قابل للتعديل</div>
-          </div>
-        </div>
-        <div class="hd-stat">
-          <div class="hd-stat-icon" style="background:#FDF4FF;">
-            <svg fill="none" stroke="#9333EA" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
-          </div>
-          <div>
-            <div class="hd-stat-lbl">واجهة عربية كاملة</div>
-            <div class="hd-stat-val">RTL</div>
-            <div class="hd-stat-sub">دعم كامل للعربية</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('hypothesis')">
+          <div class="hp-sub-card-icon" style="background:rgba(139,92,246,0.15);">🔬</div>
+          <div class="hp-sub-card-name">تقييم فرضية</div>
+          <div class="hp-sub-card-code">HYPOTHESIS</div>
         </div>
       </div>
+    </div>
 
-      <!-- Cards section -->
-      <div class="hd-section-hdr">
-        <div>
-          <div class="hd-section-title">
-            <svg width="18" height="18" fill="none" stroke="#0078A8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            البطاقات التقريرية
-          </div>
-          <div class="hd-section-sub">اختر نوع البطاقة المناسبة للحادثة لبدء إعداد التقرير</div>
+    <!-- Sub-cards: إدارة العمليات -->
+    <div class="hp-sub-area" id="hp-sub-operations">
+      <div class="hp-sub-title">▸ إدارة العمليات</div>
+      <div class="hp-sub-grid">
+        <div class="hp-sub-card" onclick="switchCard('electricity')">
+          <div class="hp-sub-card-icon" style="background:rgba(245,158,11,0.15);">⚡</div>
+          <div class="hp-sub-card-name">انقطاع كهرباء</div>
+          <div class="hp-sub-card-code">CODE BROWN</div>
         </div>
-        <span class="hd-section-badge">11 نوع</span>
-      </div>
-
-      <!-- ══ GROUP 1: الاستعداد ══ -->
-      <div style="margin-bottom:6px;display:flex;align-items:center;gap:10px;">
-        <div style="background:linear-gradient(135deg,#003D5C,#0078A8);color:#fff;font-size:11px;font-weight:900;padding:5px 16px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;">🛡️ الاستعداد</div>
-        <div style="flex:1;height:2px;background:linear-gradient(90deg,#00AEEF,transparent);border-radius:2px;"></div>
-      </div>
-      <div class="hd-cards" style="grid-template-columns:repeat(2,1fr);margin-bottom:18px;">
-
-        <!-- بطاقة الجاهزية -->
-        <div class="hd-card" onclick="switchCard('readiness')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#00AEEF,#0078A8);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#EFF6FF;">
-                <svg fill="none" stroke="#1D4ED8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#EFF6FF;color:#1D4ED8;">READINESS</span>
-            </div>
-            <div class="hd-card-name">بطاقة الجاهزية</div>
-            <div class="hd-card-desc">تقرير الجاهزية التشغيلية والاستعداد للأحداث الصحية</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('oxygen')">
+          <div class="hp-sub-card-icon" style="background:rgba(6,182,212,0.15);">💨</div>
+          <div class="hp-sub-card-name">انقطاع أكسجين</div>
+          <div class="hp-sub-card-code">CODE BROWN</div>
         </div>
-
-        <!-- بطاقة الفرضية -->
-        <div class="hd-card" onclick="switchCard('hypothesis')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#8B5CF6,#7C3AED);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#F5F3FF;">
-                <svg fill="none" stroke="#7C3AED" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#F5F3FF;color:#6D28D9;">HYPOTHESIS</span>
-            </div>
-            <div class="hd-card-name">تقييم فرضية</div>
-            <div class="hd-card-desc">توثيق الفرضيات والسيناريوهات التدريبية الصحية</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('fire')">
+          <div class="hp-sub-card-icon" style="background:rgba(239,68,68,0.15);">🔥</div>
+          <div class="hp-sub-card-name">حريق</div>
+          <div class="hp-sub-card-code">CODE RED</div>
         </div>
-      </div>
-
-      <!-- ══ GROUP 2: تقارير الأحداث ══ -->
-      <div style="margin-bottom:6px;display:flex;align-items:center;gap:10px;">
-        <div style="background:linear-gradient(135deg,#B71C1C,#D32F2F);color:#fff;font-size:11px;font-weight:900;padding:5px 16px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;">⚡ تقارير الأحداث</div>
-        <div style="flex:1;height:2px;background:linear-gradient(90deg,#EF4444,transparent);border-radius:2px;"></div>
-      </div>
-      <div class="hd-cards" style="grid-template-columns:repeat(4,1fr);margin-bottom:18px;">
-
-        <!-- انقطاع الكهرباء -->
-        <div class="hd-card" onclick="switchCard('electricity')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#F59E0B,#D97706);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#FFFBEB;">
-                <svg fill="none" stroke="#D97706" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#FFFBEB;color:#B45309;">CODE BROWN</span>
-            </div>
-            <div class="hd-card-name">انقطاع الكهرباء</div>
-            <div class="hd-card-desc">توثيق حوادث انقطاع التيار الكهربائي</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('injuries')">
+          <div class="hp-sub-card-icon" style="background:rgba(234,179,8,0.15);">🚑</div>
+          <div class="hp-sub-card-name">إصابات متعددة</div>
+          <div class="hp-sub-card-code">CODE YELLOW</div>
         </div>
-
-        <!-- انقطاع الأكسجين -->
-        <div class="hd-card" onclick="switchCard('oxygen')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#06B6D4,#0891B2);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#ECFEFF;">
-                <svg fill="none" stroke="#0891B2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1M4.22 4.22l.707.707m12.728 12.728l.707.707M1 12h2m18 0h2M4.22 19.778l.707-.707M18.95 5.636l.707-.707"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#ECFEFF;color:#0E7490;">CODE BROWN</span>
-            </div>
-            <div class="hd-card-name">انقطاع الأكسجين</div>
-            <div class="hd-card-desc">توثيق حوادث انقطاع الأكسجين الطبي</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('hazard-human')">
+          <div class="hp-sub-card-icon" style="background:rgba(0,174,239,0.12);">🧑</div>
+          <div class="hp-sub-card-name">بشري</div>
+          <div class="hp-sub-card-code">HUMAN</div>
         </div>
-
-        <!-- حادثة حريق -->
-        <div class="hd-card" onclick="switchCard('fire')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#EF4444,#DC2626);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#FEF2F2;">
-                <svg fill="none" stroke="#DC2626" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#FEF2F2;color:#B91C1C;">CODE RED</span>
-            </div>
-            <div class="hd-card-name">حادثة حريق</div>
-            <div class="hd-card-desc">تقرير حوادث الحريق وتوزيع الإصابات</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('hazard-nature')">
+          <div class="hp-sub-card-icon" style="background:rgba(0,174,239,0.12);">🌿</div>
+          <div class="hp-sub-card-name">طبيعي</div>
+          <div class="hp-sub-card-code">NATURAL</div>
         </div>
-
-        <!-- الإصابات الجماعية -->
-        <div class="hd-card" onclick="switchCard('injuries')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#F59E0B,#EAB308);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#FEF9C3;">
-                <svg fill="none" stroke="#CA8A04" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#FEF9C3;color:#854D0E;">CODE YELLOW</span>
-            </div>
-            <div class="hd-card-name">الإصابات الجماعية</div>
-            <div class="hd-card-desc">تقرير حوادث الإصابات الجماعية</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('hazard-tech')">
+          <div class="hp-sub-card-icon" style="background:rgba(0,174,239,0.12);">💻</div>
+          <div class="hp-sub-card-name">تكنولوجي</div>
+          <div class="hp-sub-card-code">TECH</div>
         </div>
-
-        <!-- مخاطر بشرية -->
-        <div class="hd-card" onclick="switchCard('hazard-human')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#005B82,#0078A8);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#EFF6FF;">
-                <svg fill="none" stroke="#1D4ED8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#EFF6FF;color:#1D4ED8;">HUMAN</span>
-            </div>
-            <div class="hd-card-name">🧑 بشري</div>
-            <div class="hd-card-desc">إرهاب، اختطاف، جائحة، مظاهرات وغيرها</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('hazard-hazmat')">
+          <div class="hp-sub-card-icon" style="background:rgba(0,174,239,0.12);">☣️</div>
+          <div class="hp-sub-card-name">مواد خطرة</div>
+          <div class="hp-sub-card-code">HAZMAT</div>
         </div>
-
-        <!-- مخاطر طبيعية -->
-        <div class="hd-card" onclick="switchCard('hazard-nature')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#005B82,#0078A8);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#EFF6FF;">
-                <svg fill="none" stroke="#1D4ED8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#EFF6FF;color:#1D4ED8;">NATURAL</span>
-            </div>
-            <div class="hd-card-name">🌿 طبيعي</div>
-            <div class="hd-card-desc">زلازل، سيول، حرائق، إعصار وغيرها</div>
-          </div>
-        </div>
-
-        <!-- مخاطر تكنولوجية -->
-        <div class="hd-card" onclick="switchCard('hazard-tech')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#005B82,#0078A8);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#EFF6FF;">
-                <svg fill="none" stroke="#1D4ED8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#EFF6FF;color:#1D4ED8;">TECH</span>
-            </div>
-            <div class="hd-card-name">💻 تكنولوجي</div>
-            <div class="hd-card-desc">فشل الاتصالات، الأنظمة، الغازات الطبية وغيرها</div>
-          </div>
-        </div>
-
-        <!-- مواد خطرة -->
-        <div class="hd-card" onclick="switchCard('hazard-hazmat')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#005B82,#0078A8);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#EFF6FF;">
-                <svg fill="none" stroke="#1D4ED8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#EFF6FF;color:#1D4ED8;">HAZMAT</span>
-            </div>
-            <div class="hd-card-name">☣️ مواد خطرة</div>
-            <div class="hd-card-desc">مواد كيميائية، إشعاع، تلوث المياه وغيرها</div>
-          </div>
+        <div class="hp-sub-card" onclick="switchCard('readiness-check')" style="grid-column:span 2;">
+          <div class="hp-sub-card-icon" style="background:rgba(34,197,94,0.12);">✅</div>
+          <div class="hp-sub-card-name">تحقق التأهب</div>
+          <div class="hp-sub-card-code">READINESS CHECK</div>
         </div>
       </div>
+    </div>
 
-      <!-- ══ GROUP 3: نماذج العمليات ══ -->
-      <div style="margin-bottom:6px;display:flex;align-items:center;gap:10px;">
-        <div style="background:linear-gradient(135deg,#1B5E20,#2E7D32);color:#fff;font-size:11px;font-weight:900;padding:5px 16px;border-radius:20px;letter-spacing:.5px;white-space:nowrap;">📋 نماذج العمليات</div>
-        <div style="flex:1;height:2px;background:linear-gradient(90deg,#4CAF50,transparent);border-radius:2px;"></div>
+    <!-- Sub-cards: الإحصائيات -->
+    <div class="hp-sub-area" id="hp-sub-stats">
+      <div class="hp-sub-title">▸ الإحصائيات</div>
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="font-size:40px;margin-bottom:12px;">📊</div>
+        <div style="color:rgba(255,255,255,0.5);font-size:14px;font-weight:700;">هذا القسم قيد التطوير</div>
+        <div style="color:rgba(255,255,255,0.3);font-size:11px;font-weight:600;margin-top:6px;">قريباً — Soon</div>
       </div>
-      <div class="hd-cards" style="grid-template-columns:repeat(1,1fr);max-width:320px;margin-bottom:18px;">
+    </div>
 
-        <!-- تحقق التأهب -->
-        <div class="hd-card" onclick="switchCard('readiness-check')">
-          <div class="hd-card-accent" style="background:linear-gradient(90deg,#2E7D32,#1B5E20);"></div>
-          <div class="hd-card-body">
-            <div class="hd-card-top">
-              <div class="hd-card-icon" style="background:#E8F5E9;">
-                <svg fill="none" stroke="#2E7D32" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7l2 2 4-4"/></svg>
-              </div>
-              <span class="hd-card-tag" style="background:#E8F5E9;color:#1B5E20;">READINESS CHECK</span>
-            </div>
-            <div class="hd-card-name">✅ تحقق التأهب</div>
-            <div class="hd-card-desc">جدول متابعة تأهب المستشفيات — القوى العاملة، بنك الدم، المخزون، الأسرة وغيرها</div>
-          </div>
-        </div>
-      </div>
+  </div>
 
-      <!-- System info bar -->
-      <div class="hd-sysbar">
-        <div class="hd-sys-item">
-          <svg width="14" height="14" fill="none" stroke="#22c55e" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/></svg>
-          التاريخ: <strong id="hd-date-disp">—</strong>
-        </div>
-        <div class="hd-sys-sep"></div>
-        <div class="hd-sys-item">
-          <svg width="14" height="14" fill="none" stroke="#0078A8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
-          <strong>hailthy.gov.sa</strong>
-        </div>
-        <div class="hd-sys-sep"></div>
-        <div class="hd-sys-item">
-          <svg width="14" height="14" fill="none" stroke="#7C3AED" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-          تجمع حائل الصحي — <strong>مركز إدارة الأزمات والكوارث الصحية</strong>
-        </div>
-        <div class="hd-sys-sep" style="margin-right:auto;"></div>
-        <div class="hd-sys-item" style="color:#22c55e;">
-          <svg width="12" height="12" fill="#22c55e" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
-          النظام يعمل بكفاءة
-        </div>
-      </div>
+  <!-- Footer -->
+  <div class="hp-footer">
+    <div class="hp-footer-left">مركز إدارة الأزمات والكوارث الصحية — Hail Health Cluster</div>
+    <div class="hp-time-badge" id="hp-clock">—</div>
+    <div class="hp-footer-right">+966538002168</div>
+  </div>
 
-    </div><!-- end hd-content -->
-  </div><!-- end hd-main -->
-</div><!-- end hd-wrap -->
+</div>
 
 <script>
+function hpSelectCat(cat){
+  // Reset all buttons
+  ['readiness','operations','stats'].forEach(function(c){
+    var btn=document.getElementById('hp-cat-'+c);
+    var sub=document.getElementById('hp-sub-'+c);
+    if(btn) btn.classList.remove('hp-active');
+    if(sub) sub.classList.remove('hp-sub-vis');
+  });
+  // Activate selected
+  var btn=document.getElementById('hp-cat-'+cat);
+  var sub=document.getElementById('hp-sub-'+cat);
+  if(btn) btn.classList.add('hp-active');
+  if(sub) sub.classList.add('hp-sub-vis');
+}
 // Clock
 (function(){
   function updateClock(){
     var now=new Date();
-    var h=String(now.getHours()).padStart(2,'0');
-    var m=String(now.getMinutes()).padStart(2,'0');
-    var s=String(now.getSeconds()).padStart(2,'0');
-    var el=document.getElementById('hd-clock');
-    if(el) el.textContent=h+':'+m+':'+s+' — '+now.toLocaleDateString('ar-SA');
-    var de=document.getElementById('hd-date-disp');
-    if(de) de.textContent=now.toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+    var t=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+    var el=document.getElementById('hp-clock');
+    if(el) el.textContent=days[now.getDay()]+' — '+t;
   }
   updateClock();
-  setInterval(updateClock,1000);
-  // Update settings count badge
-  var cnt=document.getElementById('sb-settings-count');
-  if(cnt) cnt.textContent='0';
+  setInterval(updateClock,30000);
 })();
 </script>
 </div>
-
-
 <!-- ================================================================
      1. بطاقة الاستعداد
 ================================================================ -->
@@ -1889,7 +1805,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 @media print{
   .rck-form{display:none!important;}
   .rck-a4{box-shadow:none!important;border-radius:0!important;width:297mm!important;min-height:210mm!important;}
-  @page{size:A4 landscape;margin:0;}
   .rck-tbl td[onclick]{cursor:default;}
   .rck-remove-btn{display:none!important;}
 }
@@ -1991,55 +1906,32 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   </div>
 </div>
 
+
 <!-- ================================================================
      6. تقرير الفرضية
 ================================================================ -->
 <div id="panel-hypothesis" class="card-panel">
 <style>
-/* ══ Hypothesis: 4-page A4 portrait print layout ══ */
-@media print {
-  /* When hypothesis panel is active, use portrait layout */
-  #panel-hypothesis.active .hyp-page {
-    display: block !important;
-    width: 210mm;
-    height: 297mm;
-    overflow: hidden;
-    page-break-after: always;
-    break-after: page;
-    page-break-inside: avoid;
-    break-inside: avoid;
-    position: relative;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-  }
-  #panel-hypothesis.active .hyp-page:last-of-type { page-break-after: auto; break-after: auto; }
-  #panel-hypothesis.active .a4-header,
-  #panel-hypothesis.active .a4-title-bar,
-  #panel-hypothesis.active .a4-footer,
-  #panel-hypothesis.active .total-row,
-  #panel-hypothesis.active .t-black,
-  #panel-hypothesis.active .t-red,
-  #panel-hypothesis.active .t-yellow,
-  #panel-hypothesis.active .t-green,
-  #panel-hypothesis.active .triage-box,
-  #panel-hypothesis.active [style*="background"] {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
-  }
-  #panel-hypothesis.active .a4-footer { position: absolute; bottom: 0; left: 0; right: 0; }
-  #panel-hypothesis.active .no-print { display: none !important; }
-  #panel-hypothesis.active .form-section { display: none !important; }
-  #panel-hypothesis.active table { page-break-inside: avoid; break-inside: avoid; }
-  #panel-hypothesis.active select { -webkit-appearance: none !important; appearance: none !important; border: none !important; background: transparent !important; }
+.hyp-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  margin: 0 auto 20px;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
 }
-#panel-hypothesis .hyp-page { margin-bottom: 20px; }
 </style>
 
 <!-- ══════════════════════════════════════════
      الصفحة 1: بيانات + جهات + فريق التقييم
 ══════════════════════════════════════════ -->
-<div class="hyp-page a4-page" style="min-height:297mm;position:relative;padding-bottom:36px;display:flex;flex-direction:column;">
+<div class="hyp-page">
     <div class="a4-header hdr-readiness">
       <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
       <div class="a4-org-block">
@@ -2050,7 +1942,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
 
   <!-- spacer: الثلث الأول -->
-  <div style="height:calc(297mm / 3 - 52px - 100px);flex-shrink:0;"></div>
+  <div class="hyp-spacer" style="height:calc(297mm / 3 - 52px - 100px);flex-shrink:0;"></div>
   <!-- المحتوى يبدأ من الثلث الثاني -->
   <div style="flex:1;display:flex;flex-direction:column;padding:0 28px 0;">
 
@@ -2123,7 +2015,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- ══════════════════════════════════════════
      الصفحة 2: جداول 1 و 2 (قيادة + تطهير)
 ══════════════════════════════════════════ -->
-<div class="hyp-page a4-page" style="min-height:297mm;position:relative;padding-bottom:36px;">
+<div class="hyp-page">
     <div class="a4-header hdr-readiness">
       <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
       <div class="a4-org-block">
@@ -2159,7 +2051,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- ══════════════════════════════════════════
      الصفحة 3: جداول 3 و 4 و 5
 ══════════════════════════════════════════ -->
-<div class="hyp-page a4-page" style="min-height:297mm;position:relative;padding-bottom:36px;">
+<div class="hyp-page">
     <div class="a4-header hdr-readiness">
       <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
       <div class="a4-org-block">
@@ -2202,7 +2094,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <!-- ══════════════════════════════════════════
      الصفحة 4: النتائج + ملاحظات + توصيات
 ══════════════════════════════════════════ -->
-<div class="hyp-page a4-page" style="min-height:297mm;position:relative;padding-bottom:36px;display:flex;flex-direction:column;">
+<div class="hyp-page">
     <div class="a4-header hdr-readiness">
       <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
       <div class="a4-org-block">
@@ -2215,7 +2107,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <span style="opacity:0.75;font-size:12px;">تقرير فرضية</span><span class="title-sep">|</span><span class="hyp-hosp-disp-cls">—</span>
     </div>
   <!-- spacer: القسم الأول من الخمسة -->
-  <div style="height:calc((297mm - 52px - 32px) / 5 - 180px);flex-shrink:0;"></div>
+  <div class="hyp-spacer" style="height:calc((297mm - 52px - 32px) / 5 - 180px);flex-shrink:0;"></div>
   <!-- المحتوى يبدأ من القسم الثاني -->
   <div style="flex:1;display:flex;flex-direction:column;">
   <!-- نتائج التقييم -->
@@ -2703,7 +2595,9 @@ const HOSPITALS = [
   "مستشفى الولادة والأطفال","مجمع إرادة والصحة النفسية","مستشفى بقعاء العام",
   "مستشفى موقق العام","مستشفى السليمي العام","مستشفى سميراء العام",
   "مستشفى الشملي العام","مستشفى الشنان العام","مستشفى الغزالة العام",
-  "مستشفى الحائط العام","مستشفى اجاء للرعاية المديدة","مستشفى شراف"
+  "مستشفى الحائط العام","مستشفى اجاء للرعاية المديدة","مستشفى شراف",
+  "مستشفى سلامات","المستشفى السعودي الألماني","عمليات فرع الوزارة",
+  "عمليات النقل الطبي","عمليات الهلال الأحمر","عمليات الدفاع المدني"
 ];
 
 // ===== DYNAMIC DATA MANAGEMENT =====
@@ -2939,20 +2833,62 @@ function switchCard(card){
 
 // Dynamic print page size based on active panel
 (function(){
-  var printStyle = document.createElement('style');
-  printStyle.id = 'dynamic-print-page';
-  document.head.appendChild(printStyle);
+  var _ps = document.createElement('style');
+  _ps.id = 'hyp-print-style';
+  document.head.appendChild(_ps);
 
   window.addEventListener('beforeprint', function(){
     var active = document.querySelector('.card-panel.active');
-    var isHyp = active && active.id === 'panel-hypothesis';
-    printStyle.textContent = isHyp
-      ? '@page { size: A4 portrait; margin: 0; }'
-      : '@page { size: A4 landscape; margin: 0; }';
+    var isHyp  = active && active.id === 'panel-hypothesis';
+
+    if(isHyp){
+      // Portrait + fix all hyp-page sizing
+      _ps.textContent = [
+        '@page { size: 210mm 297mm; margin: 0; }',
+        '.hyp-page {',
+        '  width: 210mm !important;',
+        '  height: 297mm !important;',
+        '  min-height: unset !important;',
+        '  max-height: 297mm !important;',
+        '  margin: 0 !important;',
+        '  padding: 0 !important;',
+        '  overflow: hidden !important;',
+        '  page-break-after: always !important;',
+        '  break-after: page !important;',
+        '  box-shadow: none !important;',
+        '  border-radius: 0 !important;',
+        '  display: flex !important;',
+        '  flex-direction: column !important;',
+        '  position: relative !important;',
+        '  background: #fff !important;',
+        '}',
+        '.hyp-page:last-of-type { page-break-after: auto !important; break-after: auto !important; }',
+        /* إخفاء الـ spacers */
+        '.hyp-spacer, [style*="height:calc(297mm"] { display: none !important; }',
+        /* تمديد المحتوى ليملأ الصفحة */
+        '.hyp-page > [style*="flex:1"] { flex:1 !important; justify-content:center !important; }',
+        '.hyp-page > [style*="flex: 1"] { flex:1 !important; justify-content:center !important; }',
+        /* الألوان */
+        '.hyp-page * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }',
+        /* الفوتر */
+        '.hyp-page .a4-footer { position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; }',
+        /* select */
+        '.hyp-page select { -webkit-appearance: none !important; appearance: none !important; border: none !important; background: transparent !important; }',
+        /* إخفاء النموذج */
+        '#panel-hypothesis .no-print, #panel-hypothesis .form-section { display: none !important; }',
+        /* التأكد من ظهور الفرضية فقط */
+        '.card-panel { display: none !important; }',
+        '#panel-hypothesis { display: block !important; }',
+        '.top-bar { display: none !important; }',
+        '.tab-nav { display: none !important; }',
+      ].join('\n');
+    } else {
+      _ps.textContent = '@page { size: A4 landscape; margin: 0; }';
+    }
   });
 
   window.addEventListener('afterprint', function(){
-    printStyle.textContent = '';
+    _ps.textContent = '';
   });
 })();
 
@@ -3465,7 +3401,8 @@ makeSettingsListFns('execs',getExecs,saveExecs,'s-execs-list','s-new-exec','Exec
 makeSettingsListFns('transports',getTransports,saveTransports,'s-transports-list','s-new-transport','TransportsList',populateTransportSelects,'لا توجد مركبات');
 makeSettingsListFns('participants',getParticipants,saveParticipants,'s-participants-list','s-new-participant','ParticipantsList',populateParticipantSelects,'لا توجد جهات مشاركة');
 makeSettingsListFns('outage_types',getOutageTypes,saveOutageTypes,'s-outage-types-list','s-new-outage-type','OutageTypesList',populateOutageTypeSelects,'لا توجد أنواع انقطاع');
-makeSettingsListFns('departments',getDepartments,saveDepartments,'s-depts-list','s-new-dept','DeptsList',function(){buildAreaChecks('el','updateElectricity()');buildAreaChecks('ox','updateOxygen()');updateElectricity();updateOxygen();},'لا توجد أقسام');
+makeSettingsListFns('departments',getDepartments,saveDepartments,'s-depts-list','s-new-dept','DeptsList',function(){buildAreaChecks('el','updateElectricity()');buildAreaChecks('ox','updateOxygen()');
+  rckPopulateAddSelect();updateElectricity();updateOxygen();},'لا توجد أقسام');
 makeSettingsListFns('actions',getActions,saveActions,'s-actions-list','s-new-action','ActionsList',populateActionSelects,'لا توجد إجراءات');
 makeSettingsListFns('fire_types',getFireTypes,saveFireTypes,'s-fire-types-list','s-new-fire-type','FireTypesList',populateFireTypeSelects,'لا توجد أنواع حرائق');
 makeSettingsListFns('inj_types',getInjTypes,saveInjTypes,'s-inj-types-list','s-new-inj-type','InjTypesList',populateInjTypeSelects,'لا توجد أنواع إصابات');
@@ -3767,6 +3704,7 @@ window.addEventListener('DOMContentLoaded', function(){
   populateRdEvTypeSelects();
   buildAreaChecks('el','updateElectricity()');
   buildAreaChecks('ox','updateOxygen()');
+  rckPopulateAddSelect();
   const now=new Date();
   const todayStr=now.toISOString().split('T')[0];
   const timeStr=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
@@ -3777,7 +3715,6 @@ window.addEventListener('DOMContentLoaded', function(){
   hypReplaceStaticInputs();
   hypInitAllSettings();
   hazardPopulateSelects();
-  rckInit();
   // Set today's date for hazard panels
   var now2=new Date();
   var todayStr2=now2.toISOString().split('T')[0];
@@ -3786,8 +3723,13 @@ window.addEventListener('DOMContentLoaded', function(){
   ['hh-f-time','ht-f-time','hn-f-time','hz-f-time'].forEach(function(id){var el=document.getElementById(id);if(el&&!el.value)el.value=timeStr2;});
   const _tb=document.querySelector('.top-bar');if(_tb)_tb.style.display='none';
   const _tn=document.querySelector('.tab-nav');if(_tn)_tn.style.display='none';
-  const _hp=document.getElementById('panel-home');
-  if(_hp){_hp.style.position='fixed';_hp.style.inset='0';_hp.style.zIndex='100';_hp.style.overflow='hidden';}
+  // Force home panel on startup
+  document.querySelectorAll('.card-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  var _hp=document.getElementById('panel-home');
+  if(_hp){_hp.classList.add('active');_hp.style.position='fixed';_hp.style.inset='0';_hp.style.zIndex='100';_hp.style.overflow='hidden';}
+  var _htb=document.querySelector('.tab-btn[data-card="home"]');
+  if(_htb)_htb.classList.add('active');
   // Wire up Enter key for all settings inputs
   const settingsInputMap={
     's-new-reporter':'add_reporters','s-new-exec':'add_execs','s-new-transport':'add_transports',
@@ -3956,8 +3898,421 @@ function hypReplaceStaticInputs(){
 }
 
 // ══════════════════════════════════════════
-// READINESS CHECK — تحقق التأهب
+// HAZARD PANELS — Helper
 // ══════════════════════════════════════════
+function hazardGetVal(id){ var el=document.getElementById(id); return el?el.value||'':''; }
+function hazardGetNum(id){ var el=document.getElementById(id); return el?parseInt(el.value)||0:0; }
+function hazardSetTxt(id,v){ var el=document.getElementById(id); if(el) el.textContent=v||'—'; }
+function hazardFmtDate(d,t){ if(!d) return '—'; var dt=new Date(d+'T00:00:00'); var s=dt.getFullYear()+'/'+String(dt.getMonth()+1).padStart(2,'0')+'/'+String(dt.getDate()).padStart(2,'0'); if(t) s+=' — '+t; return s; }
+
+// Populate hospital/reporter/exec/action selects for hazard panels
+function hazardPopulateSelects(){
+  // Uses the shared populate functions — new IDs already added to each list above
+  populateHospitalSelects();
+  populateReporterSelects();
+  populateOfficerSelects();
+  populateActionSelects();
+}
+
+// ── بطاقة بشرية ──
+function hhEventChange(){
+  var v=hazardGetVal('hh-f-event');
+  if(v==='__fire__'){ switchCard('fire'); return; }
+  if(v==='__injuries__'){ switchCard('injuries'); return; }
+  updateHazardHuman();
+}
+function updateHazardHuman(){
+  var hosp=hazardGetVal('hh-f-hosp');
+  var event=hazardGetVal('hh-f-event');
+  var date=hazardGetVal('hh-f-date');
+  var time=hazardGetVal('hh-f-time');
+  var notify8=hazardGetVal('hh-f-notify8');
+  var end=hazardGetVal('hh-f-end');
+  var loc=hazardGetVal('hh-f-loc');
+  var status=hazardGetVal('hh-f-status');
+  var reporter=hazardGetVal('hh-f-reporter');
+  var exec=hazardGetVal('hh-f-exec');
+  var action=hazardGetVal('hh-f-action');
+  var notes=hazardGetVal('hh-f-notes');
+  var recv1=hazardGetVal('hh-f-recv1');
+  var recv2=hazardGetVal('hh-f-recv2');
+  var recv3=hazardGetVal('hh-f-recv3');
+  var blk=hazardGetNum('hh-f-black'), red=hazardGetNum('hh-f-red'), yel=hazardGetNum('hh-f-yellow'), grn=hazardGetNum('hh-f-green');
+  var tot=blk+red+yel+grn;
+  var totEl=document.getElementById('hh-f-total'); if(totEl) totEl.value=tot;
+  hazardSetTxt('hh-hosp-disp', hosp);
+  hazardSetTxt('hh-event-disp', event);
+  hazardSetTxt('hh-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('hh-location', hosp);
+  hazardSetTxt('hh-event-type', event);
+  hazardSetTxt('hh-location-detail', loc);
+  hazardSetTxt('hh-time', time||'—');
+  hazardSetTxt('hh-notify8', notify8||'—');
+  hazardSetTxt('hh-end-time', end||'—');
+  hazardSetTxt('hh-status', status);
+  hazardSetTxt('hh-reporter', reporter);
+  hazardSetTxt('hh-exec', exec);
+  hazardSetTxt('hh-total', tot);
+  hazardSetTxt('hh-black', blk);
+  hazardSetTxt('hh-red', red);
+  hazardSetTxt('hh-yellow', yel);
+  hazardSetTxt('hh-green', grn);
+  // Receiving hospitals
+  var recvSec=document.getElementById('hh-recv-section');
+  var hasRecv=recv1||recv2||recv3;
+  if(recvSec) recvSec.className=hasRecv?'':'recv-section-empty';
+  function hhSetRecv(rowId,valId,val){
+    var row=document.getElementById(rowId);
+    var el=document.getElementById(valId);
+    if(row) row.className='recv-hosp-row'+(val?'':' empty-row');
+    if(el) el.textContent=val||'';
+  }
+  hhSetRecv('hh-recv-hosp-1','hh-recv1',recv1);
+  hhSetRecv('hh-recv-hosp-2','hh-recv2',recv2);
+  hhSetRecv('hh-recv-hosp-3','hh-recv3',recv3);
+  // Action row
+  var actRow=document.getElementById('hh-action-row');
+  if(actRow) actRow.className='info-row'+(action?'':' empty-row');
+  hazardSetTxt('hh-action', action);
+  var nb=document.getElementById('hh-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('hh-notes-text', notes);
+}
+
+// ── بطاقة تكنولوجية ──
+function htEventChange(){
+  var v=hazardGetVal('ht-f-event');
+  if(v==='__electricity__'){ switchCard('electricity'); return; }
+  if(v==='__oxygen__'){ switchCard('oxygen'); return; }
+  updateHazardTech();
+}
+function updateHazardTech(){
+  var hosp=hazardGetVal('ht-f-hosp');
+  var event=hazardGetVal('ht-f-event');
+  var date=hazardGetVal('ht-f-date');
+  var time=hazardGetVal('ht-f-time');
+  var notify8=hazardGetVal('ht-f-notify8');
+  var end=hazardGetVal('ht-f-end');
+  var affected=hazardGetVal('ht-f-affected');
+  var severity=hazardGetVal('ht-f-severity');
+  var techteam=hazardGetVal('ht-f-techteam');
+  var duration=hazardGetVal('ht-f-duration');
+  var status=hazardGetVal('ht-f-status');
+  var reporter=hazardGetVal('ht-f-reporter');
+  var exec=hazardGetVal('ht-f-exec');
+  var action=hazardGetVal('ht-f-action');
+  var notes=hazardGetVal('ht-f-notes');
+  hazardSetTxt('ht-hosp-disp', hosp);
+  hazardSetTxt('ht-event-disp', event);
+  hazardSetTxt('ht-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('ht-location', hosp);
+  hazardSetTxt('ht-event-type', event);
+  hazardSetTxt('ht-affected', affected);
+  hazardSetTxt('ht-time', time||'—');
+  hazardSetTxt('ht-notify8', notify8||'—');
+  hazardSetTxt('ht-end-time', end||'—');
+  hazardSetTxt('ht-status', status);
+  hazardSetTxt('ht-severity', severity);
+  hazardSetTxt('ht-tech-team', techteam);
+  hazardSetTxt('ht-duration', duration);
+  hazardSetTxt('ht-reporter', reporter);
+  hazardSetTxt('ht-exec', exec);
+  hazardSetTxt('ht-action', action);
+  var nb=document.getElementById('ht-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('ht-notes-text', notes);
+}
+
+// ── بطاقة طبيعية ──
+function hnEventChange(){
+  var v=hazardGetVal('hn-f-event');
+  if(v==='__fire__'){ switchCard('fire'); return; }
+  updateHazardNature();
+}
+function updateHazardNature(){
+  var hosp=hazardGetVal('hn-f-hosp');
+  var event=hazardGetVal('hn-f-event');
+  var date=hazardGetVal('hn-f-date');
+  var time=hazardGetVal('hn-f-time');
+  var notify8=hazardGetVal('hn-f-notify8');
+  var end=hazardGetVal('hn-f-end');
+  var area=hazardGetVal('hn-f-area');
+  var status=hazardGetVal('hn-f-status');
+  var reporter=hazardGetVal('hn-f-reporter');
+  var exec=hazardGetVal('hn-f-exec');
+  var action=hazardGetVal('hn-f-action');
+  var notes=hazardGetVal('hn-f-notes');
+  var blk=hazardGetNum('hn-f-black'), red=hazardGetNum('hn-f-red'), yel=hazardGetNum('hn-f-yellow'), grn=hazardGetNum('hn-f-green');
+  var tot=blk+red+yel+grn;
+  var totEl=document.getElementById('hn-f-total'); if(totEl) totEl.value=tot;
+  hazardSetTxt('hn-hosp-disp', hosp);
+  hazardSetTxt('hn-event-disp', event);
+  hazardSetTxt('hn-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('hn-location', hosp);
+  hazardSetTxt('hn-event-type', event);
+  hazardSetTxt('hn-area', area);
+  hazardSetTxt('hn-time', time||'—');
+  hazardSetTxt('hn-notify8', notify8||'—');
+  hazardSetTxt('hn-end-time', end||'—');
+  hazardSetTxt('hn-status', status);
+  hazardSetTxt('hn-reporter', reporter);
+  hazardSetTxt('hn-exec', exec);
+  hazardSetTxt('hn-action', action);
+  hazardSetTxt('hn-total', tot);
+  hazardSetTxt('hn-black', blk);
+  hazardSetTxt('hn-red', red);
+  hazardSetTxt('hn-yellow', yel);
+  hazardSetTxt('hn-green', grn);
+  var nb=document.getElementById('hn-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('hn-notes-text', notes);
+}
+
+// ── بطاقة مواد خطرة ──
+function updateHazardHazmat(){
+  var hosp=hazardGetVal('hz-f-hosp');
+  var event=hazardGetVal('hz-f-event');
+  var material=hazardGetVal('hz-f-material');
+  var date=hazardGetVal('hz-f-date');
+  var time=hazardGetVal('hz-f-time');
+  var notify8=hazardGetVal('hz-f-notify8');
+  var end=hazardGetVal('hz-f-end');
+  var area=hazardGetVal('hz-f-area');
+  var status=hazardGetVal('hz-f-status');
+  var reporter=hazardGetVal('hz-f-reporter');
+  var exec=hazardGetVal('hz-f-exec');
+  var action=hazardGetVal('hz-f-action');
+  var notes=hazardGetVal('hz-f-notes');
+  var blk=hazardGetNum('hz-f-black'), red=hazardGetNum('hz-f-red'), yel=hazardGetNum('hz-f-yellow'), grn=hazardGetNum('hz-f-green');
+  var tot=blk+red+yel+grn;
+  var totEl=document.getElementById('hz-f-total'); if(totEl) totEl.value=tot;
+  hazardSetTxt('hz-hosp-disp', hosp);
+  hazardSetTxt('hz-event-disp', event);
+  hazardSetTxt('hz-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('hz-location', hosp);
+  hazardSetTxt('hz-event-type', event);
+  hazardSetTxt('hz-material', material);
+  hazardSetTxt('hz-area', area);
+  hazardSetTxt('hz-time', time||'—');
+  hazardSetTxt('hz-notify8', notify8||'—');
+  hazardSetTxt('hz-end-time', end||'—');
+  hazardSetTxt('hz-status', status);
+  hazardSetTxt('hz-reporter', reporter);
+  hazardSetTxt('hz-exec', exec);
+  hazardSetTxt('hz-action', action);
+  hazardSetTxt('hz-total', tot);
+  hazardSetTxt('hz-black', blk);
+  hazardSetTxt('hz-red', red);
+  hazardSetTxt('hz-yellow', yel);
+  hazardSetTxt('hz-green', grn);
+  var nb=document.getElementById('hz-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('hz-notes-text', notes);
+}
+
+function hazardGetVal(id){ var el=document.getElementById(id); return el?el.value||'':''; }
+function hazardGetNum(id){ var el=document.getElementById(id); return el?parseInt(el.value)||0:0; }
+function hazardSetTxt(id,v){ var el=document.getElementById(id); if(el) el.textContent=v||'—'; }
+function hazardFmtDate(d,t){ if(!d) return '—'; var dt=new Date(d+'T00:00:00'); var s=dt.getFullYear()+'/'+String(dt.getMonth()+1).padStart(2,'0')+'/'+String(dt.getDate()).padStart(2,'0'); if(t) s+=' — '+t; return s; }
+
+// Populate hospital/reporter/exec/action selects for hazard panels
+function hazardPopulateSelects(){
+  // Uses the shared populate functions — new IDs already added to each list above
+  populateHospitalSelects();
+  populateReporterSelects();
+  populateOfficerSelects();
+  populateActionSelects();
+}
+
+// ── بطاقة بشرية ──
+function hhEventChange(){
+  var v=hazardGetVal('hh-f-event');
+  if(v==='__fire__'){ switchCard('fire'); return; }
+  if(v==='__injuries__'){ switchCard('injuries'); return; }
+  updateHazardHuman();
+}
+function updateHazardHuman(){
+  var hosp=hazardGetVal('hh-f-hosp');
+  var event=hazardGetVal('hh-f-event');
+  var date=hazardGetVal('hh-f-date');
+  var time=hazardGetVal('hh-f-time');
+  var notify8=hazardGetVal('hh-f-notify8');
+  var end=hazardGetVal('hh-f-end');
+  var loc=hazardGetVal('hh-f-loc');
+  var status=hazardGetVal('hh-f-status');
+  var reporter=hazardGetVal('hh-f-reporter');
+  var exec=hazardGetVal('hh-f-exec');
+  var action=hazardGetVal('hh-f-action');
+  var notes=hazardGetVal('hh-f-notes');
+  var recv1=hazardGetVal('hh-f-recv1');
+  var recv2=hazardGetVal('hh-f-recv2');
+  var recv3=hazardGetVal('hh-f-recv3');
+  var blk=hazardGetNum('hh-f-black'), red=hazardGetNum('hh-f-red'), yel=hazardGetNum('hh-f-yellow'), grn=hazardGetNum('hh-f-green');
+  var tot=blk+red+yel+grn;
+  var totEl=document.getElementById('hh-f-total'); if(totEl) totEl.value=tot;
+  hazardSetTxt('hh-hosp-disp', hosp);
+  hazardSetTxt('hh-event-disp', event);
+  hazardSetTxt('hh-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('hh-location', hosp);
+  hazardSetTxt('hh-event-type', event);
+  hazardSetTxt('hh-location-detail', loc);
+  hazardSetTxt('hh-time', time||'—');
+  hazardSetTxt('hh-notify8', notify8||'—');
+  hazardSetTxt('hh-end-time', end||'—');
+  hazardSetTxt('hh-status', status);
+  hazardSetTxt('hh-reporter', reporter);
+  hazardSetTxt('hh-exec', exec);
+  hazardSetTxt('hh-total', tot);
+  hazardSetTxt('hh-black', blk);
+  hazardSetTxt('hh-red', red);
+  hazardSetTxt('hh-yellow', yel);
+  hazardSetTxt('hh-green', grn);
+  // Receiving hospitals
+  var recvSec=document.getElementById('hh-recv-section');
+  var hasRecv=recv1||recv2||recv3;
+  if(recvSec) recvSec.className=hasRecv?'':'recv-section-empty';
+  function hhSetRecv(rowId,valId,val){
+    var row=document.getElementById(rowId);
+    var el=document.getElementById(valId);
+    if(row) row.className='recv-hosp-row'+(val?'':' empty-row');
+    if(el) el.textContent=val||'';
+  }
+  hhSetRecv('hh-recv-hosp-1','hh-recv1',recv1);
+  hhSetRecv('hh-recv-hosp-2','hh-recv2',recv2);
+  hhSetRecv('hh-recv-hosp-3','hh-recv3',recv3);
+  // Action row
+  var actRow=document.getElementById('hh-action-row');
+  if(actRow) actRow.className='info-row'+(action?'':' empty-row');
+  hazardSetTxt('hh-action', action);
+  var nb=document.getElementById('hh-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('hh-notes-text', notes);
+}
+
+// ── بطاقة تكنولوجية ──
+function htEventChange(){
+  var v=hazardGetVal('ht-f-event');
+  if(v==='__electricity__'){ switchCard('electricity'); return; }
+  if(v==='__oxygen__'){ switchCard('oxygen'); return; }
+  updateHazardTech();
+}
+function updateHazardTech(){
+  var hosp=hazardGetVal('ht-f-hosp');
+  var event=hazardGetVal('ht-f-event');
+  var date=hazardGetVal('ht-f-date');
+  var time=hazardGetVal('ht-f-time');
+  var notify8=hazardGetVal('ht-f-notify8');
+  var end=hazardGetVal('ht-f-end');
+  var affected=hazardGetVal('ht-f-affected');
+  var severity=hazardGetVal('ht-f-severity');
+  var techteam=hazardGetVal('ht-f-techteam');
+  var duration=hazardGetVal('ht-f-duration');
+  var status=hazardGetVal('ht-f-status');
+  var reporter=hazardGetVal('ht-f-reporter');
+  var exec=hazardGetVal('ht-f-exec');
+  var action=hazardGetVal('ht-f-action');
+  var notes=hazardGetVal('ht-f-notes');
+  hazardSetTxt('ht-hosp-disp', hosp);
+  hazardSetTxt('ht-event-disp', event);
+  hazardSetTxt('ht-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('ht-location', hosp);
+  hazardSetTxt('ht-event-type', event);
+  hazardSetTxt('ht-affected', affected);
+  hazardSetTxt('ht-time', time||'—');
+  hazardSetTxt('ht-notify8', notify8||'—');
+  hazardSetTxt('ht-end-time', end||'—');
+  hazardSetTxt('ht-status', status);
+  hazardSetTxt('ht-severity', severity);
+  hazardSetTxt('ht-tech-team', techteam);
+  hazardSetTxt('ht-duration', duration);
+  hazardSetTxt('ht-reporter', reporter);
+  hazardSetTxt('ht-exec', exec);
+  hazardSetTxt('ht-action', action);
+  var nb=document.getElementById('ht-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('ht-notes-text', notes);
+}
+
+// ── بطاقة طبيعية ──
+function hnEventChange(){
+  var v=hazardGetVal('hn-f-event');
+  if(v==='__fire__'){ switchCard('fire'); return; }
+  updateHazardNature();
+}
+function updateHazardNature(){
+  var hosp=hazardGetVal('hn-f-hosp');
+  var event=hazardGetVal('hn-f-event');
+  var date=hazardGetVal('hn-f-date');
+  var time=hazardGetVal('hn-f-time');
+  var notify8=hazardGetVal('hn-f-notify8');
+  var end=hazardGetVal('hn-f-end');
+  var area=hazardGetVal('hn-f-area');
+  var status=hazardGetVal('hn-f-status');
+  var reporter=hazardGetVal('hn-f-reporter');
+  var exec=hazardGetVal('hn-f-exec');
+  var action=hazardGetVal('hn-f-action');
+  var notes=hazardGetVal('hn-f-notes');
+  var blk=hazardGetNum('hn-f-black'), red=hazardGetNum('hn-f-red'), yel=hazardGetNum('hn-f-yellow'), grn=hazardGetNum('hn-f-green');
+  var tot=blk+red+yel+grn;
+  var totEl=document.getElementById('hn-f-total'); if(totEl) totEl.value=tot;
+  hazardSetTxt('hn-hosp-disp', hosp);
+  hazardSetTxt('hn-event-disp', event);
+  hazardSetTxt('hn-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('hn-location', hosp);
+  hazardSetTxt('hn-event-type', event);
+  hazardSetTxt('hn-area', area);
+  hazardSetTxt('hn-time', time||'—');
+  hazardSetTxt('hn-notify8', notify8||'—');
+  hazardSetTxt('hn-end-time', end||'—');
+  hazardSetTxt('hn-status', status);
+  hazardSetTxt('hn-reporter', reporter);
+  hazardSetTxt('hn-exec', exec);
+  hazardSetTxt('hn-action', action);
+  hazardSetTxt('hn-total', tot);
+  hazardSetTxt('hn-black', blk);
+  hazardSetTxt('hn-red', red);
+  hazardSetTxt('hn-yellow', yel);
+  hazardSetTxt('hn-green', grn);
+  var nb=document.getElementById('hn-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('hn-notes-text', notes);
+}
+
+// ── بطاقة مواد خطرة ──
+function updateHazardHazmat(){
+  var hosp=hazardGetVal('hz-f-hosp');
+  var event=hazardGetVal('hz-f-event');
+  var material=hazardGetVal('hz-f-material');
+  var date=hazardGetVal('hz-f-date');
+  var time=hazardGetVal('hz-f-time');
+  var notify8=hazardGetVal('hz-f-notify8');
+  var end=hazardGetVal('hz-f-end');
+  var area=hazardGetVal('hz-f-area');
+  var status=hazardGetVal('hz-f-status');
+  var reporter=hazardGetVal('hz-f-reporter');
+  var exec=hazardGetVal('hz-f-exec');
+  var action=hazardGetVal('hz-f-action');
+  var notes=hazardGetVal('hz-f-notes');
+  var blk=hazardGetNum('hz-f-black'), red=hazardGetNum('hz-f-red'), yel=hazardGetNum('hz-f-yellow'), grn=hazardGetNum('hz-f-green');
+  var tot=blk+red+yel+grn;
+  var totEl=document.getElementById('hz-f-total'); if(totEl) totEl.value=tot;
+  hazardSetTxt('hz-hosp-disp', hosp);
+  hazardSetTxt('hz-event-disp', event);
+  hazardSetTxt('hz-date-disp', hazardFmtDate(date,time));
+  hazardSetTxt('hz-location', hosp);
+  hazardSetTxt('hz-event-type', event);
+  hazardSetTxt('hz-material', material);
+  hazardSetTxt('hz-area', area);
+  hazardSetTxt('hz-time', time||'—');
+  hazardSetTxt('hz-notify8', notify8||'—');
+  hazardSetTxt('hz-end-time', end||'—');
+  hazardSetTxt('hz-status', status);
+  hazardSetTxt('hz-reporter', reporter);
+  hazardSetTxt('hz-exec', exec);
+  hazardSetTxt('hz-action', action);
+  hazardSetTxt('hz-total', tot);
+  hazardSetTxt('hz-black', blk);
+  hazardSetTxt('hz-red', red);
+  hazardSetTxt('hz-yellow', yel);
+  hazardSetTxt('hz-green', grn);
+  var nb=document.getElementById('hz-notes-block'); if(nb) nb.style.display=notes?'block':'none';
+  hazardSetTxt('hz-notes-text', notes);
+}
+
+
 var rckData = {};
 function rckSave(){
   try{localStorage.setItem('rck_v2',JSON.stringify(rckData));}catch(e){}
@@ -4275,6 +4630,9 @@ function updateHazardHazmat(){
   hazardSetTxt('hz-notes-text', notes);
 }
 
+
+  rckInit();
+  rckPopulateAddSelect();
 </script>
 </body>
 </html>
