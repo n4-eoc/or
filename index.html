@@ -21,6 +21,190 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .home-sub{color:rgba(255,255,255,0.65);font-size:15px;font-weight:600;}
 .home-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:960px;margin:0 auto;}
 @media(max-width:700px){.home-cards{grid-template-columns:repeat(2,1fr);}}
+
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE — شامل للجوال
+══════════════════════════════════════════ */
+
+/* ── Global body on mobile ── */
+@media(max-width:768px){
+  body{padding:8px 6px;}
+
+  /* ── Tab Nav ── */
+  .tab-nav{
+    display:flex!important;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory;
+    padding:6px 8px;
+    gap:6px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(0,30,50,0.95);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(0,174,239,0.2);
+  }
+  .tab-nav::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex-shrink:0;
+    scroll-snap-align:start;
+    font-size:11px!important;
+    padding:7px 12px!important;
+    white-space:nowrap;
+  }
+
+  /* ── Top bar ── */
+  .top-bar{padding:8px 10px!important;}
+  .top-logo{width:36px!important;height:36px!important;}
+  .top-title{font-size:13px!important;}
+  .top-sub{display:none!important;}
+  .top-actions{gap:6px!important;}
+  .btn-print,.btn-reset{font-size:10px!important;padding:6px 10px!important;}
+
+  /* ── A4 Page — scale down ── */
+  .a4-page{
+    width:100%!important;
+    min-height:unset!important;
+    margin:0 auto!important;
+    border-radius:8px!important;
+    transform:none!important;
+  }
+  .a4-header{padding:10px 12px 8px!important;gap:8px!important;}
+  .a4-logo{width:40px!important;height:40px!important;}
+  .a4-org-main{font-size:13px!important;}
+  .a4-org-sub{font-size:8px!important;}
+  .a4-badge{font-size:9px!important;padding:3px 8px!important;}
+  .a4-title-bar{font-size:11px!important;padding:4px 12px!important;}
+
+  /* ── A4 body grid → single column ── */
+  .a4-body{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:0!important;
+  }
+  .col-right,.col-left{
+    border:none!important;
+    padding:10px 12px!important;
+    width:100%!important;
+  }
+  .col-left{border-top:1px solid #E3F2FD!important;}
+
+  /* ── A4 Lower ── */
+  .a4-lower{
+    flex-direction:column!important;
+    gap:0!important;
+  }
+  .lower-right,.lower-left{
+    width:100%!important;
+    padding:8px 12px!important;
+    border:none!important;
+    border-top:1px solid #E3F2FD!important;
+  }
+
+  /* ── Triages grid ── */
+  .triages{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* ── Total row ── */
+  .total-row{padding:8px 12px!important;}
+  .total-val{font-size:28px!important;}
+
+  /* ── A4 Footer ── */
+  .a4-footer{font-size:9px!important;padding:6px 12px!important;flex-wrap:wrap;gap:4px;}
+
+  /* ── Form section ── */
+  .form-section{
+    margin:8px auto!important;
+    padding:12px!important;
+    border-radius:10px!important;
+    max-width:100%!important;
+  }
+  .form-title{font-size:13px!important;}
+  .form-grid{
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+  .rc-field label{font-size:10px!important;}
+  .rc-field select,.rc-field input{font-size:12px!important;padding:8px 10px!important;}
+
+  /* ── Num section ── */
+  .num-grid{grid-template-columns:repeat(3,1fr)!important;gap:6px!important;}
+  .num-total{grid-column:span 3!important;}
+
+  /* ── Buttons ── */
+  .btn-print{width:100%!important;justify-content:center!important;}
+}
+
+/* ── Very small screens (< 480px) ── */
+@media(max-width:480px){
+  .tab-btn{font-size:10px!important;padding:6px 10px!important;}
+  .a4-org-main{font-size:11px!important;}
+  .triages{grid-template-columns:repeat(2,1fr)!important;}
+  .num-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .num-total{grid-column:span 2!important;}
+  .triage-box{padding:8px 6px!important;}
+  .triage-num{font-size:22px!important;}
+}
+
+/* ── Home page mobile ── */
+@media(max-width:768px){
+  .hp-wrap{min-height:100vh;}
+  .hp-header{padding:16px 20px 14px!important;gap:12px!important;}
+  .hp-logo-ring{width:52px!important;height:52px!important;}
+  .hp-org-main{font-size:18px!important;}
+  .hp-org-sub{font-size:10px!important;}
+  .hp-body{padding:20px 16px!important;gap:20px!important;}
+  .hp-cats{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+    max-width:100%!important;
+  }
+  .hp-cat-btn{
+    flex-direction:row!important;
+    padding:16px 20px!important;
+    gap:16px!important;
+    border-radius:14px!important;
+    text-align:right!important;
+    align-items:center!important;
+  }
+  .hp-cat-icon{width:48px!important;height:48px!important;font-size:22px!important;flex-shrink:0!important;}
+  .hp-cat-name{font-size:15px!important;text-align:right!important;}
+  .hp-sub-grid{
+    grid-template-columns:repeat(2,1fr)!important;
+    gap:8px!important;
+  }
+  .hp-sub-card{padding:12px 10px!important;border-radius:10px!important;}
+  .hp-sub-card-name{font-size:11px!important;}
+  .hp-sub-card-icon{width:34px!important;height:34px!important;font-size:16px!important;}
+  .hp-footer{padding:10px 16px!important;flex-wrap:wrap;gap:6px;justify-content:center;}
+  .hp-footer-left{display:none!important;}
+  .hp-time-badge{font-size:10px!important;}
+}
+
+/* ── RCK table mobile ── */
+@media(max-width:768px){
+  .rck-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch;}
+  .rck-a4{min-width:600px;}
+  .rck-tbl{font-size:9px!important;}
+  .rck-form .form-grid{grid-template-columns:1fr 1fr!important;}
+}
+
+/* ── Hypothesis pages mobile ── */
+@media(max-width:768px){
+  .hyp-page{
+    width:100%!important;
+    min-height:unset!important;
+    margin:0 0 12px!important;
+    border-radius:8px!important;
+  }
+}
+
+/* ── Hazard panels mobile ── */
+@media(max-width:768px){
+  .recv-hosp-row{flex-wrap:wrap;}
+}
 .home-card{background:rgba(255,255,255,0.09);border:1.5px solid rgba(255,255,255,0.18);border-radius:20px;padding:30px 20px 26px;cursor:pointer;transition:all .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
 .home-card::before{content:'';position:absolute;top:0;right:0;left:0;height:3px;border-radius:20px 20px 0 0;transition:opacity .25s;}
 .home-card.hc-fire::before{background:linear-gradient(90deg,#FF5252,#FF8A80);}
@@ -1276,7 +1460,7 @@ function hpSelectCat(cat){
           <div class="info-row"><span class="info-icon">🕐</span><div class="info-content"><span class="info-lbl">وقت البلاغ</span><span class="info-val" id="hh-time">—</span></div></div>
           <div class="info-row"><span class="info-icon">📡</span><div class="info-content"><span class="info-lbl">وقت إبلاغ صحة 8</span><span class="info-val" id="hh-notify8">—</span></div></div>
           <div class="info-row"><span class="info-icon">✅</span><div class="info-content"><span class="info-lbl">وقت انتهاء الحدث</span><span class="info-val" id="hh-end-time">—</span></div></div>
-          <div class="info-row"><span class="info-icon">🚦</span><div class="info-content"><span class="info-lbl">حالة الحدث</span><span class="info-val" id="hh-status">—</span></div></div>
+          
         </div>
       </div>
       <div class="col-left">
@@ -1300,7 +1484,7 @@ function hpSelectCat(cat){
     <div class="a4-lower">
       <div class="lower-right">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">📞 جهة البلاغ</div>
-        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="hh-reporter" style="font-size:12px;">—</span></div></div>
+        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="hh-reporter" style="font-size:12px;">—</span><span class="info-val" id="hh-reporter-name" style="font-size:11px;color:#888;display:block;margin-top:2px;"></span></div></div>
       </div>
       <div class="lower-left" style="display:block;padding:8px 16px 8px 10px;">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">🎖️ مناوب العمليات</div>
@@ -1352,15 +1536,9 @@ function hpSelectCat(cat){
       <div class="rc-field"><label>وقت إبلاغ صحة 8</label><input type="time" id="hh-f-notify8" oninput="updateHazardHuman()"/></div>
       <div class="rc-field"><label>وقت انتهاء الحدث</label><input type="time" id="hh-f-end" oninput="updateHazardHuman()"/></div>
       <div class="rc-field"><label>موقع الحدث</label><input type="text" id="hh-f-loc" placeholder="مثال: الطوارئ — الدور الثاني" oninput="updateHazardHuman()"/></div>
-      <div class="rc-field"><label>حالة الحدث</label>
-        <select id="hh-f-status" onchange="updateHazardHuman()">
-          <option value="">— اختر —</option>
-          <option value="نشط">🔴 نشط</option>
-          <option value="تحت السيطرة">🟡 تحت السيطرة</option>
-          <option value="منتهي">🟢 منتهي</option>
-        </select>
-      </div>
+      
       <div class="rc-field"><label>جهة البلاغ</label><select id="hh-f-reporter" onchange="updateHazardHuman()"><option value="">— اختر —</option></select></div>
+      <div class="rc-field"><label>اسم المبلِّغ</label><input type="text" id="hh-f-reporter-name" placeholder="اسم المبلِّغ" oninput="updateHazardHuman()"/></div>
       <div class="rc-field"><label>مناوب العمليات</label><select id="hh-f-exec" onchange="updateHazardHuman()"><option value="">— اختر —</option></select></div>
       <div class="rc-field"><label>الإجراء المتخذ</label><select id="hh-f-action" onchange="updateHazardHuman()"><option value="">— اختر —</option></select></div>
     </div>
@@ -1409,27 +1587,26 @@ function hpSelectCat(cat){
         <div class="info-list">
           <div class="info-row"><span class="info-icon">🏥</span><div class="info-content"><span class="info-lbl">جهة الحدث</span><span class="info-val" id="ht-location">—</span></div></div>
           <div class="info-row"><span class="info-icon">⚙️</span><div class="info-content"><span class="info-lbl">نوع الحدث</span><span class="info-val" id="ht-event-type">—</span></div></div>
-          <div class="info-row"><span class="info-icon">🗺️</span><div class="info-content"><span class="info-lbl">الأقسام المتأثرة</span><span class="info-val" id="ht-affected">—</span></div></div>
+          
           <div class="info-row"><span class="info-icon">🕐</span><div class="info-content"><span class="info-lbl">وقت البلاغ</span><span class="info-val" id="ht-time">—</span></div></div>
           <div class="info-row"><span class="info-icon">📡</span><div class="info-content"><span class="info-lbl">وقت إبلاغ صحة 8</span><span class="info-val" id="ht-notify8">—</span></div></div>
           <div class="info-row"><span class="info-icon">✅</span><div class="info-content"><span class="info-lbl">وقت انتهاء الحدث</span><span class="info-val" id="ht-end-time">—</span></div></div>
-          <div class="info-row"><span class="info-icon">🚦</span><div class="info-content"><span class="info-lbl">حالة الحدث</span><span class="info-val" id="ht-status">—</span></div></div>
+          
         </div>
       </div>
       <div class="col-left">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;">📋 تفاصيل إضافية</div>
         <div class="total-row" style="background:linear-gradient(135deg,#005B82,#0078A8);"><span class="total-lbl">مستوى الخطورة</span><span class="total-val" id="ht-severity" style="font-size:22px;">—</span></div>
         <div class="info-list" style="margin-top:8px;">
+          <div class="info-row"><span class="info-icon">🗺️</span><div class="info-content"><span class="info-lbl">الأقسام المتأثرة</span><span class="info-val" id="ht-affected">—</span></div></div>
           <div class="info-row"><span class="info-icon">🛠️</span><div class="info-content"><span class="info-lbl">الإجراء المتخذ</span><span class="info-val" id="ht-action" style="font-size:11px;">—</span></div></div>
-          <div class="info-row"><span class="info-icon">🏥</span><div class="info-content"><span class="info-lbl">الجهة التقنية المسؤولة</span><span class="info-val" id="ht-tech-team">—</span></div></div>
-          <div class="info-row"><span class="info-icon">⏱️</span><div class="info-content"><span class="info-lbl">المدة المتوقعة للإصلاح</span><span class="info-val" id="ht-duration">—</span></div></div>
         </div>
       </div>
     </div>
     <div class="a4-lower">
       <div class="lower-right">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">📞 جهة البلاغ</div>
-        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="ht-reporter" style="font-size:12px;">—</span></div></div>
+        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="ht-reporter" style="font-size:12px;">—</span><span class="info-val" id="ht-reporter-name" style="font-size:11px;color:#888;display:block;margin-top:2px;"></span></div></div>
       </div>
       <div class="lower-left" style="display:block;padding:8px 16px 8px 10px;">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">🎖️ مناوب العمليات</div>
@@ -1484,17 +1661,8 @@ function hpSelectCat(cat){
           <option value="🟢 منخفض">🟢 منخفض</option>
         </select>
       </div>
-      <div class="rc-field"><label>الجهة التقنية المسؤولة</label><input type="text" id="ht-f-techteam" placeholder="مثال: قسم الصيانة" oninput="updateHazardTech()"/></div>
-      <div class="rc-field"><label>المدة المتوقعة للإصلاح</label><input type="text" id="ht-f-duration" placeholder="مثال: 4 ساعات" oninput="updateHazardTech()"/></div>
-      <div class="rc-field"><label>حالة الحدث</label>
-        <select id="ht-f-status" onchange="updateHazardTech()">
-          <option value="">— اختر —</option>
-          <option value="نشط">🔴 نشط</option>
-          <option value="تحت المعالجة">🟡 تحت المعالجة</option>
-          <option value="تم الحل">🟢 تم الحل</option>
-        </select>
-      </div>
       <div class="rc-field"><label>جهة البلاغ</label><select id="ht-f-reporter" onchange="updateHazardTech()"><option value="">— اختر —</option></select></div>
+      <div class="rc-field"><label>اسم المبلِّغ</label><input type="text" id="ht-f-reporter-name" placeholder="اسم المبلِّغ" oninput="updateHazardTech()"/></div>
       <div class="rc-field"><label>مناوب العمليات</label><select id="ht-f-exec" onchange="updateHazardTech()"><option value="">— اختر —</option></select></div>
       <div class="rc-field"><label>الإجراء المتخذ</label><select id="ht-f-action" onchange="updateHazardTech()"><option value="">— اختر —</option></select></div>
     </div>
@@ -1528,7 +1696,7 @@ function hpSelectCat(cat){
           <div class="info-row"><span class="info-icon">🕐</span><div class="info-content"><span class="info-lbl">وقت البلاغ</span><span class="info-val" id="hn-time">—</span></div></div>
           <div class="info-row"><span class="info-icon">📡</span><div class="info-content"><span class="info-lbl">وقت إبلاغ صحة 8</span><span class="info-val" id="hn-notify8">—</span></div></div>
           <div class="info-row"><span class="info-icon">✅</span><div class="info-content"><span class="info-lbl">وقت انتهاء الحدث</span><span class="info-val" id="hn-end-time">—</span></div></div>
-          <div class="info-row"><span class="info-icon">🚦</span><div class="info-content"><span class="info-lbl">حالة الحدث</span><span class="info-val" id="hn-status">—</span></div></div>
+          
         </div>
       </div>
       <div class="col-left">
@@ -1540,13 +1708,14 @@ function hpSelectCat(cat){
           <div class="triage-box t-yellow"><span class="triage-icon">🟡</span><span class="triage-lbl">الحالات الصفراء</span><span class="triage-num" id="hn-yellow">0</span></div>
           <div class="triage-box t-green"><span class="triage-icon">🟢</span><span class="triage-lbl">الحالات الخضراء</span><span class="triage-num" id="hn-green">0</span></div>
         </div>
+        <div id="hn-recv-section"><div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-top:8px;margin-bottom:4px;font-size:10px;">🏥 المستشفيات المستقبلة</div><div id="hn-recv-hosp-1" class="recv-hosp-row empty-row"><span class="info-icon">🏥</span><span class="info-val" id="hn-recv1" style="font-size:11px;"></span></div><div id="hn-recv-hosp-2" class="recv-hosp-row empty-row"><span class="info-icon">🏥</span><span class="info-val" id="hn-recv2" style="font-size:11px;"></span></div><div id="hn-recv-hosp-3" class="recv-hosp-row empty-row"><span class="info-icon">🏥</span><span class="info-val" id="hn-recv3" style="font-size:11px;"></span></div></div>
         <div class="info-row" style="margin-top:8px;"><span class="info-icon">🛠️</span><div class="info-content"><span class="info-lbl">الإجراء المتخذ</span><span class="info-val" id="hn-action" style="font-size:11px;">—</span></div></div>
       </div>
     </div>
     <div class="a4-lower">
       <div class="lower-right">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">📞 جهة البلاغ</div>
-        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="hn-reporter" style="font-size:12px;">—</span></div></div>
+        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="hn-reporter" style="font-size:12px;">—</span><span class="info-val" id="hn-reporter-name" style="font-size:11px;color:#888;display:block;margin-top:2px;"></span></div></div>
       </div>
       <div class="lower-left" style="display:block;padding:8px 16px 8px 10px;">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">🎖️ مناوب العمليات</div>
@@ -1590,17 +1759,20 @@ function hpSelectCat(cat){
       <div class="rc-field"><label>وقت إبلاغ صحة 8</label><input type="time" id="hn-f-notify8" oninput="updateHazardNature()"/></div>
       <div class="rc-field"><label>وقت انتهاء الحدث</label><input type="time" id="hn-f-end" oninput="updateHazardNature()"/></div>
       <div class="rc-field"><label>منطقة التأثير</label><input type="text" id="hn-f-area" placeholder="مثال: شمال المدينة" oninput="updateHazardNature()"/></div>
-      <div class="rc-field"><label>حالة الحدث</label>
-        <select id="hn-f-status" onchange="updateHazardNature()">
-          <option value="">— اختر —</option>
-          <option value="نشط">🔴 نشط</option>
-          <option value="تحت السيطرة">🟡 تحت السيطرة</option>
-          <option value="منتهي">🟢 منتهي</option>
-        </select>
-      </div>
+      
       <div class="rc-field"><label>جهة البلاغ</label><select id="hn-f-reporter" onchange="updateHazardNature()"><option value="">— اختر —</option></select></div>
+      <div class="rc-field"><label>اسم المبلِّغ</label><input type="text" id="hn-f-reporter-name" placeholder="اسم المبلِّغ" oninput="updateHazardNature()"/></div>
       <div class="rc-field"><label>مناوب العمليات</label><select id="hn-f-exec" onchange="updateHazardNature()"><option value="">— اختر —</option></select></div>
       <div class="rc-field"><label>الإجراء المتخذ</label><select id="hn-f-action" onchange="updateHazardNature()"><option value="">— اختر —</option></select></div>
+    </div>
+    <div class="form-grid" style="margin-top:10px;">
+      <div class="rc-field" style="grid-column:span 3;"><label>🏥 المستشفيات المستقبلة</label>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+          <select id="hn-f-recv1" onchange="updateHazardNature()"><option value="">— المستشفى الأول —</option></select>
+          <select id="hn-f-recv2" onchange="updateHazardNature()"><option value="">— المستشفى الثاني —</option></select>
+          <select id="hn-f-recv3" onchange="updateHazardNature()"><option value="">— المستشفى الثالث —</option></select>
+        </div>
+      </div>
     </div>
     <div class="num-section">
       <div class="num-section-lbl">⚕️ عدد الحالات</div>
@@ -1643,8 +1815,7 @@ function hpSelectCat(cat){
           <div class="info-row"><span class="info-icon">🕐</span><div class="info-content"><span class="info-lbl">وقت البلاغ</span><span class="info-val" id="hz-time">—</span></div></div>
           <div class="info-row"><span class="info-icon">📡</span><div class="info-content"><span class="info-lbl">وقت إبلاغ صحة 8</span><span class="info-val" id="hz-notify8">—</span></div></div>
           <div class="info-row"><span class="info-icon">✅</span><div class="info-content"><span class="info-lbl">وقت انتهاء الحدث</span><span class="info-val" id="hz-end-time">—</span></div></div>
-          <div class="info-row"><span class="info-icon">🚦</span><div class="info-content"><span class="info-lbl">حالة الحدث</span><span class="info-val" id="hz-status">—</span></div></div>
-        </div>
+                  </div>
       </div>
       <div class="col-left">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;">⚕️ عدد الحالات</div>
@@ -1655,13 +1826,14 @@ function hpSelectCat(cat){
           <div class="triage-box t-yellow"><span class="triage-icon">🟡</span><span class="triage-lbl">الحالات الصفراء</span><span class="triage-num" id="hz-yellow">0</span></div>
           <div class="triage-box t-green"><span class="triage-icon">🟢</span><span class="triage-lbl">الحالات الخضراء</span><span class="triage-num" id="hz-green">0</span></div>
         </div>
+        <div id="hz-recv-section"><div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-top:8px;margin-bottom:4px;font-size:10px;">🏥 المستشفيات المستقبلة</div><div id="hz-recv-hosp-1" class="recv-hosp-row empty-row"><span class="info-icon">🏥</span><span class="info-val" id="hz-recv1" style="font-size:11px;"></span></div><div id="hz-recv-hosp-2" class="recv-hosp-row empty-row"><span class="info-icon">🏥</span><span class="info-val" id="hz-recv2" style="font-size:11px;"></span></div><div id="hz-recv-hosp-3" class="recv-hosp-row empty-row"><span class="info-icon">🏥</span><span class="info-val" id="hz-recv3" style="font-size:11px;"></span></div></div>
         <div class="info-row" style="margin-top:8px;"><span class="info-icon">🛠️</span><div class="info-content"><span class="info-lbl">الإجراء المتخذ</span><span class="info-val" id="hz-action" style="font-size:11px;">—</span></div></div>
       </div>
     </div>
     <div class="a4-lower">
       <div class="lower-right">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">📞 جهة البلاغ</div>
-        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="hz-reporter" style="font-size:12px;">—</span></div></div>
+        <div class="info-row"><span class="info-icon">🏛️</span><div class="info-content"><span class="info-lbl">الجهة المُبلِّغة</span><span class="info-val" id="hz-reporter" style="font-size:12px;">—</span><span class="info-val" id="hz-reporter-name" style="font-size:11px;color:#888;display:block;margin-top:2px;"></span></div></div>
       </div>
       <div class="lower-left" style="display:block;padding:8px 16px 8px 10px;">
         <div class="section-title" style="color:#005B82;border-bottom-color:#00AEEF;margin-bottom:5px;">🎖️ مناوب العمليات</div>
@@ -1695,17 +1867,19 @@ function hpSelectCat(cat){
       <div class="rc-field"><label>وقت إبلاغ صحة 8</label><input type="time" id="hz-f-notify8" oninput="updateHazardHazmat()"/></div>
       <div class="rc-field"><label>وقت انتهاء الحدث</label><input type="time" id="hz-f-end" oninput="updateHazardHazmat()"/></div>
       <div class="rc-field"><label>موقع الحادثة</label><input type="text" id="hz-f-area" placeholder="مثال: مستودع المواد الكيميائية" oninput="updateHazardHazmat()"/></div>
-      <div class="rc-field"><label>حالة الحدث</label>
-        <select id="hz-f-status" onchange="updateHazardHazmat()">
-          <option value="">— اختر —</option>
-          <option value="نشط">🔴 نشط</option>
-          <option value="تحت السيطرة">🟡 تحت السيطرة</option>
-          <option value="منتهي">🟢 منتهي</option>
-        </select>
-      </div>
-      <div class="rc-field"><label>جهة البلاغ</label><select id="hz-f-reporter" onchange="updateHazardHazmat()"><option value="">— اختر —</option></select></div>
+            <div class="rc-field"><label>جهة البلاغ</label><select id="hz-f-reporter" onchange="updateHazardHazmat()"><option value="">— اختر —</option></select></div>
+      <div class="rc-field"><label>اسم المبلِّغ</label><input type="text" id="hz-f-reporter-name" placeholder="اسم المبلِّغ" oninput="updateHazardHazmat()"/></div>
       <div class="rc-field"><label>مناوب العمليات</label><select id="hz-f-exec" onchange="updateHazardHazmat()"><option value="">— اختر —</option></select></div>
       <div class="rc-field"><label>الإجراء المتخذ</label><select id="hz-f-action" onchange="updateHazardHazmat()"><option value="">— اختر —</option></select></div>
+    </div>
+    <div class="form-grid" style="margin-top:10px;">
+      <div class="rc-field" style="grid-column:span 3;"><label>🏥 المستشفيات المستقبلة</label>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;">
+          <select id="hz-f-recv1" onchange="updateHazardHazmat()"><option value="">— المستشفى الأول —</option></select>
+          <select id="hz-f-recv2" onchange="updateHazardHazmat()"><option value="">— المستشفى الثاني —</option></select>
+          <select id="hz-f-recv3" onchange="updateHazardHazmat()"><option value="">— المستشفى الثالث —</option></select>
+        </div>
+      </div>
     </div>
     <div class="num-section">
       <div class="num-section-lbl">⚕️ عدد الحالات</div>
@@ -2788,7 +2962,9 @@ function populateRecvHospSelects(){
   const recvIds=[
     ['fi-f-recv1','— المستشفى الأول —'],['fi-f-recv2','— المستشفى الثاني —'],['fi-f-recv3','— المستشفى الثالث —'],
     ['inj-f-recv1','— المستشفى الأول —'],['inj-f-recv2','— المستشفى الثاني —'],['inj-f-recv3','— المستشفى الثالث —'],
-    ['hh-f-recv1','— المستشفى الأول —'],['hh-f-recv2','— المستشفى الثاني —'],['hh-f-recv3','— المستشفى الثالث —']
+    ['hh-f-recv1','— المستشفى الأول —'],['hh-f-recv2','— المستشفى الثاني —'],['hh-f-recv3','— المستشفى الثالث —'],
+    ['hn-f-recv1','— المستشفى الأول —'],['hn-f-recv2','— المستشفى الثاني —'],['hn-f-recv3','— المستشفى الثالث —'],
+    ['hz-f-recv1','— المستشفى الأول —'],['hz-f-recv2','— المستشفى الثاني —'],['hz-f-recv3','— المستشفى الثالث —']
   ];
   recvIds.forEach(([id,ph])=>{
     const sel=document.getElementById(id);if(!sel)return;
@@ -3929,8 +4105,8 @@ function updateHazardHuman(){
   var notify8=hazardGetVal('hh-f-notify8');
   var end=hazardGetVal('hh-f-end');
   var loc=hazardGetVal('hh-f-loc');
-  var status=hazardGetVal('hh-f-status');
   var reporter=hazardGetVal('hh-f-reporter');
+  var reporterName=hazardGetVal('hh-f-reporter-name');
   var exec=hazardGetVal('hh-f-exec');
   var action=hazardGetVal('hh-f-action');
   var notes=hazardGetVal('hh-f-notes');
@@ -3949,8 +4125,8 @@ function updateHazardHuman(){
   hazardSetTxt('hh-time', time||'—');
   hazardSetTxt('hh-notify8', notify8||'—');
   hazardSetTxt('hh-end-time', end||'—');
-  hazardSetTxt('hh-status', status);
   hazardSetTxt('hh-reporter', reporter);
+  var _rn=document.getElementById('hh-reporter-name');if(_rn)_rn.textContent=reporterName||'';
   hazardSetTxt('hh-exec', exec);
   hazardSetTxt('hh-total', tot);
   hazardSetTxt('hh-black', blk);
@@ -3994,10 +4170,8 @@ function updateHazardTech(){
   var end=hazardGetVal('ht-f-end');
   var affected=hazardGetVal('ht-f-affected');
   var severity=hazardGetVal('ht-f-severity');
-  var techteam=hazardGetVal('ht-f-techteam');
-  var duration=hazardGetVal('ht-f-duration');
-  var status=hazardGetVal('ht-f-status');
   var reporter=hazardGetVal('ht-f-reporter');
+  var reporterName=hazardGetVal('ht-f-reporter-name');
   var exec=hazardGetVal('ht-f-exec');
   var action=hazardGetVal('ht-f-action');
   var notes=hazardGetVal('ht-f-notes');
@@ -4010,11 +4184,9 @@ function updateHazardTech(){
   hazardSetTxt('ht-time', time||'—');
   hazardSetTxt('ht-notify8', notify8||'—');
   hazardSetTxt('ht-end-time', end||'—');
-  hazardSetTxt('ht-status', status);
   hazardSetTxt('ht-severity', severity);
-  hazardSetTxt('ht-tech-team', techteam);
-  hazardSetTxt('ht-duration', duration);
   hazardSetTxt('ht-reporter', reporter);
+  var _rn=document.getElementById('ht-reporter-name');if(_rn)_rn.textContent=reporterName||'';
   hazardSetTxt('ht-exec', exec);
   hazardSetTxt('ht-action', action);
   var nb=document.getElementById('ht-notes-block'); if(nb) nb.style.display=notes?'block':'none';
@@ -4035,11 +4207,14 @@ function updateHazardNature(){
   var notify8=hazardGetVal('hn-f-notify8');
   var end=hazardGetVal('hn-f-end');
   var area=hazardGetVal('hn-f-area');
-  var status=hazardGetVal('hn-f-status');
   var reporter=hazardGetVal('hn-f-reporter');
+  var reporterName=hazardGetVal('hn-f-reporter-name');
   var exec=hazardGetVal('hn-f-exec');
   var action=hazardGetVal('hn-f-action');
   var notes=hazardGetVal('hn-f-notes');
+  var recv1=hazardGetVal('hn-f-recv1');
+  var recv2=hazardGetVal('hn-f-recv2');
+  var recv3=hazardGetVal('hn-f-recv3');
   var blk=hazardGetNum('hn-f-black'), red=hazardGetNum('hn-f-red'), yel=hazardGetNum('hn-f-yellow'), grn=hazardGetNum('hn-f-green');
   var tot=blk+red+yel+grn;
   var totEl=document.getElementById('hn-f-total'); if(totEl) totEl.value=tot;
@@ -4052,8 +4227,8 @@ function updateHazardNature(){
   hazardSetTxt('hn-time', time||'—');
   hazardSetTxt('hn-notify8', notify8||'—');
   hazardSetTxt('hn-end-time', end||'—');
-  hazardSetTxt('hn-status', status);
   hazardSetTxt('hn-reporter', reporter);
+  var _rn=document.getElementById('hn-reporter-name');if(_rn)_rn.textContent=reporterName||'';
   hazardSetTxt('hn-exec', exec);
   hazardSetTxt('hn-action', action);
   hazardSetTxt('hn-total', tot);
@@ -4061,6 +4236,11 @@ function updateHazardNature(){
   hazardSetTxt('hn-red', red);
   hazardSetTxt('hn-yellow', yel);
   hazardSetTxt('hn-green', grn);
+    // Recv hospitals
+  function _setRecv(rowId,valId,val){var row=document.getElementById(rowId);var el=document.getElementById(valId);if(row)row.className='recv-hosp-row'+(val?'':' empty-row');if(el)el.textContent=val||'';}
+  _setRecv('hn-recv-hosp-1','hn-recv1',recv1);
+  _setRecv('hn-recv-hosp-2','hn-recv2',recv2);
+  _setRecv('hn-recv-hosp-3','hn-recv3',recv3);
   var nb=document.getElementById('hn-notes-block'); if(nb) nb.style.display=notes?'block':'none';
   hazardSetTxt('hn-notes-text', notes);
 }
@@ -4075,11 +4255,14 @@ function updateHazardHazmat(){
   var notify8=hazardGetVal('hz-f-notify8');
   var end=hazardGetVal('hz-f-end');
   var area=hazardGetVal('hz-f-area');
-  var status=hazardGetVal('hz-f-status');
   var reporter=hazardGetVal('hz-f-reporter');
+  var reporterName=hazardGetVal('hz-f-reporter-name');
   var exec=hazardGetVal('hz-f-exec');
   var action=hazardGetVal('hz-f-action');
   var notes=hazardGetVal('hz-f-notes');
+  var recv1=hazardGetVal('hz-f-recv1');
+  var recv2=hazardGetVal('hz-f-recv2');
+  var recv3=hazardGetVal('hz-f-recv3');
   var blk=hazardGetNum('hz-f-black'), red=hazardGetNum('hz-f-red'), yel=hazardGetNum('hz-f-yellow'), grn=hazardGetNum('hz-f-green');
   var tot=blk+red+yel+grn;
   var totEl=document.getElementById('hz-f-total'); if(totEl) totEl.value=tot;
@@ -4093,8 +4276,8 @@ function updateHazardHazmat(){
   hazardSetTxt('hz-time', time||'—');
   hazardSetTxt('hz-notify8', notify8||'—');
   hazardSetTxt('hz-end-time', end||'—');
-  hazardSetTxt('hz-status', status);
   hazardSetTxt('hz-reporter', reporter);
+  var _rn=document.getElementById('hz-reporter-name');if(_rn)_rn.textContent=reporterName||'';
   hazardSetTxt('hz-exec', exec);
   hazardSetTxt('hz-action', action);
   hazardSetTxt('hz-total', tot);
@@ -4102,6 +4285,11 @@ function updateHazardHazmat(){
   hazardSetTxt('hz-red', red);
   hazardSetTxt('hz-yellow', yel);
   hazardSetTxt('hz-green', grn);
+    // Recv hospitals
+  function _setRecv(rowId,valId,val){var row=document.getElementById(rowId);var el=document.getElementById(valId);if(row)row.className='recv-hosp-row'+(val?'':' empty-row');if(el)el.textContent=val||'';}
+  _setRecv('hz-recv-hosp-1','hz-recv1',recv1);
+  _setRecv('hz-recv-hosp-2','hz-recv2',recv2);
+  _setRecv('hz-recv-hosp-3','hz-recv3',recv3);
   var nb=document.getElementById('hz-notes-block'); if(nb) nb.style.display=notes?'block':'none';
   hazardSetTxt('hz-notes-text', notes);
 }
@@ -4135,7 +4323,6 @@ function updateHazardHuman(){
   var notify8=hazardGetVal('hh-f-notify8');
   var end=hazardGetVal('hh-f-end');
   var loc=hazardGetVal('hh-f-loc');
-  var status=hazardGetVal('hh-f-status');
   var reporter=hazardGetVal('hh-f-reporter');
   var exec=hazardGetVal('hh-f-exec');
   var action=hazardGetVal('hh-f-action');
@@ -4155,7 +4342,6 @@ function updateHazardHuman(){
   hazardSetTxt('hh-time', time||'—');
   hazardSetTxt('hh-notify8', notify8||'—');
   hazardSetTxt('hh-end-time', end||'—');
-  hazardSetTxt('hh-status', status);
   hazardSetTxt('hh-reporter', reporter);
   hazardSetTxt('hh-exec', exec);
   hazardSetTxt('hh-total', tot);
@@ -4200,9 +4386,6 @@ function updateHazardTech(){
   var end=hazardGetVal('ht-f-end');
   var affected=hazardGetVal('ht-f-affected');
   var severity=hazardGetVal('ht-f-severity');
-  var techteam=hazardGetVal('ht-f-techteam');
-  var duration=hazardGetVal('ht-f-duration');
-  var status=hazardGetVal('ht-f-status');
   var reporter=hazardGetVal('ht-f-reporter');
   var exec=hazardGetVal('ht-f-exec');
   var action=hazardGetVal('ht-f-action');
@@ -4216,10 +4399,7 @@ function updateHazardTech(){
   hazardSetTxt('ht-time', time||'—');
   hazardSetTxt('ht-notify8', notify8||'—');
   hazardSetTxt('ht-end-time', end||'—');
-  hazardSetTxt('ht-status', status);
   hazardSetTxt('ht-severity', severity);
-  hazardSetTxt('ht-tech-team', techteam);
-  hazardSetTxt('ht-duration', duration);
   hazardSetTxt('ht-reporter', reporter);
   hazardSetTxt('ht-exec', exec);
   hazardSetTxt('ht-action', action);
@@ -4241,7 +4421,6 @@ function updateHazardNature(){
   var notify8=hazardGetVal('hn-f-notify8');
   var end=hazardGetVal('hn-f-end');
   var area=hazardGetVal('hn-f-area');
-  var status=hazardGetVal('hn-f-status');
   var reporter=hazardGetVal('hn-f-reporter');
   var exec=hazardGetVal('hn-f-exec');
   var action=hazardGetVal('hn-f-action');
@@ -4258,7 +4437,6 @@ function updateHazardNature(){
   hazardSetTxt('hn-time', time||'—');
   hazardSetTxt('hn-notify8', notify8||'—');
   hazardSetTxt('hn-end-time', end||'—');
-  hazardSetTxt('hn-status', status);
   hazardSetTxt('hn-reporter', reporter);
   hazardSetTxt('hn-exec', exec);
   hazardSetTxt('hn-action', action);
@@ -4281,7 +4459,6 @@ function updateHazardHazmat(){
   var notify8=hazardGetVal('hz-f-notify8');
   var end=hazardGetVal('hz-f-end');
   var area=hazardGetVal('hz-f-area');
-  var status=hazardGetVal('hz-f-status');
   var reporter=hazardGetVal('hz-f-reporter');
   var exec=hazardGetVal('hz-f-exec');
   var action=hazardGetVal('hz-f-action');
@@ -4299,7 +4476,6 @@ function updateHazardHazmat(){
   hazardSetTxt('hz-time', time||'—');
   hazardSetTxt('hz-notify8', notify8||'—');
   hazardSetTxt('hz-end-time', end||'—');
-  hazardSetTxt('hz-status', status);
   hazardSetTxt('hz-reporter', reporter);
   hazardSetTxt('hz-exec', exec);
   hazardSetTxt('hz-action', action);
@@ -4453,7 +4629,6 @@ function updateHazardHuman(){
   var notify8=hazardGetVal('hh-f-notify8');
   var end=hazardGetVal('hh-f-end');
   var loc=hazardGetVal('hh-f-loc');
-  var status=hazardGetVal('hh-f-status');
   var reporter=hazardGetVal('hh-f-reporter');
   var exec=hazardGetVal('hh-f-exec');
   var action=hazardGetVal('hh-f-action');
@@ -4473,7 +4648,6 @@ function updateHazardHuman(){
   hazardSetTxt('hh-time', time||'—');
   hazardSetTxt('hh-notify8', notify8||'—');
   hazardSetTxt('hh-end-time', end||'—');
-  hazardSetTxt('hh-status', status);
   hazardSetTxt('hh-reporter', reporter);
   hazardSetTxt('hh-exec', exec);
   hazardSetTxt('hh-total', tot);
@@ -4518,9 +4692,6 @@ function updateHazardTech(){
   var end=hazardGetVal('ht-f-end');
   var affected=hazardGetVal('ht-f-affected');
   var severity=hazardGetVal('ht-f-severity');
-  var techteam=hazardGetVal('ht-f-techteam');
-  var duration=hazardGetVal('ht-f-duration');
-  var status=hazardGetVal('ht-f-status');
   var reporter=hazardGetVal('ht-f-reporter');
   var exec=hazardGetVal('ht-f-exec');
   var action=hazardGetVal('ht-f-action');
@@ -4534,10 +4705,7 @@ function updateHazardTech(){
   hazardSetTxt('ht-time', time||'—');
   hazardSetTxt('ht-notify8', notify8||'—');
   hazardSetTxt('ht-end-time', end||'—');
-  hazardSetTxt('ht-status', status);
   hazardSetTxt('ht-severity', severity);
-  hazardSetTxt('ht-tech-team', techteam);
-  hazardSetTxt('ht-duration', duration);
   hazardSetTxt('ht-reporter', reporter);
   hazardSetTxt('ht-exec', exec);
   hazardSetTxt('ht-action', action);
@@ -4559,7 +4727,6 @@ function updateHazardNature(){
   var notify8=hazardGetVal('hn-f-notify8');
   var end=hazardGetVal('hn-f-end');
   var area=hazardGetVal('hn-f-area');
-  var status=hazardGetVal('hn-f-status');
   var reporter=hazardGetVal('hn-f-reporter');
   var exec=hazardGetVal('hn-f-exec');
   var action=hazardGetVal('hn-f-action');
@@ -4576,7 +4743,6 @@ function updateHazardNature(){
   hazardSetTxt('hn-time', time||'—');
   hazardSetTxt('hn-notify8', notify8||'—');
   hazardSetTxt('hn-end-time', end||'—');
-  hazardSetTxt('hn-status', status);
   hazardSetTxt('hn-reporter', reporter);
   hazardSetTxt('hn-exec', exec);
   hazardSetTxt('hn-action', action);
@@ -4599,7 +4765,6 @@ function updateHazardHazmat(){
   var notify8=hazardGetVal('hz-f-notify8');
   var end=hazardGetVal('hz-f-end');
   var area=hazardGetVal('hz-f-area');
-  var status=hazardGetVal('hz-f-status');
   var reporter=hazardGetVal('hz-f-reporter');
   var exec=hazardGetVal('hz-f-exec');
   var action=hazardGetVal('hz-f-action');
@@ -4617,7 +4782,6 @@ function updateHazardHazmat(){
   hazardSetTxt('hz-time', time||'—');
   hazardSetTxt('hz-notify8', notify8||'—');
   hazardSetTxt('hz-end-time', end||'—');
-  hazardSetTxt('hz-status', status);
   hazardSetTxt('hz-reporter', reporter);
   hazardSetTxt('hz-exec', exec);
   hazardSetTxt('hz-action', action);
