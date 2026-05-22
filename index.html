@@ -20,14 +20,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .home-org{color:#fff;font-size:48px;font-weight:900;line-height:1.15;margin-bottom:8px;text-shadow:0 2px 16px rgba(0,0,0,0.3);}
 .home-sub{color:rgba(255,255,255,0.65);font-size:15px;font-weight:600;}
 .home-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:960px;margin:0 auto;}
-@media(max-width:700px){.home-cards{grid-template-columns:repeat(2,1fr);}}
+@media screen and (max-width:700px){.home-cards{grid-template-columns:repeat(2,1fr);}}
 
 /* ══════════════════════════════════════════
    MOBILE RESPONSIVE — شامل للجوال
 ══════════════════════════════════════════ */
 
 /* ── Global body on mobile ── */
-@media(max-width:768px){
+@media screen and (max-width:768px){
   body{padding:8px 6px;}
 
   /* ── Tab Nav ── */
@@ -138,7 +138,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 }
 
 /* ── Very small screens (< 480px) ── */
-@media(max-width:480px){
+@media screen and (max-width:480px){
   .tab-btn{font-size:10px!important;padding:6px 10px!important;}
   .a4-org-main{font-size:11px!important;}
   .triages{grid-template-columns:repeat(2,1fr)!important;}
@@ -149,7 +149,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 }
 
 /* ── Home page mobile ── */
-@media(max-width:768px){
+@media screen and (max-width:768px){
   .hp-wrap{min-height:100vh;}
   .hp-header{padding:16px 20px 14px!important;gap:12px!important;}
   .hp-logo-ring{width:52px!important;height:52px!important;}
@@ -184,7 +184,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 }
 
 /* ── RCK table mobile ── */
-@media(max-width:768px){
+@media screen and (max-width:768px){
   .rck-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch;}
   .rck-a4{min-width:600px;}
   .rck-tbl{font-size:9px!important;}
@@ -192,7 +192,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 }
 
 /* ── Hypothesis pages mobile ── */
-@media(max-width:768px){
+@media screen and (max-width:768px){
   .hyp-page{
     width:100%!important;
     min-height:unset!important;
@@ -202,7 +202,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 }
 
 /* ── Hazard panels mobile ── */
-@media(max-width:768px){
+@media screen and (max-width:768px){
   .recv-hosp-row{flex-wrap:wrap;}
 }
 .home-card{background:rgba(255,255,255,0.09);border:1.5px solid rgba(255,255,255,0.18);border-radius:20px;padding:30px 20px 26px;cursor:pointer;transition:all .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
@@ -462,7 +462,7 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
   touch-action: manipulation;
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
 
   /* ── iOS: منع تكبير الشاشة عند النقر على الحقول (font-size >= 16px) ── */
   .rc-field select,
@@ -581,7 +581,7 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
 /* ── شريط الإجراءات السفلي للجوال ── */
 #mobile-action-bar { display: none; }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   #mobile-action-bar {
     display: flex;
     position: fixed;
