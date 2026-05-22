@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>لوحة تحكم البطاقات — تجمع حائل الصحي</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
@@ -448,6 +448,195 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-settings:hover{background:rgba(0,174,239,0.28);color:#fff;}
 
 
+/* ═══════════════════════════════════════════════════
+   PROFESSIONAL MOBILE ENHANCEMENTS — تحسينات الجوال
+   ═══════════════════════════════════════════════════ */
+
+/* منع pull-to-refresh */
+body { overscroll-behavior-y: contain; }
+
+/* إزالة الوميض عند اللمس */
+button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
+.mob-bar-btn,.settings-add-btn,.stab,.settings-del {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+
+  /* ── iOS: منع تكبير الشاشة عند النقر على الحقول (font-size >= 16px) ── */
+  .rc-field select,
+  .rc-field input,
+  .rc-field textarea,
+  .settings-inp,
+  .num-field input {
+    font-size: 16px !important;
+    -webkit-appearance: none;
+  }
+
+  /* ── إصلاح grid-column:span على تخطيط عمود واحد ── */
+  .form-grid > * { grid-column: span 1 !important; }
+
+  /* ── أحجام لمس مريحة (min 44px) ── */
+  .tab-btn {
+    min-height: 44px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    display: inline-flex !important;
+  }
+  .btn-print, .btn-reset, .btn-settings {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .check-item {
+    padding: 10px 14px !important;
+    min-height: 44px !important;
+    align-items: center !important;
+  }
+  .stab {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 12px !important;
+  }
+  .settings-add-btn { min-height: 46px !important; font-size: 14px !important; }
+  .settings-del     { min-height: 38px !important; padding: 6px 16px !important; }
+  .settings-item    { padding: 10px 14px !important; }
+  .settings-item span { font-size: 14px !important; }
+  .settings-inp     { min-height: 46px !important; font-size: 16px !important; }
+
+  /* ── Settings modal → bottom sheet ── */
+  .settings-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .settings-box {
+    border-radius: 22px 22px 0 0 !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 22px 16px calc(24px + env(safe-area-inset-bottom,0px)) !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-shadow: 0 -12px 48px rgba(0,0,0,0.6) !important;
+  }
+  .settings-box::before {
+    content: '';
+    display: block;
+    width: 40px; height: 4px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 4px;
+    margin: 0 auto 18px;
+  }
+  .settings-header { margin-bottom: 16px !important; }
+  .settings-title  { font-size: 15px !important; }
+  .stabs { gap: 6px !important; margin-bottom: 16px !important; }
+  .settings-list { max-height: 40vh !important; }
+
+  /* ── الـ top-bar على الجوال: شريط علوي لاصق ── */
+  .top-bar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 60 !important;
+    background: rgba(0, 22, 40, 0.97) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(0,174,239,0.2) !important;
+    max-width: 100% !important;
+    margin-bottom: 0 !important;
+    padding: 10px 12px !important;
+  }
+  .top-title-block { display: none !important; }
+  .top-actions { margin-right: auto; }
+
+  /* ── مسافة سفلية لشريط الإجراءات المثبّت ── */
+  body {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ── num fields على الجوال ── */
+  .num-field input { font-size: 22px !important; padding: 10px 6px !important; }
+  .num-field label { font-size: 10px !important; }
+
+  /* ── check-group مريح ── */
+  .check-group { gap: 8px !important; }
+
+  /* ── ردود فعل اللمس ── */
+  .hp-cat-btn:active  { background: rgba(0,174,239,0.15) !important; border-color: #00AEEF !important; }
+  .hp-sub-card:active { background: rgba(0,174,239,0.2)  !important; border-color: rgba(0,174,239,0.6) !important; }
+  .home-card:active   { background: rgba(255,255,255,0.2) !important; }
+
+  /* ── تحسين معاينة التقرير ── */
+  .a4-page     { box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important; }
+  .section-title { font-size: 10px !important; }
+  .info-val    { font-size: 12px !important; }
+  .info-lbl    { font-size: 8px !important; }
+  .triage-box  { padding: 10px 12px !important; }
+  .triage-num  { font-size: 24px !important; }
+}
+
+/* ── شريط الإجراءات السفلي للجوال ── */
+#mobile-action-bar { display: none; }
+
+@media (max-width: 768px) {
+  #mobile-action-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 500;
+    background: rgba(0, 18, 34, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0,174,239,0.22);
+    padding: 8px 12px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    gap: 6px;
+    align-items: stretch;
+    justify-content: space-around;
+  }
+  #mobile-action-bar.bar-home { display: none !important; }
+}
+.mob-bar-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 7px 4px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.09);
+  color: rgba(255,255,255,0.7);
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  min-height: 52px;
+}
+.mob-bar-btn:active {
+  background: rgba(0,174,239,0.18) !important;
+  border-color: rgba(0,174,239,0.55) !important;
+  color: #fff !important;
+  transform: scale(.96);
+}
+.mob-bar-btn.mob-primary {
+  background: rgba(0,174,239,0.14);
+  border-color: rgba(0,174,239,0.38);
+  color: #7dd8f7;
+}
+.mob-bar-btn.mob-danger {
+  background: rgba(255,80,80,0.08);
+  border-color: rgba(255,80,80,0.2);
+  color: rgba(255,160,160,0.8);
+}
+.mob-bar-btn-icon { font-size: 18px; line-height: 1; }
+.mob-bar-btn-lbl  { font-size: 9px; font-weight: 700; white-space: nowrap; letter-spacing: .2px; }
+
 /* Print */
 @media print{
   body{background:#fff;padding:0;}
@@ -480,6 +669,26 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </style>
 </head>
 <body>
+
+<!-- ===== شريط الإجراءات السفلي للجوال (no-print) ===== -->
+<div id="mobile-action-bar" class="no-print bar-home">
+  <button class="mob-bar-btn" onclick="switchCard('home')">
+    <span class="mob-bar-btn-icon">🏠</span>
+    <span class="mob-bar-btn-lbl">الرئيسية</span>
+  </button>
+  <button class="mob-bar-btn mob-primary" onclick="window.print()">
+    <span class="mob-bar-btn-icon">🖨️</span>
+    <span class="mob-bar-btn-lbl">طباعة</span>
+  </button>
+  <button class="mob-bar-btn mob-danger" onclick="resetActive()">
+    <span class="mob-bar-btn-icon">🔄</span>
+    <span class="mob-bar-btn-lbl">إعادة تعيين</span>
+  </button>
+  <button class="mob-bar-btn" onclick="openSettings()">
+    <span class="mob-bar-btn-icon">⚙️</span>
+    <span class="mob-bar-btn-lbl">الإعدادات</span>
+  </button>
+</div>
 
 <!-- ===== TOP BAR ===== -->
 <div class="top-bar no-print" style="display:none;">
@@ -956,11 +1165,11 @@ function hpSelectCat(cat){
     <div class="num-section">
       <div class="num-section-lbl">📊 أعداد الحالات</div>
       <div class="num-grid">
-        <div class="num-field"><label>⚫ سوداء</label><input type="number" id="rd-f-black" min="0" value="0" oninput="updateReadiness()"/></div>
-        <div class="num-field nf-red"><label>🔴 حمراء</label><input type="number" id="rd-f-red" min="0" value="0" oninput="updateReadiness()"/></div>
-        <div class="num-field nf-yellow"><label>🟡 صفراء</label><input type="number" id="rd-f-yellow" min="0" value="0" oninput="updateReadiness()"/></div>
-        <div class="num-field nf-green"><label>🟢 خضراء</label><input type="number" id="rd-f-green" min="0" value="0" oninput="updateReadiness()"/></div>
-        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" id="rd-f-total" value="0" readonly/></div>
+        <div class="num-field"><label>⚫ سوداء</label><input type="number" inputmode="numeric" id="rd-f-black" min="0" value="0" oninput="updateReadiness()"/></div>
+        <div class="num-field nf-red"><label>🔴 حمراء</label><input type="number" inputmode="numeric" id="rd-f-red" min="0" value="0" oninput="updateReadiness()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 صفراء</label><input type="number" inputmode="numeric" id="rd-f-yellow" min="0" value="0" oninput="updateReadiness()"/></div>
+        <div class="num-field nf-green"><label>🟢 خضراء</label><input type="number" inputmode="numeric" id="rd-f-green" min="0" value="0" oninput="updateReadiness()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="rd-f-total" value="0" readonly/></div>
       </div>
     </div>
     <div class="rc-field" style="margin-top:12px;"><label>📝 ملاحظات</label><textarea id="rd-f-notes" rows="2" placeholder="اكتب الملاحظات هنا..." oninput="updateReadiness()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea></div>
@@ -1062,8 +1271,8 @@ function hpSelectCat(cat){
           <option>❌ لا تعمل</option>
         </select>
       </div>
-      <div class="rc-field"><label>عدد المرضى المنومين</label><input type="number" id="el-f-inpatients" min="0" value="0" oninput="updateElectricity()"/></div>
-      <div class="rc-field"><label>عدد المرضى على تنفس اصطناعي</label><input type="number" id="el-f-ventilators" min="0" value="0" oninput="updateElectricity()"/></div>
+      <div class="rc-field"><label>عدد المرضى المنومين</label><input type="number" inputmode="numeric" id="el-f-inpatients" min="0" value="0" oninput="updateElectricity()"/></div>
+      <div class="rc-field"><label>عدد المرضى على تنفس اصطناعي</label><input type="number" inputmode="numeric" id="el-f-ventilators" min="0" value="0" oninput="updateElectricity()"/></div>
 
       <div class="rc-field" style="grid-column:span 3;"><label>الإجراء المتخذ</label>
         <select id="el-f-action" onchange="elActionToggle()"><option value="">— اختر —</option><option value="__other__">أخرى</option></select>
@@ -1176,9 +1385,9 @@ function hpSelectCat(cat){
       <div class="rc-field"><label>وقت نهاية الانقطاع</label><input type="time" id="ox-f-end" oninput="updateOxygen()"/></div>
 
       <!-- الوضع والإجراءات -->
-      <div class="rc-field"><label>عدد أسطوانات الأكسجين المتوفرة</label><input type="number" id="ox-f-cylinders" min="0" value="0" oninput="updateOxygen()"/></div>
-      <div class="rc-field"><label>عدد المرضى المنومين</label><input type="number" id="ox-f-inpatients" min="0" value="0" oninput="updateOxygen()"/></div>
-      <div class="rc-field"><label>عدد المرضى على تنفس اصطناعي</label><input type="number" id="ox-f-ventilators" min="0" value="0" oninput="updateOxygen()"/></div>
+      <div class="rc-field"><label>عدد أسطوانات الأكسجين المتوفرة</label><input type="number" inputmode="numeric" id="ox-f-cylinders" min="0" value="0" oninput="updateOxygen()"/></div>
+      <div class="rc-field"><label>عدد المرضى المنومين</label><input type="number" inputmode="numeric" id="ox-f-inpatients" min="0" value="0" oninput="updateOxygen()"/></div>
+      <div class="rc-field"><label>عدد المرضى على تنفس اصطناعي</label><input type="number" inputmode="numeric" id="ox-f-ventilators" min="0" value="0" oninput="updateOxygen()"/></div>
 
       <div class="rc-field"><label>مستوى الخطورة</label>
         <select id="ox-f-severity" onchange="updateOxygen()">
@@ -1315,11 +1524,11 @@ function hpSelectCat(cat){
     <div class="num-section">
       <div class="num-section-lbl">🔥 عدد الحالات (فرز ميداني)</div>
       <div class="num-grid">
-        <div class="num-field"><label>⚫ وفيات</label><input type="number" id="fi-f-black" min="0" value="0" oninput="updateFire()"/></div>
-        <div class="num-field nf-red"><label>🔴 حروق حرجة</label><input type="number" id="fi-f-red" min="0" value="0" oninput="updateFire()"/></div>
-        <div class="num-field nf-yellow"><label>🟡 إصابات متوسطة</label><input type="number" id="fi-f-yellow" min="0" value="0" oninput="updateFire()"/></div>
-        <div class="num-field nf-green"><label>🟢 إصابات طفيفة</label><input type="number" id="fi-f-green" min="0" value="0" oninput="updateFire()"/></div>
-        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" id="fi-f-total" value="0" readonly/></div>
+        <div class="num-field"><label>⚫ وفيات</label><input type="number" inputmode="numeric" id="fi-f-black" min="0" value="0" oninput="updateFire()"/></div>
+        <div class="num-field nf-red"><label>🔴 حروق حرجة</label><input type="number" inputmode="numeric" id="fi-f-red" min="0" value="0" oninput="updateFire()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 إصابات متوسطة</label><input type="number" inputmode="numeric" id="fi-f-yellow" min="0" value="0" oninput="updateFire()"/></div>
+        <div class="num-field nf-green"><label>🟢 إصابات طفيفة</label><input type="number" inputmode="numeric" id="fi-f-green" min="0" value="0" oninput="updateFire()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="fi-f-total" value="0" readonly/></div>
       </div>
     </div>
     <div class="rc-field" style="margin-top:12px;"><label>📝 ملاحظات</label><textarea id="fi-f-notes" rows="2" placeholder="ملاحظات إضافية..." oninput="updateFire()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea></div>
@@ -1423,11 +1632,11 @@ function hpSelectCat(cat){
     <div class="num-section">
       <div class="num-section-lbl">📊 أعداد الحالات — الفرز الميداني</div>
       <div class="num-grid">
-        <div class="num-field"><label>⚫ سوداء</label><input type="number" id="inj-f-black" min="0" value="0" oninput="updateInjuries()"/></div>
-        <div class="num-field nf-red"><label>🔴 حمراء</label><input type="number" id="inj-f-red" min="0" value="0" oninput="updateInjuries()"/></div>
-        <div class="num-field nf-yellow"><label>🟡 صفراء</label><input type="number" id="inj-f-yellow" min="0" value="0" oninput="updateInjuries()"/></div>
-        <div class="num-field nf-green"><label>🟢 خضراء</label><input type="number" id="inj-f-green" min="0" value="0" oninput="updateInjuries()"/></div>
-        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" id="inj-f-total" value="0" readonly/></div>
+        <div class="num-field"><label>⚫ سوداء</label><input type="number" inputmode="numeric" id="inj-f-black" min="0" value="0" oninput="updateInjuries()"/></div>
+        <div class="num-field nf-red"><label>🔴 حمراء</label><input type="number" inputmode="numeric" id="inj-f-red" min="0" value="0" oninput="updateInjuries()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 صفراء</label><input type="number" inputmode="numeric" id="inj-f-yellow" min="0" value="0" oninput="updateInjuries()"/></div>
+        <div class="num-field nf-green"><label>🟢 خضراء</label><input type="number" inputmode="numeric" id="inj-f-green" min="0" value="0" oninput="updateInjuries()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="inj-f-total" value="0" readonly/></div>
       </div>
     </div>
     <div class="rc-field" style="margin-top:12px;"><label>📝 ملاحظات</label><textarea id="inj-f-notes" rows="2" placeholder="ملاحظات إضافية..." oninput="updateInjuries()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea></div>
@@ -1554,11 +1763,11 @@ function hpSelectCat(cat){
     <div class="num-section">
       <div class="num-section-lbl">⚕️ عدد الحالات</div>
       <div class="num-grid">
-        <div class="num-field"><label>⚫ وفيات</label><input type="number" id="hh-f-black" min="0" value="0" oninput="updateHazardHuman()"/></div>
-        <div class="num-field nf-red"><label>🔴 حرجة</label><input type="number" id="hh-f-red" min="0" value="0" oninput="updateHazardHuman()"/></div>
-        <div class="num-field nf-yellow"><label>🟡 متوسطة</label><input type="number" id="hh-f-yellow" min="0" value="0" oninput="updateHazardHuman()"/></div>
-        <div class="num-field nf-green"><label>🟢 طفيفة</label><input type="number" id="hh-f-green" min="0" value="0" oninput="updateHazardHuman()"/></div>
-        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" id="hh-f-total" value="0" readonly/></div>
+        <div class="num-field"><label>⚫ وفيات</label><input type="number" inputmode="numeric" id="hh-f-black" min="0" value="0" oninput="updateHazardHuman()"/></div>
+        <div class="num-field nf-red"><label>🔴 حرجة</label><input type="number" inputmode="numeric" id="hh-f-red" min="0" value="0" oninput="updateHazardHuman()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 متوسطة</label><input type="number" inputmode="numeric" id="hh-f-yellow" min="0" value="0" oninput="updateHazardHuman()"/></div>
+        <div class="num-field nf-green"><label>🟢 طفيفة</label><input type="number" inputmode="numeric" id="hh-f-green" min="0" value="0" oninput="updateHazardHuman()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="hh-f-total" value="0" readonly/></div>
       </div>
     </div>
     <div class="rc-field" style="margin-top:12px;"><label>📝 ملاحظات</label><textarea id="hh-f-notes" rows="2" placeholder="ملاحظات إضافية..." oninput="updateHazardHuman()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea></div>
@@ -1777,11 +1986,11 @@ function hpSelectCat(cat){
     <div class="num-section">
       <div class="num-section-lbl">⚕️ عدد الحالات</div>
       <div class="num-grid">
-        <div class="num-field"><label>⚫ وفيات</label><input type="number" id="hn-f-black" min="0" value="0" oninput="updateHazardNature()"/></div>
-        <div class="num-field nf-red"><label>🔴 حرجة</label><input type="number" id="hn-f-red" min="0" value="0" oninput="updateHazardNature()"/></div>
-        <div class="num-field nf-yellow"><label>🟡 متوسطة</label><input type="number" id="hn-f-yellow" min="0" value="0" oninput="updateHazardNature()"/></div>
-        <div class="num-field nf-green"><label>🟢 طفيفة</label><input type="number" id="hn-f-green" min="0" value="0" oninput="updateHazardNature()"/></div>
-        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" id="hn-f-total" value="0" readonly/></div>
+        <div class="num-field"><label>⚫ وفيات</label><input type="number" inputmode="numeric" id="hn-f-black" min="0" value="0" oninput="updateHazardNature()"/></div>
+        <div class="num-field nf-red"><label>🔴 حرجة</label><input type="number" inputmode="numeric" id="hn-f-red" min="0" value="0" oninput="updateHazardNature()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 متوسطة</label><input type="number" inputmode="numeric" id="hn-f-yellow" min="0" value="0" oninput="updateHazardNature()"/></div>
+        <div class="num-field nf-green"><label>🟢 طفيفة</label><input type="number" inputmode="numeric" id="hn-f-green" min="0" value="0" oninput="updateHazardNature()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="hn-f-total" value="0" readonly/></div>
       </div>
     </div>
     <div class="rc-field" style="margin-top:12px;"><label>📝 ملاحظات</label><textarea id="hn-f-notes" rows="2" placeholder="ملاحظات إضافية..." oninput="updateHazardNature()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea></div>
@@ -1884,11 +2093,11 @@ function hpSelectCat(cat){
     <div class="num-section">
       <div class="num-section-lbl">⚕️ عدد الحالات</div>
       <div class="num-grid">
-        <div class="num-field"><label>⚫ وفيات</label><input type="number" id="hz-f-black" min="0" value="0" oninput="updateHazardHazmat()"/></div>
-        <div class="num-field nf-red"><label>🔴 حرجة</label><input type="number" id="hz-f-red" min="0" value="0" oninput="updateHazardHazmat()"/></div>
-        <div class="num-field nf-yellow"><label>🟡 متوسطة</label><input type="number" id="hz-f-yellow" min="0" value="0" oninput="updateHazardHazmat()"/></div>
-        <div class="num-field nf-green"><label>🟢 طفيفة</label><input type="number" id="hz-f-green" min="0" value="0" oninput="updateHazardHazmat()"/></div>
-        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" id="hz-f-total" value="0" readonly/></div>
+        <div class="num-field"><label>⚫ وفيات</label><input type="number" inputmode="numeric" id="hz-f-black" min="0" value="0" oninput="updateHazardHazmat()"/></div>
+        <div class="num-field nf-red"><label>🔴 حرجة</label><input type="number" inputmode="numeric" id="hz-f-red" min="0" value="0" oninput="updateHazardHazmat()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 متوسطة</label><input type="number" inputmode="numeric" id="hz-f-yellow" min="0" value="0" oninput="updateHazardHazmat()"/></div>
+        <div class="num-field nf-green"><label>🟢 طفيفة</label><input type="number" inputmode="numeric" id="hz-f-green" min="0" value="0" oninput="updateHazardHazmat()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="hz-f-total" value="0" readonly/></div>
       </div>
     </div>
     <div class="rc-field" style="margin-top:12px;"><label>📝 ملاحظات</label><textarea id="hz-f-notes" rows="2" placeholder="ملاحظات إضافية..." oninput="updateHazardHazmat()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea></div>
@@ -2556,11 +2765,11 @@ function hpSelectCat(cat){
     <div class="num-section">
       <div class="num-section-lbl">📊 إحصائية المصابين</div>
       <div class="num-grid">
-        <div class="num-field"><label>⚫ سوداء</label><input type="number" id="hyp-f-black" min="0" value="0" oninput="hypUpdate()"/></div>
-        <div class="num-field nf-red"><label>🔴 حمراء</label><input type="number" id="hyp-f-red" min="0" value="0" oninput="hypUpdate()"/></div>
-        <div class="num-field nf-yellow"><label>🟡 صفراء</label><input type="number" id="hyp-f-yellow" min="0" value="0" oninput="hypUpdate()"/></div>
-        <div class="num-field nf-green"><label>🟢 خضراء</label><input type="number" id="hyp-f-green" min="0" value="0" oninput="hypUpdate()"/></div>
-        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" id="hyp-f-total" value="0" readonly/></div>
+        <div class="num-field"><label>⚫ سوداء</label><input type="number" inputmode="numeric" id="hyp-f-black" min="0" value="0" oninput="hypUpdate()"/></div>
+        <div class="num-field nf-red"><label>🔴 حمراء</label><input type="number" inputmode="numeric" id="hyp-f-red" min="0" value="0" oninput="hypUpdate()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 صفراء</label><input type="number" inputmode="numeric" id="hyp-f-yellow" min="0" value="0" oninput="hypUpdate()"/></div>
+        <div class="num-field nf-green"><label>🟢 خضراء</label><input type="number" inputmode="numeric" id="hyp-f-green" min="0" value="0" oninput="hypUpdate()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="hyp-f-total" value="0" readonly/></div>
       </div>
     </div>
     <!-- فريق قيادة الحدث ICS -->
@@ -3005,6 +3214,18 @@ function switchCard(card){
   } else {
     if(_hp){_hp.style.position='';_hp.style.inset='';_hp.style.zIndex='';_hp.style.overflow='';}
   }
+  // ── شريط الجوال السفلي ──
+  const _mob=document.getElementById('mobile-action-bar');
+  if(_mob){
+    if(card==='home') _mob.classList.add('bar-home');
+    else _mob.classList.remove('bar-home');
+    // تمييز زر الطباعة بحسب الصفحة
+    const _hipHyp = card==='hypothesis';
+    const _printBtn=_mob.querySelector('.mob-primary');
+    if(_printBtn) _printBtn.title = _hipHyp ? 'طباعة الفرضية (متعددة الصفحات)' : 'طباعة A4';
+  }
+  // التمرير للأعلى عند تبديل التبويب على الجوال
+  if(window.innerWidth<=768) window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // Dynamic print page size based on active panel
@@ -4599,204 +4820,6 @@ function rckPopulateAddSelect(){
   sel.innerHTML='<option value="">— اختر —</option>'+hosps.map(function(h){return'<option value="'+h+'">'+h+'</option>';}).join('');
 }
 function rckInit(){rckLoad();rckPopulateAddSelect();rckUpdate();}
-
-function hazardGetVal(id){ var el=document.getElementById(id); return el?el.value||'':''; }
-function hazardGetNum(id){ var el=document.getElementById(id); return el?parseInt(el.value)||0:0; }
-function hazardSetTxt(id,v){ var el=document.getElementById(id); if(el) el.textContent=v||'—'; }
-function hazardFmtDate(d,t){ if(!d) return '—'; var dt=new Date(d+'T00:00:00'); var s=dt.getFullYear()+'/'+String(dt.getMonth()+1).padStart(2,'0')+'/'+String(dt.getDate()).padStart(2,'0'); if(t) s+=' — '+t; return s; }
-
-// Populate hospital/reporter/exec/action selects for hazard panels
-function hazardPopulateSelects(){
-  // Uses the shared populate functions — new IDs already added to each list above
-  populateHospitalSelects();
-  populateReporterSelects();
-  populateOfficerSelects();
-  populateActionSelects();
-}
-
-// ── بطاقة بشرية ──
-function hhEventChange(){
-  var v=hazardGetVal('hh-f-event');
-  if(v==='__fire__'){ switchCard('fire'); return; }
-  if(v==='__injuries__'){ switchCard('injuries'); return; }
-  updateHazardHuman();
-}
-function updateHazardHuman(){
-  var hosp=hazardGetVal('hh-f-hosp');
-  var event=hazardGetVal('hh-f-event');
-  var date=hazardGetVal('hh-f-date');
-  var time=hazardGetVal('hh-f-time');
-  var notify8=hazardGetVal('hh-f-notify8');
-  var end=hazardGetVal('hh-f-end');
-  var loc=hazardGetVal('hh-f-loc');
-  var reporter=hazardGetVal('hh-f-reporter');
-  var exec=hazardGetVal('hh-f-exec');
-  var action=hazardGetVal('hh-f-action');
-  var notes=hazardGetVal('hh-f-notes');
-  var recv1=hazardGetVal('hh-f-recv1');
-  var recv2=hazardGetVal('hh-f-recv2');
-  var recv3=hazardGetVal('hh-f-recv3');
-  var blk=hazardGetNum('hh-f-black'), red=hazardGetNum('hh-f-red'), yel=hazardGetNum('hh-f-yellow'), grn=hazardGetNum('hh-f-green');
-  var tot=blk+red+yel+grn;
-  var totEl=document.getElementById('hh-f-total'); if(totEl) totEl.value=tot;
-  hazardSetTxt('hh-hosp-disp', hosp);
-  hazardSetTxt('hh-event-disp', event);
-  hazardSetTxt('hh-date-disp', hazardFmtDate(date,time));
-  hazardSetTxt('hh-location', hosp);
-  hazardSetTxt('hh-event-type', event);
-  hazardSetTxt('hh-location-detail', loc);
-  hazardSetTxt('hh-time', time||'—');
-  hazardSetTxt('hh-notify8', notify8||'—');
-  hazardSetTxt('hh-end-time', end||'—');
-  hazardSetTxt('hh-reporter', reporter);
-  hazardSetTxt('hh-exec', exec);
-  hazardSetTxt('hh-total', tot);
-  hazardSetTxt('hh-black', blk);
-  hazardSetTxt('hh-red', red);
-  hazardSetTxt('hh-yellow', yel);
-  hazardSetTxt('hh-green', grn);
-  // Receiving hospitals
-  var recvSec=document.getElementById('hh-recv-section');
-  var hasRecv=recv1||recv2||recv3;
-  if(recvSec) recvSec.className=hasRecv?'':'recv-section-empty';
-  function hhSetRecv(rowId,valId,val){
-    var row=document.getElementById(rowId);
-    var el=document.getElementById(valId);
-    if(row) row.className='recv-hosp-row'+(val?'':' empty-row');
-    if(el) el.textContent=val||'';
-  }
-  hhSetRecv('hh-recv-hosp-1','hh-recv1',recv1);
-  hhSetRecv('hh-recv-hosp-2','hh-recv2',recv2);
-  hhSetRecv('hh-recv-hosp-3','hh-recv3',recv3);
-  // Action row
-  var actRow=document.getElementById('hh-action-row');
-  if(actRow) actRow.className='info-row'+(action?'':' empty-row');
-  hazardSetTxt('hh-action', action);
-  var nb=document.getElementById('hh-notes-block'); if(nb) nb.style.display=notes?'block':'none';
-  hazardSetTxt('hh-notes-text', notes);
-}
-
-// ── بطاقة تكنولوجية ──
-function htEventChange(){
-  var v=hazardGetVal('ht-f-event');
-  if(v==='__electricity__'){ switchCard('electricity'); return; }
-  if(v==='__oxygen__'){ switchCard('oxygen'); return; }
-  updateHazardTech();
-}
-function updateHazardTech(){
-  var hosp=hazardGetVal('ht-f-hosp');
-  var event=hazardGetVal('ht-f-event');
-  var date=hazardGetVal('ht-f-date');
-  var time=hazardGetVal('ht-f-time');
-  var notify8=hazardGetVal('ht-f-notify8');
-  var end=hazardGetVal('ht-f-end');
-  var affected=hazardGetVal('ht-f-affected');
-  var severity=hazardGetVal('ht-f-severity');
-  var reporter=hazardGetVal('ht-f-reporter');
-  var exec=hazardGetVal('ht-f-exec');
-  var action=hazardGetVal('ht-f-action');
-  var notes=hazardGetVal('ht-f-notes');
-  hazardSetTxt('ht-hosp-disp', hosp);
-  hazardSetTxt('ht-event-disp', event);
-  hazardSetTxt('ht-date-disp', hazardFmtDate(date,time));
-  hazardSetTxt('ht-location', hosp);
-  hazardSetTxt('ht-event-type', event);
-  hazardSetTxt('ht-affected', affected);
-  hazardSetTxt('ht-time', time||'—');
-  hazardSetTxt('ht-notify8', notify8||'—');
-  hazardSetTxt('ht-end-time', end||'—');
-  hazardSetTxt('ht-severity', severity);
-  hazardSetTxt('ht-reporter', reporter);
-  hazardSetTxt('ht-exec', exec);
-  hazardSetTxt('ht-action', action);
-  var nb=document.getElementById('ht-notes-block'); if(nb) nb.style.display=notes?'block':'none';
-  hazardSetTxt('ht-notes-text', notes);
-}
-
-// ── بطاقة طبيعية ──
-function hnEventChange(){
-  var v=hazardGetVal('hn-f-event');
-  if(v==='__fire__'){ switchCard('fire'); return; }
-  updateHazardNature();
-}
-function updateHazardNature(){
-  var hosp=hazardGetVal('hn-f-hosp');
-  var event=hazardGetVal('hn-f-event');
-  var date=hazardGetVal('hn-f-date');
-  var time=hazardGetVal('hn-f-time');
-  var notify8=hazardGetVal('hn-f-notify8');
-  var end=hazardGetVal('hn-f-end');
-  var area=hazardGetVal('hn-f-area');
-  var reporter=hazardGetVal('hn-f-reporter');
-  var exec=hazardGetVal('hn-f-exec');
-  var action=hazardGetVal('hn-f-action');
-  var notes=hazardGetVal('hn-f-notes');
-  var blk=hazardGetNum('hn-f-black'), red=hazardGetNum('hn-f-red'), yel=hazardGetNum('hn-f-yellow'), grn=hazardGetNum('hn-f-green');
-  var tot=blk+red+yel+grn;
-  var totEl=document.getElementById('hn-f-total'); if(totEl) totEl.value=tot;
-  hazardSetTxt('hn-hosp-disp', hosp);
-  hazardSetTxt('hn-event-disp', event);
-  hazardSetTxt('hn-date-disp', hazardFmtDate(date,time));
-  hazardSetTxt('hn-location', hosp);
-  hazardSetTxt('hn-event-type', event);
-  hazardSetTxt('hn-area', area);
-  hazardSetTxt('hn-time', time||'—');
-  hazardSetTxt('hn-notify8', notify8||'—');
-  hazardSetTxt('hn-end-time', end||'—');
-  hazardSetTxt('hn-reporter', reporter);
-  hazardSetTxt('hn-exec', exec);
-  hazardSetTxt('hn-action', action);
-  hazardSetTxt('hn-total', tot);
-  hazardSetTxt('hn-black', blk);
-  hazardSetTxt('hn-red', red);
-  hazardSetTxt('hn-yellow', yel);
-  hazardSetTxt('hn-green', grn);
-  var nb=document.getElementById('hn-notes-block'); if(nb) nb.style.display=notes?'block':'none';
-  hazardSetTxt('hn-notes-text', notes);
-}
-
-// ── بطاقة مواد خطرة ──
-function updateHazardHazmat(){
-  var hosp=hazardGetVal('hz-f-hosp');
-  var event=hazardGetVal('hz-f-event');
-  var material=hazardGetVal('hz-f-material');
-  var date=hazardGetVal('hz-f-date');
-  var time=hazardGetVal('hz-f-time');
-  var notify8=hazardGetVal('hz-f-notify8');
-  var end=hazardGetVal('hz-f-end');
-  var area=hazardGetVal('hz-f-area');
-  var reporter=hazardGetVal('hz-f-reporter');
-  var exec=hazardGetVal('hz-f-exec');
-  var action=hazardGetVal('hz-f-action');
-  var notes=hazardGetVal('hz-f-notes');
-  var blk=hazardGetNum('hz-f-black'), red=hazardGetNum('hz-f-red'), yel=hazardGetNum('hz-f-yellow'), grn=hazardGetNum('hz-f-green');
-  var tot=blk+red+yel+grn;
-  var totEl=document.getElementById('hz-f-total'); if(totEl) totEl.value=tot;
-  hazardSetTxt('hz-hosp-disp', hosp);
-  hazardSetTxt('hz-event-disp', event);
-  hazardSetTxt('hz-date-disp', hazardFmtDate(date,time));
-  hazardSetTxt('hz-location', hosp);
-  hazardSetTxt('hz-event-type', event);
-  hazardSetTxt('hz-material', material);
-  hazardSetTxt('hz-area', area);
-  hazardSetTxt('hz-time', time||'—');
-  hazardSetTxt('hz-notify8', notify8||'—');
-  hazardSetTxt('hz-end-time', end||'—');
-  hazardSetTxt('hz-reporter', reporter);
-  hazardSetTxt('hz-exec', exec);
-  hazardSetTxt('hz-action', action);
-  hazardSetTxt('hz-total', tot);
-  hazardSetTxt('hz-black', blk);
-  hazardSetTxt('hz-red', red);
-  hazardSetTxt('hz-yellow', yel);
-  hazardSetTxt('hz-green', grn);
-  var nb=document.getElementById('hz-notes-block'); if(nb) nb.style.display=notes?'block':'none';
-  hazardSetTxt('hz-notes-text', notes);
-}
-
-
-  rckInit();
-  rckPopulateAddSelect();
 </script>
 </body>
 </html>
