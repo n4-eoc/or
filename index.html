@@ -3409,6 +3409,90 @@ function switchCard(card){
   });
 })();
 
+/* ===== PRINT FILENAME ===== */
+(function(){
+  var AR_MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو',
+                   'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  var _origTitle = document.title;
+
+  function gv(id){ var e=document.getElementById(id); if(!e) return ''; return (e.tagName==='SELECT'?e.options[e.selectedIndex]&&e.options[e.selectedIndex].text:e.value)||''; }
+  function gvVal(id){ var e=document.getElementById(id); return e?e.value||'':''; }
+
+  function monthFromDate(dateVal){
+    if(!dateVal) return '';
+    var parts = dateVal.split('-');
+    if(parts.length<2) return '';
+    var m = parseInt(parts[1],10);
+    return AR_MONTHS[m-1]||'';
+  }
+  function yearFromDate(dateVal){
+    if(!dateVal) return '';
+    return dateVal.split('-')[0]||'';
+  }
+
+  function buildTitle(){
+    var active = document.querySelector('.card-panel.active');
+    if(!active) return _origTitle;
+    var id = active.id;
+
+    if(id === 'panel-readiness-check'){
+      var period = gv('rck-f-period') || '....';
+      var dateVal = gvVal('rck-f-date');
+      var yr = yearFromDate(dateVal);
+      var mn = monthFromDate(dateVal);
+      var datePart = (mn && yr) ? mn+' '+yr : (yr||'....');
+      return 'تحقق تأهب مستشفيات التجمع للفترة ' + period + ' ' + datePart;
+    }
+
+    if(id === 'panel-hypothesis'){
+      var hosp = gv('hyp-f-hosp') || '....';
+      var mn   = monthFromDate(gvVal('hyp-f-date'));
+      return 'تقرير فرضية - ' + hosp + (mn?' - '+mn:'');
+    }
+
+    if(id === 'panel-readiness'){
+      var hosp = gv('rd-f-hosp') || '....';
+      var mn   = monthFromDate(gvVal('rd-f-date'));
+      var yr   = yearFromDate(gvVal('rd-f-date'));
+      return 'بطاقة الاستعداد - ' + hosp + (mn?' - '+mn:'') + (yr?' - '+yr:'');
+    }
+
+    if(id === 'panel-electricity'){
+      return 'تقرير انقطاع كهرباء - ' + (gv('el-f-hosp')||'....');
+    }
+    if(id === 'panel-oxygen'){
+      return 'تقرير انقطاع أكسجين - ' + (gv('ox-f-hosp')||'....');
+    }
+    if(id === 'panel-fire'){
+      return 'تقرير حريق - ' + (gv('fi-f-hosp')||'....');
+    }
+    if(id === 'panel-injuries'){
+      return 'تقرير إصابات متعددة - ' + (gv('inj-f-hosp')||'....');
+    }
+    if(id === 'panel-hazard-human'){
+      return 'تقرير مخاطر بشرية - ' + (gv('hh-f-hosp')||'....');
+    }
+    if(id === 'panel-hazard-tech'){
+      return 'تقرير مخاطر تكنولوجية - ' + (gv('ht-f-hosp')||'....');
+    }
+    if(id === 'panel-hazard-nature'){
+      return 'تقرير مخاطر طبيعية - ' + (gv('hn-f-hosp')||'....');
+    }
+    if(id === 'panel-hazard-hazmat'){
+      return 'تقرير مواد خطرة - ' + (gv('hz-f-hosp')||'....');
+    }
+    return _origTitle;
+  }
+
+  window.addEventListener('beforeprint', function(){
+    _origTitle = document.title;
+    document.title = buildTitle();
+  });
+  window.addEventListener('afterprint', function(){
+    document.title = _origTitle;
+  });
+})();
+
 /* ===== HELPERS ===== */
 function fmtDate(dateVal, timeVal){
   if(!dateVal) return '—';
