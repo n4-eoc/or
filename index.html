@@ -3437,11 +3437,9 @@ function switchCard(card){
 
     if(id === 'panel-readiness-check'){
       var period = gv('rck-f-period') || '....';
-      var dateVal = gvVal('rck-f-date');
-      var yr = yearFromDate(dateVal);
-      var mn = monthFromDate(dateVal);
-      var datePart = (mn && yr) ? mn+' '+yr : (yr||'....');
-      return 'تحقق تأهب مستشفيات التجمع للفترة ' + period + ' ' + datePart;
+      var today = new Date();
+      var todayStr = today.getDate() + ' ' + AR_MONTHS[today.getMonth()] + ' ' + today.getFullYear();
+      return 'تحقق تأهب مستشفيات التجمع للفترة ' + period + ' ' + todayStr;
     }
 
     if(id === 'panel-hypothesis'){
