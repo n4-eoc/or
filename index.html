@@ -639,33 +639,111 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
 
 /* Print */
 @media print{
-  body{background:#fff;padding:0!important;margin:0!important;}
-  body::before{display:none;}
+  /* ═══ أساسيات ═══ */
+  body{background:#fff!important;padding:0!important;margin:0!important;}
+  body::before{display:none!important;}
   .no-print{display:none!important;}
   #mobile-action-bar{display:none!important;}
   .settings-overlay{display:none!important;}
   .top-bar{display:none!important;}
   .tab-nav{display:none!important;}
+  .form-section{display:none!important;}
+
+  /* ═══ إظهار اللوحة النشطة فقط ═══ */
   .card-panel{display:none!important;}
   .card-panel.active{display:block!important;}
   #panel-home{display:none!important;}
-  .a4-page{width:297mm;min-height:210mm;box-shadow:none;border-radius:0;margin:0;}
-  .a4-header,.a4-title-bar,.a4-footer,.total-row,.t-black,.t-red,.t-yellow,.t-green,.triage-box{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-  .form-section{display:none!important;}
-  body::before{display:none;}
-  .no-print{display:none!important;}
-  .settings-overlay{display:none!important;}
-  .top-bar{display:none!important;}
-  .tab-nav{display:none!important;}
-  /* Hide ALL panels, then show only the active one */
-  .card-panel{display:none!important;}
-  .card-panel.active{display:block!important;}
-  /* Home panel must not appear in print */
-  #panel-home{display:none!important;}
-  .a4-page{width:297mm;min-height:210mm;box-shadow:none;border-radius:0;margin:0;}
-  .a4-header,.a4-title-bar,.a4-footer,.total-row,.t-black,.t-red,.t-yellow,.t-green,.triage-box{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-  /* Hide form section in print, show only the report */
-  .form-section{display:none!important;}
+
+  /* ═══ إعادة تعيين CSS الجوال لصفحة A4 ═══
+     (على الجوال تُطبَّق قواعد max-width:768px أثناء الطباعة
+      بسبب عرض الشاشة، لذا نحتاج !important لإلغائها) */
+  .a4-page{
+    width:297mm!important;
+    min-height:210mm!important;
+    box-shadow:none!important;
+    border-radius:0!important;
+    margin:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+  .a4-body{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    flex-direction:unset!important;
+    gap:0!important;
+  }
+  .col-right{
+    padding:10px 16px 10px 10px!important;
+    width:auto!important;
+    border:none!important;
+    border-left:2px solid #E3F2FD!important;
+    background:#fff!important;
+  }
+  .col-left{
+    padding:10px 10px 10px 16px!important;
+    width:auto!important;
+    border:none!important;
+    border-top:none!important;
+    background:#F7FBFD!important;
+  }
+  .a4-lower{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    flex-direction:unset!important;
+  }
+  .lower-right{
+    padding:8px 10px 8px 16px!important;
+    width:auto!important;
+    border:none!important;
+    border-top:none!important;
+    border-left:2px solid #E3F2FD!important;
+    background:#F7FBFD!important;
+  }
+  .lower-left{
+    padding:8px 16px 8px 10px!important;
+    width:auto!important;
+    border:none!important;
+    background:#fff!important;
+  }
+  .triages{
+    display:flex!important;
+    flex-direction:column!important;
+    grid-template-columns:unset!important;
+    gap:6px!important;
+  }
+  .triage-box{padding:8px 12px!important;}
+  .triage-num{font-size:26px!important;}
+  .triage-lbl{font-size:13px!important;}
+  .total-row{padding:9px 14px!important;}
+  .total-val{font-size:38px!important;}
+  .a4-header{padding:12px 22px 10px!important;gap:14px!important;}
+  .a4-logo{width:60px!important;height:60px!important;}
+  .a4-org-main{font-size:19px!important;}
+  .a4-org-sub{font-size:10px!important;}
+  .a4-badge{font-size:12px!important;padding:5px 14px!important;}
+  .a4-title-bar{font-size:14px!important;padding:5px 20px!important;}
+  .a4-footer{font-size:10px!important;padding:5px 20px!important;flex-wrap:nowrap!important;}
+  .section-title{font-size:11px!important;}
+  .info-val{font-size:13px!important;}
+  .info-lbl{font-size:9px!important;}
+
+  /* ═══ إجبار ألوان A4 ═══ */
+  .a4-header,.a4-title-bar,.a4-footer,.total-row,
+  .t-black,.t-red,.t-yellow,.t-green,.triage-box,
+  .info-row,.notes-block,.affected-chip,
+  .status-active,.status-resolved,.status-monitoring,.status-critical{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+    color-adjust:exact!important;
+  }
+
+  /* ═══ RCK: إعادة تعيين ═══ */
+  .rck-a4{
+    width:297mm!important;
+    min-height:210mm!important;
+    box-shadow:none!important;
+    border-radius:0!important;
+  }
 }
 </style>
 </head>
