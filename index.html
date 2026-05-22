@@ -185,6 +185,9 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 /* ── RCK table mobile ── */
 @media screen and (max-width:768px){
+  .ops-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch;}
+  .ops-a4{min-width:600px;}
+  .ops-tbl{font-size:8px!important;}
   .rck-wrap{overflow-x:auto!important;-webkit-overflow-scrolling:touch;}
   .rck-a4{min-width:600px;}
   .rck-tbl{font-size:9px!important;}
@@ -261,6 +264,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .tab-btn[data-card="hazard-tech"].active{background:linear-gradient(135deg,#1565C0,#1976D2);color:#fff;border-color:transparent;}
 .tab-btn[data-card="hazard-nature"].active{background:linear-gradient(135deg,#2E7D32,#388E3C);color:#fff;border-color:transparent;}
 .tab-btn[data-card="hazard-hazmat"].active{background:linear-gradient(135deg,#BF360C,#D84315);color:#fff;border-color:transparent;}
+.tab-btn[data-card="ops"].active{background:linear-gradient(135deg,#004D40,#00695C);color:#fff;border-color:transparent;}
 .tab-btn[data-card="readiness-check"].active{background:linear-gradient(135deg,#1B5E20,#2E7D32);color:#fff;border-color:transparent;}
 .tab-btn[data-card="hazard-human"].active{background:linear-gradient(135deg,#7B1FA2,#9C27B0);color:#fff;border-color:transparent;}
 .tab-btn[data-card="hazard-tech"].active{background:linear-gradient(135deg,#1565C0,#1976D2);color:#fff;border-color:transparent;}
@@ -1119,6 +1123,11 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
           <div class="hp-sub-card-icon" style="background:rgba(34,197,94,0.12);">✅</div>
           <div class="hp-sub-card-name">تحقق التأهب</div>
           <div class="hp-sub-card-code">READINESS CHECK</div>
+        </div>
+        <div class="hp-sub-card" onclick="switchCard('ops')" style="grid-column:span 2;">
+          <div class="hp-sub-card-icon" style="background:rgba(0,105,92,0.15);">📡</div>
+          <div class="hp-sub-card-name">مؤشر تحضير تترا</div>
+          <div class="hp-sub-card-code">TETRA READINESS</div>
         </div>
       </div>
     </div>
@@ -2411,6 +2420,573 @@ function hpSelectCat(cat){
 
 
 <!-- ================================================================
+     إدارة العمليات — مؤشر تحضير تترا
+================================================================ -->
+<div id="panel-ops" class="card-panel">
+<style>
+/* ══ Ops Management — Tetra Readiness Indicator ══ */
+.ops-wrap{width:100%;max-width:297mm;margin:0 auto;overflow-x:auto;position:relative;z-index:1;}
+.ops-a4{width:297mm;min-height:210mm;background:#fff;margin:0 auto;border-radius:4px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.35);font-family:'Cairo',sans-serif;direction:rtl;
+  overflow:hidden;display:flex;flex-direction:column;}
+.ops-hdr{padding:11px 20px 9px;display:flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,#003D5C 0%,#005B82 50%,#0078A8 100%);
+  border-bottom:4px solid #00AEEF;}
+.ops-hdr-logo{width:56px;height:56px;object-fit:contain;flex-shrink:0;}
+.ops-hdr-org{flex:1;}
+.ops-hdr-main{color:#fff;font-size:18px;font-weight:900;line-height:1.2;}
+.ops-hdr-sub{color:rgba(255,255,255,0.65);font-size:10px;font-weight:600;margin-top:2px;}
+.ops-hdr-badge{background:rgba(0,174,239,0.25);border:1.5px solid #00AEEF;border-radius:20px;
+  padding:5px 14px;color:#fff;font-size:11px;font-weight:800;white-space:nowrap;}
+.ops-title-bar{padding:5px 18px;background:linear-gradient(90deg,#005B82,#003D5C);
+  color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.ops-title-sep{opacity:.5;font-size:14px;}
+.ops-body{flex:1;padding:7px 12px 5px;overflow:hidden;}
+.ops-tbl{width:100%;border-collapse:collapse;font-family:'Cairo',sans-serif;direction:rtl;font-size:9.5px;}
+.ops-tbl th{background:linear-gradient(135deg,#003D5C,#005B82);color:#fff;padding:6px 4px;
+  text-align:center;font-weight:800;font-size:9px;border:1px solid #0078A8;}
+.ops-tbl th.th-hosp{text-align:right;padding-right:8px;min-width:115px;background:linear-gradient(135deg,#002A40,#003D5C);}
+.ops-tbl th.th-period-am{background:linear-gradient(135deg,#004D40,#00695C)!important;font-size:10px;padding:7px 4px;}
+.ops-tbl th.th-period-pm{background:linear-gradient(135deg,#4A148C,#6A1B9A)!important;font-size:10px;padding:7px 4px;}
+.ops-tbl th.th-am,.ops-tbl th.th-pm{font-size:9px;}
+.ops-tbl td{padding:4px 4px;text-align:center;border:1px solid #C8E4F0;font-size:9.5px;font-weight:700;background:#fff;}
+.ops-tbl td.td-hosp{text-align:right;padding-right:8px;font-weight:800;color:#1A3A4A;background:#F7FBFD;}
+.ops-tbl td.td-code{font-weight:800;color:#005B82;background:#F0F7FF;}
+.ops-time{display:inline-block;min-width:38px;width:100%;padding:1px 3px;outline:none;
+  border-radius:3px;direction:ltr;font-size:9px;cursor:text;font-family:'Cairo',sans-serif;font-weight:700;}
+.ops-time:focus{background:#E3F2FD;}
+.ops-note{display:inline-block;min-width:50px;width:100%;text-align:right;padding:1px 3px;
+  outline:none;border-radius:3px;cursor:text;font-family:'Cairo',sans-serif;font-size:9px;}
+.ops-note:focus{background:#E3F2FD;}
+.ops-resp{cursor:pointer;min-width:50px;padding:2px 5px;border-radius:10px;
+  font-size:9px;font-weight:900;display:inline-block;user-select:none;}
+.ops-complete{background:#C8E6C9!important;color:#1B5E20!important;}
+.ops-incomplete{background:#FFCDD2!important;color:#B71C1C!important;}
+.ops-empty{background:#F5F5F5!important;color:#9E9E9E!important;}
+.ops-sumbar{padding:5px 14px;background:#EAF4FA;border-top:2px solid #C8E4F0;
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex-shrink:0;}
+.ops-sum-item{display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:700;color:#005B82;}
+.ops-sum-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.ops-sum-label{font-weight:900;font-size:10px;}
+.ops-footer{padding:5px 18px;background:linear-gradient(135deg,#005B82,#003D5C);
+  border-top:2px solid #00AEEF;display:flex;align-items:center;justify-content:space-between;
+  color:rgba(255,255,255,0.85);font-size:10px;font-weight:600;flex-shrink:0;}
+.ops-form{max-width:297mm;margin:14px auto 30px;background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(255,255,255,0.15);border-radius:14px;padding:18px;backdrop-filter:blur(10px);}
+.ops-print-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding:12px;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;}
+.ops-print-lbl{width:100%;color:rgba(255,255,255,0.6);font-size:11px;font-weight:700;margin-bottom:4px;}
+/* Print base */
+@media print{
+  .ops-form{display:none!important;}
+  .ops-a4{box-shadow:none!important;border-radius:0!important;width:297mm!important;min-height:210mm!important;}
+  [contenteditable]{outline:none!important;border:none!important;}
+  .ops-hdr,.ops-title-bar,.ops-footer,.ops-tbl th,.ops-tbl th.th-period-am,.ops-tbl th.th-period-pm,
+  .ops-resp,.ops-complete,.ops-incomplete,.ops-empty,.ops-sumbar,
+  .ops-tbl td.td-hosp,.ops-tbl td.td-code{
+    -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+  .ops-hdr{background:linear-gradient(135deg,#003D5C 0%,#005B82 50%,#0078A8 100%)!important;}
+  .ops-title-bar{background:linear-gradient(90deg,#005B82,#003D5C)!important;}
+  .ops-footer{background:linear-gradient(135deg,#005B82,#003D5C)!important;}
+  .ops-tbl th{background-color:#004A6E!important;color:#fff!important;}
+  .ops-tbl th.th-period-am{background-color:#00695C!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .ops-tbl th.th-period-pm{background-color:#6A1B9A!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  .ops-tbl td.td-hosp{background-color:#F7FBFD!important;color:#1A3A4A!important;}
+  .ops-tbl td.td-code{background-color:#F0F7FF!important;color:#005B82!important;}
+  .ops-complete{background-color:#C8E6C9!important;color:#1B5E20!important;}
+  .ops-incomplete{background-color:#FFCDD2!important;color:#B71C1C!important;}
+  .ops-empty{background-color:#F5F5F5!important;color:#9E9E9E!important;}
+  .ops-sumbar{background-color:#EAF4FA!important;}
+  /* Print mode: morning only */
+  .ops-a4.print-am .th-period-pm,
+  .ops-a4.print-am .th-pm,
+  .ops-a4.print-am .td-pm{display:none!important;}
+  /* Print mode: evening only */
+  .ops-a4.print-pm .th-period-am,
+  .ops-a4.print-pm .th-am,
+  .ops-a4.print-pm .td-am{display:none!important;}
+}
+</style>
+
+<div class="ops-wrap">
+  <div class="ops-a4" id="ops-a4-el">
+    <div class="ops-hdr">
+      <img class="ops-hdr-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
+      <div class="ops-hdr-org">
+        <div class="ops-hdr-main">تجمع حائل الصحي</div>
+        <div class="ops-hdr-sub">مركز إدارة الأزمات والكوارث الصحية</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="ops-hdr-badge">📡 مؤشر تحضير وسائل الاتصال</div>
+        <div id="ops-disp-date" style="color:#fff;font-size:11px;font-weight:800;margin-top:5px;">—</div>
+      </div>
+    </div>
+    <div class="ops-title-bar">
+      <span>مؤشر تحضير وسائل الاتصال</span>
+      <span class="ops-title-sep">|</span>
+      <span id="ops-disp-period">الفترة الصباحية والمسائية</span>
+    </div>
+    <div class="ops-body">
+      <table class="ops-tbl">
+        <thead>
+          <tr>
+            <th class="th-hosp" rowspan="2">اسم المنشأة</th>
+            <th rowspan="2" style="min-width:40px;">الرمز</th>
+            <th colspan="3" class="th-period-am">🌅 الفترة الصباحية</th>
+            <th colspan="3" class="th-period-pm">🌙 الفترة المسائية</th>
+          </tr>
+          <tr>
+            <th class="th-am" style="min-width:40px;">وقت الاتصال</th>
+            <th class="th-am" style="min-width:50px;">الاستجابة</th>
+            <th class="th-am" style="min-width:55px;">الملاحظات</th>
+            <th class="th-pm" style="min-width:40px;">وقت الاتصال</th>
+            <th class="th-pm" style="min-width:50px;">الاستجابة</th>
+            <th class="th-pm" style="min-width:55px;">الملاحظات</th>
+          </tr>
+        </thead>
+        <tbody id="ops-tbody">
+          <tr>
+            <td class="td-hosp">مستشفى الملك سلمان التخصصي</td>
+            <td class="td-code">شفاء ١</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-1" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-1" onclick="opsToggleResp('ops-am-resp-1')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-1" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-1" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-1" onclick="opsToggleResp('ops-pm-resp-1')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-1" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp" style="background:#EAF4FA;">مستشفى الملك خالد</td>
+            <td class="td-code" style="background:#E8F4FF;">شفاء ٢</td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-time" id="ops-am-time-2" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-2" onclick="opsToggleResp('ops-am-resp-2')"></td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-note" id="ops-am-note-2" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-time" id="ops-pm-time-2" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-2" onclick="opsToggleResp('ops-pm-resp-2')"></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-note" id="ops-pm-note-2" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp">مستشفى حائل العام</td>
+            <td class="td-code">شفاء ٣</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-3" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-3" onclick="opsToggleResp('ops-am-resp-3')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-3" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-3" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-3" onclick="opsToggleResp('ops-pm-resp-3')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-3" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp" style="background:#EAF4FA;">مستشفى الولادة والأطفال</td>
+            <td class="td-code" style="background:#E8F4FF;">شفاء ٤</td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-time" id="ops-am-time-4" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-4" onclick="opsToggleResp('ops-am-resp-4')"></td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-note" id="ops-am-note-4" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-time" id="ops-pm-time-4" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-4" onclick="opsToggleResp('ops-pm-resp-4')"></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-note" id="ops-pm-note-4" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp">مستشفى إرادة لصحة النفسية</td>
+            <td class="td-code">شفاء ٥</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-5" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-5" onclick="opsToggleResp('ops-am-resp-5')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-5" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-5" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-5" onclick="opsToggleResp('ops-pm-resp-5')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-5" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp" style="background:#EAF4FA;">مستشفى اجاء للرعاية المديدة</td>
+            <td class="td-code" style="background:#E8F4FF;">شفاء ٦</td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-time" id="ops-am-time-6" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-6" onclick="opsToggleResp('ops-am-resp-6')"></td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-note" id="ops-am-note-6" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-time" id="ops-pm-time-6" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-6" onclick="opsToggleResp('ops-pm-resp-6')"></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-note" id="ops-pm-note-6" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp">مستشفى شراف</td>
+            <td class="td-code">شفاء ٧</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-7" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-7" onclick="opsToggleResp('ops-am-resp-7')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-7" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-7" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-7" onclick="opsToggleResp('ops-pm-resp-7')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-7" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp" style="background:#EAF4FA;">مستشفى موقق</td>
+            <td class="td-code" style="background:#E8F4FF;">شفاء ٨</td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-time" id="ops-am-time-8" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-8" onclick="opsToggleResp('ops-am-resp-8')"></td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-note" id="ops-am-note-8" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-time" id="ops-pm-time-8" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-8" onclick="opsToggleResp('ops-pm-resp-8')"></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-note" id="ops-pm-note-8" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp">مستشفى بقعاء</td>
+            <td class="td-code">شفاء ٩</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-9" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-9" onclick="opsToggleResp('ops-am-resp-9')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-9" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-9" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-9" onclick="opsToggleResp('ops-pm-resp-9')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-9" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp" style="background:#EAF4FA;">مستشفى الغزالة</td>
+            <td class="td-code" style="background:#E8F4FF;">شفاء ١٠</td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-time" id="ops-am-time-10" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-10" onclick="opsToggleResp('ops-am-resp-10')"></td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-note" id="ops-am-note-10" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-time" id="ops-pm-time-10" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-10" onclick="opsToggleResp('ops-pm-resp-10')"></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-note" id="ops-pm-note-10" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp">مستشفى الشنان</td>
+            <td class="td-code">شفاء ١١</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-11" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-11" onclick="opsToggleResp('ops-am-resp-11')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-11" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-11" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-11" onclick="opsToggleResp('ops-pm-resp-11')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-11" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp" style="background:#EAF4FA;">مستشفى الشملي</td>
+            <td class="td-code" style="background:#E8F4FF;">شفاء ١٢</td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-time" id="ops-am-time-12" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-12" onclick="opsToggleResp('ops-am-resp-12')"></td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-note" id="ops-am-note-12" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-time" id="ops-pm-time-12" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-12" onclick="opsToggleResp('ops-pm-resp-12')"></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-note" id="ops-pm-note-12" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp">مستشفى السليمي</td>
+            <td class="td-code">شفاء ١٣</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-13" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-13" onclick="opsToggleResp('ops-am-resp-13')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-13" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-13" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-13" onclick="opsToggleResp('ops-pm-resp-13')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-13" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp" style="background:#EAF4FA;">مستشفى الحائط</td>
+            <td class="td-code" style="background:#E8F4FF;">شفاء ١٤</td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-time" id="ops-am-time-14" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-14" onclick="opsToggleResp('ops-am-resp-14')"></td>
+            <td class="td-am" style="background:#F2F8FC;"><span class="ops-note" id="ops-am-note-14" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-time" id="ops-pm-time-14" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-14" onclick="opsToggleResp('ops-pm-resp-14')"></td>
+            <td class="td-pm" style="background:#F2F8FC;"><span class="ops-note" id="ops-pm-note-14" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+          <tr>
+            <td class="td-hosp">مستشفى سميراء</td>
+            <td class="td-code">شفاء ١٥</td>
+            <td class="td-am"><span class="ops-time" id="ops-am-time-15" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-am" id="ops-am-resp-15" onclick="opsToggleResp('ops-am-resp-15')"></td>
+            <td class="td-am"><span class="ops-note" id="ops-am-note-15" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="td-pm"><span class="ops-time" id="ops-pm-time-15" contenteditable="true" oninput="opsSave()"></span></td>
+            <td class="ops-resp ops-empty td-pm" id="ops-pm-resp-15" onclick="opsToggleResp('ops-pm-resp-15')"></td>
+            <td class="td-pm"><span class="ops-note" id="ops-pm-note-15" contenteditable="true" oninput="opsSave()"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ops-sumbar">
+      <span class="ops-sum-label" style="color:#00695C;">🌅 الصباحية:</span>
+      <div class="ops-sum-item"><div class="ops-sum-dot" style="background:#1B5E20;"></div>مكتمل: <span id="ops-sum-am-comp">0</span></div>
+      <div class="ops-sum-item"><div class="ops-sum-dot" style="background:#B71C1C;"></div>غير مكتمل: <span id="ops-sum-am-incomp">0</span></div>
+      <span class="ops-sum-label" style="color:#6A1B9A;margin-right:10px;">🌙 المسائية:</span>
+      <div class="ops-sum-item"><div class="ops-sum-dot" style="background:#1B5E20;"></div>مكتمل: <span id="ops-sum-pm-comp">0</span></div>
+      <div class="ops-sum-item"><div class="ops-sum-dot" style="background:#B71C1C;"></div>غير مكتمل: <span id="ops-sum-pm-incomp">0</span></div>
+    </div>
+    <div class="ops-footer">
+      <span>تجمع حائل الصحي — Hail Health Cluster</span>
+      <span id="ops-footer-exec">مناوب العمليات: —</span>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="ops-form no-print">
+    <div class="form-title">✏️ بيانات مؤشر تحضير تترا</div>
+    <div class="form-grid" style="grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
+      <div class="rc-field">
+        <label>📅 التاريخ</label>
+        <input type="date" id="ops-f-date" oninput="opsUpdate()"
+          style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 11px;color:#fff;font-family:'Cairo',sans-serif;font-size:13px;outline:none;width:100%;direction:ltr;"/>
+      </div>
+      <div class="rc-field" style="grid-column:span 2;">
+        <label>👮 مناوب العمليات</label>
+        <select id="ops-f-exec" onchange="opsUpdate()"
+          style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 11px;color:#fff;font-family:'Cairo',sans-serif;font-size:13px;outline:none;width:100%;">
+          <option value="">— اختر المناوب —</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <div class="rc-field">
+        <label>🌅 وقت الفترة الصباحية الافتراضي</label>
+        <div style="display:flex;gap:6px;">
+          <input type="time" id="ops-f-am-time"
+            style="flex:1;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 11px;color:#fff;font-family:'Cairo',sans-serif;font-size:13px;outline:none;direction:ltr;"/>
+          <button onclick="opsSetDefaultTime('am')"
+            style="padding:8px 12px;background:rgba(0,105,92,0.4);border:1.5px solid #00695C;border-radius:8px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">تطبيق ✓</button>
+        </div>
+      </div>
+      <div class="rc-field">
+        <label>🌙 وقت الفترة المسائية الافتراضي</label>
+        <div style="display:flex;gap:6px;">
+          <input type="time" id="ops-f-pm-time"
+            style="flex:1;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 11px;color:#fff;font-family:'Cairo',sans-serif;font-size:13px;outline:none;direction:ltr;"/>
+          <button onclick="opsSetDefaultTime('pm')"
+            style="padding:8px 12px;background:rgba(74,20,140,0.4);border:1.5px solid #6A1B9A;border-radius:8px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">تطبيق ✓</button>
+        </div>
+      </div>
+    </div>
+    <!-- Print Options -->
+    <div class="ops-print-btns">
+      <div class="ops-print-lbl">🖨️ خيارات الطباعة</div>
+      <button onclick="opsPrint('am')"
+        style="padding:9px 18px;background:linear-gradient(135deg,rgba(0,105,92,0.5),rgba(0,77,64,0.5));border:1.5px solid #00695C;border-radius:8px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">
+        🌅 طباعة الفترة الصباحية فقط
+      </button>
+      <button onclick="opsPrint('pm')"
+        style="padding:9px 18px;background:linear-gradient(135deg,rgba(74,20,140,0.45),rgba(49,14,93,0.45));border:1.5px solid #6A1B9A;border-radius:8px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">
+        🌙 طباعة الفترة المسائية فقط
+      </button>
+      <button onclick="opsPrint('both')"
+        style="padding:9px 18px;background:rgba(0,94,130,0.5);border:1.5px solid #00AEEF;border-radius:8px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">
+        📄 طباعة الفترتين معاً
+      </button>
+    </div>
+    <!-- Action buttons -->
+    <div class="ops-print-btns" style="margin-bottom:0;">
+      <div class="ops-print-lbl">✏️ تعبئة سريعة</div>
+      <!-- الصباحية -->
+      <button onclick="opsSetAll('am','مكتمل')"
+        style="padding:9px 14px;background:linear-gradient(135deg,rgba(0,105,92,0.45),rgba(0,77,64,0.45));border:1.5px solid #00796B;border-radius:8px;color:#80CBC4;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        🌅 الصباحية — مكتمل ✓
+      </button>
+      <button onclick="opsSetAll('am','غير مكتمل')"
+        style="padding:9px 14px;background:linear-gradient(135deg,rgba(230,81,0,0.35),rgba(191,54,12,0.35));border:1.5px solid #E64A19;border-radius:8px;color:#FFCC80;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        🌅 الصباحية — غير مكتمل ✗
+      </button>
+      <!-- فاصل بصري -->
+      <div style="width:1.5px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 2px;"></div>
+      <!-- المسائية -->
+      <button onclick="opsSetAll('pm','مكتمل')"
+        style="padding:9px 14px;background:linear-gradient(135deg,rgba(74,20,140,0.45),rgba(49,14,93,0.45));border:1.5px solid #6A1B9A;border-radius:8px;color:#CE93D8;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        🌙 المسائية — مكتمل ✓
+      </button>
+      <button onclick="opsSetAll('pm','غير مكتمل')"
+        style="padding:9px 14px;background:linear-gradient(135deg,rgba(136,14,79,0.4),rgba(97,10,56,0.4));border:1.5px solid #AD1457;border-radius:8px;color:#F48FB1;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        🌙 المسائية — غير مكتمل ✗
+      </button>
+      <!-- مسح -->
+      <div style="width:100%;height:1px;background:rgba(255,255,255,0.1);margin:4px 0;"></div>
+      <button onclick="opsClearAll()"
+        style="padding:9px 20px;background:rgba(244,67,54,0.15);border:1.5px solid rgba(244,67,54,0.45);border-radius:8px;color:#EF9A9A;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;">
+        🗑️ مسح جميع البيانات
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== إدارة العمليات — مؤشر تحضير تترا ===== */
+var OPS_COUNT=0;
+var _opsPrintMode='both';
+
+function toArabicNum(n){
+  return String(n).split('').map(function(d){return'٠١٢٣٤٥٦٧٨٩'[+d]||d;}).join('');
+}
+
+function opsPopulateRows(){
+  var tbody=document.getElementById('ops-tbody');
+  if(!tbody)return;
+  var hospitals=getHospitals();
+  OPS_COUNT=hospitals.length;
+  tbody.innerHTML='';
+  hospitals.forEach(function(hosp,idx){
+    var n=idx+1;
+    var ev=n%2===0;
+    var bgH=ev?' style="background:#EAF4FA;"':'';
+    var bgC=ev?' style="background:#E8F4FF;"':'';
+    var bg =ev?' style="background:#F2F8FC;"':'';
+    var code='شفاء '+toArabicNum(n);
+    var tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td class="td-hosp"'+bgH+'>'+hosp+'</td>'+
+      '<td class="td-code"'+bgC+'>'+code+'</td>'+
+      '<td class="td-am"'+bg+'><span class="ops-time" id="ops-am-time-'+n+'" contenteditable="true" oninput="opsSave()"></span></td>'+
+      '<td class="ops-resp ops-empty td-am" id="ops-am-resp-'+n+'" onclick="opsToggleResp(\'ops-am-resp-'+n+'\')"></td>'+
+      '<td class="td-am"'+bg+'><span class="ops-note" id="ops-am-note-'+n+'" contenteditable="true" oninput="opsSave()"></span></td>'+
+      '<td class="td-pm"'+bg+'><span class="ops-time" id="ops-pm-time-'+n+'" contenteditable="true" oninput="opsSave()"></span></td>'+
+      '<td class="ops-resp ops-empty td-pm" id="ops-pm-resp-'+n+'" onclick="opsToggleResp(\'ops-pm-resp-'+n+'\')"></td>'+
+      '<td class="td-pm"'+bg+'><span class="ops-note" id="ops-pm-note-'+n+'" contenteditable="true" oninput="opsSave()"></span></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function opsToggleResp(id){
+  var el=document.getElementById(id);if(!el)return;
+  var c=el.textContent.trim();
+  var nxt=c===''?'مكتمل':c==='مكتمل'?'غير مكتمل':'';
+  var per=id.indexOf('-am-')>-1?'am':'pm';
+  el.textContent=nxt;
+  el.className='ops-resp td-'+per+' '+(nxt==='مكتمل'?'ops-complete':nxt==='غير مكتمل'?'ops-incomplete':'ops-empty');
+  opsUpdateSummary();opsSave();
+}
+
+function opsSetAll(period,val){
+  for(var i=1;i<=OPS_COUNT;i++){
+    var el=document.getElementById('ops-'+period+'-resp-'+i);if(!el)continue;
+    el.textContent=val;
+    el.className='ops-resp td-'+period+' '+(val==='مكتمل'?'ops-complete':val==='غير مكتمل'?'ops-incomplete':'ops-empty');
+  }
+  opsUpdateSummary();opsSave();
+}
+
+function opsSetDefaultTime(period){
+  var inp=document.getElementById('ops-f-'+period+'-time');
+  if(!inp||!inp.value)return;
+  var pts=inp.value.split(':');
+  var h=parseInt(pts[0]);var m=pts[1]||'00';
+  var pfx=h<12?'ص ':'م ';
+  var hd=h>12?h-12:(h===0?12:h);
+  var fmt=pfx+hd+':'+m;
+  for(var i=1;i<=OPS_COUNT;i++){
+    var el=document.getElementById('ops-'+period+'-time-'+i);
+    if(el)el.textContent=fmt;
+  }
+  opsSave();
+}
+
+function opsUpdate(){
+  var AR=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  var de=document.getElementById('ops-f-date');
+  var dd=document.getElementById('ops-disp-date');
+  if(de&&dd){
+    if(de.value){var pts=de.value.split('-');dd.textContent=parseInt(pts[2])+' '+AR[parseInt(pts[1])-1]+' '+pts[0];}
+    else dd.textContent='';
+  }
+  var ee=document.getElementById('ops-f-exec');
+  var ev='';
+  if(ee){ev=ee.tagName==='SELECT'?(ee.selectedIndex>0?ee.options[ee.selectedIndex].text:''):ee.value||'';}
+  ev=ev.trim();
+  var de2=document.getElementById('ops-disp-exec');var fe=document.getElementById('ops-footer-exec');
+  if(de2)de2.textContent=ev||'';
+  if(fe)fe.textContent='مناوب العمليات: '+(ev||'—');
+  opsUpdateSummary();opsSave();
+}
+
+function opsUpdateSummary(){
+  var ac=0,ai=0,pc=0,pi=0;
+  for(var i=1;i<=OPS_COUNT;i++){
+    var at=((document.getElementById('ops-am-resp-'+i)||{}).textContent||'').trim();
+    var pt=((document.getElementById('ops-pm-resp-'+i)||{}).textContent||'').trim();
+    if(at==='مكتمل')ac++;else if(at==='غير مكتمل')ai++;
+    if(pt==='مكتمل')pc++;else if(pt==='غير مكتمل')pi++;
+  }
+  function ss(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  ss('ops-sum-am-comp',ac);ss('ops-sum-am-incomp',ai);
+  ss('ops-sum-pm-comp',pc);ss('ops-sum-pm-incomp',pi);
+}
+
+function opsSave(){
+  try{
+    var ee=document.getElementById('ops-f-exec');
+    var execVal=ee?(ee.tagName==='SELECT'?ee.value:ee.value)||'':'';
+    var data={date:(document.getElementById('ops-f-date')||{}).value||'',exec:execVal,rows:{}};
+    var tbody=document.getElementById('ops-tbody');
+    if(tbody){
+      var trs=tbody.querySelectorAll('tr');
+      trs.forEach(function(tr,idx){
+        var hc=tr.querySelector('.td-hosp');if(!hc)return;
+        var hosp=hc.textContent.trim();var n=idx+1;
+        function gt(id){var e=document.getElementById(id);return e?e.textContent.trim():'';}
+        data.rows[hosp]={at:gt('ops-am-time-'+n),ar:gt('ops-am-resp-'+n),an:gt('ops-am-note-'+n),
+                         pt:gt('ops-pm-time-'+n),pr:gt('ops-pm-resp-'+n),pn:gt('ops-pm-note-'+n)};
+      });
+    }
+    localStorage.setItem('ops_tetra_v1',JSON.stringify(data));
+  }catch(e){}
+}
+
+function opsLoad(){
+  try{
+    var raw=localStorage.getItem('ops_tetra_v1');if(!raw)return;
+    var data=JSON.parse(raw);
+    var de=document.getElementById('ops-f-date');if(de&&data.date)de.value=data.date;
+    var ee=document.getElementById('ops-f-exec');if(ee&&data.exec)ee.value=data.exec;
+    if(data.rows){
+      var tbody=document.getElementById('ops-tbody');if(!tbody)return;
+      tbody.querySelectorAll('tr').forEach(function(tr,idx){
+        var hc=tr.querySelector('.td-hosp');if(!hc)return;
+        var hosp=hc.textContent.trim();
+        var r=data.rows[hosp];if(!r)return;
+        var n=idx+1;
+        function st(id,v){var e=document.getElementById(id);if(e)e.textContent=v||'';}
+        function sr(id,v,p){
+          var e=document.getElementById(id);if(!e)return;
+          e.textContent=v||'';
+          e.className='ops-resp td-'+p+' '+(v==='مكتمل'?'ops-complete':v==='غير مكتمل'?'ops-incomplete':'ops-empty');
+        }
+        st('ops-am-time-'+n,r.at);sr('ops-am-resp-'+n,r.ar,'am');st('ops-am-note-'+n,r.an);
+        st('ops-pm-time-'+n,r.pt);sr('ops-pm-resp-'+n,r.pr,'pm');st('ops-pm-note-'+n,r.pn);
+      });
+    }
+    opsUpdate();
+  }catch(e){}
+}
+
+function opsClearAll(){
+  for(var i=1;i<=OPS_COUNT;i++){
+    var tids=['ops-am-time-','ops-am-note-','ops-pm-time-','ops-pm-note-'];
+    for(var j=0;j<tids.length;j++){var e=document.getElementById(tids[j]+i);if(e)e.textContent='';}
+    var rids=[['ops-am-resp-','am'],['ops-pm-resp-','pm']];
+    for(var j=0;j<rids.length;j++){
+      var e=document.getElementById(rids[j][0]+i);
+      if(e){e.textContent='';e.className='ops-resp td-'+rids[j][1]+' ops-empty';}
+    }
+  }
+  opsUpdateSummary();opsSave();
+}
+
+function opsPrint(mode){
+  var a4=document.getElementById('ops-a4-el');
+  var dp=document.getElementById('ops-disp-period');
+  if(a4){a4.classList.remove('print-am','print-pm');}
+  if(mode==='am'){if(a4)a4.classList.add('print-am');if(dp)dp.textContent='الفترة الصباحية';}
+  else if(mode==='pm'){if(a4)a4.classList.add('print-pm');if(dp)dp.textContent='الفترة المسائية';}
+  else{if(dp)dp.textContent='الفترة الصباحية والمسائية';}
+  _opsPrintMode=mode;
+  window.print();
+  function cleanup(){
+    if(a4){a4.classList.remove('print-am','print-pm');}
+    if(dp)dp.textContent='الفترة الصباحية والمسائية';
+    _opsPrintMode='both';
+    window.removeEventListener('afterprint',cleanup);
+  }
+  window.addEventListener('afterprint',cleanup);
+}
+
+function opsInit(){
+  opsPopulateRows();
+  opsLoad();
+  opsUpdateSummary();
+}
+</script>
+
+</div>
+
+<!-- ================================================================
      6. تقرير الفرضية
 ================================================================ -->
 <div id="panel-hypothesis" class="card-panel">
@@ -3304,7 +3880,7 @@ function populateRecvHospSelects(){
 }
 function populateOfficerSelects(){
   const officers=getOfficers();
-  ['el-f-exec','ox-f-exec','fi-f-exec','inj-f-exec','hh-f-exec','ht-f-exec','hn-f-exec','hz-f-exec'].forEach(id=>{
+  ['el-f-exec','ox-f-exec','fi-f-exec','inj-f-exec','hh-f-exec','ht-f-exec','hn-f-exec','hz-f-exec','ops-f-exec'].forEach(id=>{
     const sel=document.getElementById(id);if(!sel)return;
     const cur=sel.value;
     sel.innerHTML='<option value="">— اختر —</option>';
@@ -3440,6 +4016,14 @@ function switchCard(card){
       var today = new Date();
       var todayStr = today.getDate() + ' ' + AR_MONTHS[today.getMonth()] + ' ' + today.getFullYear();
       return 'تحقق تأهب مستشفيات التجمع للفترة ' + period + ' ' + todayStr;
+    }
+
+    if(id === 'panel-ops'){
+      var dateEl=document.getElementById('ops-f-date');
+      var dateVal=dateEl?dateEl.value:'';
+      var mn=monthFromDate(dateVal);
+      var yr=yearFromDate(dateVal)||(new Date().getFullYear());
+      return 'مؤشر تحضير تترا - '+(mn?mn+' ':'')+yr;
     }
 
     if(id === 'panel-hypothesis'){
@@ -3887,12 +4471,13 @@ function openSettings(){
 }
 function closeSettings(){
   document.getElementById('settings-overlay').classList.remove('open');
-  populateHospitalSelects();populateOfficerSelects();populateRecvHospSelects();
+  populateHospitalSelects();opsPopulateRows();opsLoad();populateOfficerSelects();populateRecvHospSelects();
   populateReporterSelects();populateExecSelects();populateTransportSelects();populateParticipantSelects();
   populateOutageTypeSelects();populateActionSelects();populateFireTypeSelects();populateInjTypeSelects();
   populateCitySelects();populateCodeSelects();populateRdEvTypeSelects();
   buildAreaChecks('el','updateElectricity()');buildAreaChecks('ox','updateOxygen()');
   rckPopulateAddSelect();
+  opsInit();
 }
 function renderAllSettingsLists(){
   renderHospitalsList();renderOfficersList();renderReportersList();renderExecsList();
@@ -5022,4 +5607,4 @@ function rckPopulateAddSelect(){
 function rckInit(){rckLoad();rckPopulateAddSelect();rckUpdate();}
 </script>
 </body>
-</html>
+</html>                                              
