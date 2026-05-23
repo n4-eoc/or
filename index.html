@@ -2453,13 +2453,13 @@ function hpSelectCat(cat){
 .ops-tbl td.td-hosp{text-align:right;padding-right:8px;font-weight:800;color:#1A3A4A;background:#F7FBFD;}
 .ops-tbl td.td-code{font-weight:800;color:#005B82;background:#F0F7FF;}
 .ops-time{display:inline-block;min-width:38px;width:100%;padding:1px 3px;outline:none;
-  border-radius:3px;direction:ltr;font-size:9px;cursor:text;font-family:'Cairo',sans-serif;font-weight:700;}
+  border-radius:3px;direction:ltr;font-size:9px;cursor:text;font-family:'Cairo',sans-serif;font-weight:700;text-align:center;}
 .ops-time:focus{background:#E3F2FD;}
 .ops-note{display:inline-block;min-width:50px;width:100%;text-align:right;padding:1px 3px;
   outline:none;border-radius:3px;cursor:text;font-family:'Cairo',sans-serif;font-size:9px;}
 .ops-note:focus{background:#E3F2FD;}
 .ops-resp{cursor:pointer;min-width:50px;padding:2px 5px;border-radius:10px;
-  font-size:9px;font-weight:900;display:inline-block;user-select:none;}
+  font-size:9px;font-weight:900;display:block;width:100%;text-align:center;box-sizing:border-box;user-select:none;}
 .ops-complete{background:#C8E6C9!important;color:#1B5E20!important;}
 .ops-incomplete{background:#FFCDD2!important;color:#B71C1C!important;}
 .ops-empty{background:#F5F5F5!important;color:#9E9E9E!important;}
@@ -3674,9 +3674,7 @@ const HOSPITALS = [
   "مستشفى الولادة والأطفال","مجمع إرادة والصحة النفسية","مستشفى بقعاء العام",
   "مستشفى موقق العام","مستشفى السليمي العام","مستشفى سميراء العام",
   "مستشفى الشملي العام","مستشفى الشنان العام","مستشفى الغزالة العام",
-  "مستشفى الحائط العام","مستشفى اجاء للرعاية المديدة","مستشفى شراف",
-  "مستشفى سلامات","المستشفى السعودي الألماني","عمليات فرع الوزارة",
-  "عمليات النقل الطبي","عمليات الهلال الأحمر","عمليات الدفاع المدني"
+  "مستشفى الحائط العام","مستشفى اجاء للرعاية المديدة","مستشفى شراف"
 ];
 
 // ===== DYNAMIC DATA MANAGEMENT =====
@@ -4889,6 +4887,7 @@ window.addEventListener('DOMContentLoaded', function(){
   buildAreaChecks('el','updateElectricity()');
   buildAreaChecks('ox','updateOxygen()');
   rckPopulateAddSelect();
+  opsInit();
   const now=new Date();
   const todayStr=now.toISOString().split('T')[0];
   const timeStr=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
