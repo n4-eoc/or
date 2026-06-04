@@ -1079,6 +1079,24 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
     <div class="hp-sub-area" id="hp-sub-operations">
       <div class="hp-sub-title">▸ إدارة العمليات</div>
       <div class="hp-sub-grid">
+        <!-- صف 1: تنبيهات لجنة الطوارئ -->
+        <div class="hp-sub-card" onclick="window.open('https://mn-ux23.github.io/medical-alert-massages/','_blank')" style="grid-column:span 4;border-color:rgba(239,83,80,0.4);">
+          <div class="hp-sub-card-icon" style="background:rgba(183,28,28,0.18);">🚨</div>
+          <div class="hp-sub-card-name">تنبيهات لجنة الطوارئ</div>
+          <div class="hp-sub-card-code" style="color:#EF5350;">EMERGENCY ALERTS</div>
+        </div>
+        <!-- صف 2: تحقق التأهب + مؤشر تحضير تترا -->
+        <div class="hp-sub-card" onclick="switchCard('readiness-check')" style="grid-column:span 2;">
+          <div class="hp-sub-card-icon" style="background:rgba(34,197,94,0.12);">✅</div>
+          <div class="hp-sub-card-name">تحقق التأهب</div>
+          <div class="hp-sub-card-code">READINESS CHECK</div>
+        </div>
+        <div class="hp-sub-card" onclick="switchCard('ops')" style="grid-column:span 2;">
+          <div class="hp-sub-card-icon" style="background:rgba(0,105,92,0.15);">📡</div>
+          <div class="hp-sub-card-name">مؤشر تحضير تترا</div>
+          <div class="hp-sub-card-code">TETRA READINESS</div>
+        </div>
+        <!-- صف 3: كهرباء + أكسجين + حريق + إصابات -->
         <div class="hp-sub-card" onclick="switchCard('electricity')">
           <div class="hp-sub-card-icon" style="background:rgba(245,158,11,0.15);">⚡</div>
           <div class="hp-sub-card-name">انقطاع كهرباء</div>
@@ -1099,6 +1117,7 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
           <div class="hp-sub-card-name">إصابات متعددة</div>
           <div class="hp-sub-card-code">CODE YELLOW</div>
         </div>
+        <!-- صف 4: بشري + طبيعي + تكنولوجي + مواد خطرة -->
         <div class="hp-sub-card" onclick="switchCard('hazard-human')">
           <div class="hp-sub-card-icon" style="background:rgba(0,174,239,0.12);">🧑</div>
           <div class="hp-sub-card-name">بشري</div>
@@ -1118,16 +1137,6 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
           <div class="hp-sub-card-icon" style="background:rgba(0,174,239,0.12);">☣️</div>
           <div class="hp-sub-card-name">مواد خطرة</div>
           <div class="hp-sub-card-code">HAZMAT</div>
-        </div>
-        <div class="hp-sub-card" onclick="switchCard('readiness-check')" style="grid-column:span 2;">
-          <div class="hp-sub-card-icon" style="background:rgba(34,197,94,0.12);">✅</div>
-          <div class="hp-sub-card-name">تحقق التأهب</div>
-          <div class="hp-sub-card-code">READINESS CHECK</div>
-        </div>
-        <div class="hp-sub-card" onclick="switchCard('ops')" style="grid-column:span 2;">
-          <div class="hp-sub-card-icon" style="background:rgba(0,105,92,0.15);">📡</div>
-          <div class="hp-sub-card-name">مؤشر تحضير تترا</div>
-          <div class="hp-sub-card-code">TETRA READINESS</div>
         </div>
       </div>
     </div>
@@ -2765,6 +2774,15 @@ function hpSelectCat(cat){
         📄 طباعة الفترتين معاً
       </button>
     </div>
+    <!-- Alert Button -->
+    <div class="ops-print-btns" style="margin-bottom:0;">
+      <div class="ops-print-lbl">🔔 تنبيهات لجنة الطوارئ</div>
+      <button onclick="window.open('https://mn-ux23.github.io/medical-alert-massages/','_blank')"
+        style="padding:9px 20px;background:linear-gradient(135deg,rgba(183,28,28,0.5),rgba(198,40,40,0.5));border:1.5px solid #EF5350;border-radius:8px;color:#fff;font-family:'Cairo',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:0.3px;">
+        🚨 تنبيهات لجنة الطوارئ
+      </button>
+    </div>
+
     <!-- Action buttons -->
     <div class="ops-print-btns" style="margin-bottom:0;">
       <div class="ops-print-lbl">✏️ تعبئة سريعة</div>
@@ -2853,14 +2871,19 @@ function opsSetAll(period,val){
   opsUpdateSummary();opsSave();
 }
 
+function opsFormatTime(val){
+  if(!val)return'';
+  var pts=val.split(':');
+  var h=parseInt(pts[0]);var m=pts[1]||'00';
+  var ampm=h<12?'AM':'PM';
+  var hd=h%12;if(hd===0)hd=12;
+  return String(hd).padStart(2,'0')+':'+m+' '+ampm;
+}
+
 function opsSetDefaultTime(period){
   var inp=document.getElementById('ops-f-'+period+'-time');
   if(!inp||!inp.value)return;
-  var pts=inp.value.split(':');
-  var h=parseInt(pts[0]);var m=pts[1]||'00';
-  var pfx=h<12?'ص ':'م ';
-  var hd=h>12?h-12:(h===0?12:h);
-  var fmt=pfx+hd+':'+m;
+  var fmt=opsFormatTime(inp.value);
   for(var i=1;i<=OPS_COUNT;i++){
     var el=document.getElementById('ops-'+period+'-time-'+i);
     if(el)el.textContent=fmt;
@@ -4591,6 +4614,77 @@ makeSettingsListFns('inj_types',getInjTypes,saveInjTypes,'s-inj-types-list','s-n
 makeSettingsListFns('cities',getCities,saveCities,'s-cities-list','s-new-city','CitiesList',populateCitySelects,'لا توجد مدن');
 makeSettingsListFns('codes',getCodes,saveCodes,'s-codes-list','s-new-code','CodesList',populateCodeSelects,'لا توجد أكواد');
 makeSettingsListFns('rd_ev_types',getRdEvTypes,saveRdEvTypes,'s-rd-ev-types-list','s-new-rd-ev-type','RdEvTypesList',populateRdEvTypeSelects,'لا توجد أنواع أحداث');
+
+/* ===== أخرى — تحويل أي قائمة منسدلة إلى حقل نص ===== */
+function initOtherOptions(){
+  var sels=document.querySelectorAll('.form-section select, .ops-form select, .rck-form select');
+  sels.forEach(function(sel){
+    if(sel.dataset.otherInited)return;
+    if(sel.closest('#settings-overlay'))return;
+    /* تخطّ إذا كان لديها __other__ بالفعل وتعمل بدالة خاصة */
+    if(!sel.querySelector('option[value="__other__"]')){
+      var opt=document.createElement('option');
+      opt.value='__other__';opt.textContent='أخرى...';
+      sel.appendChild(opt);
+    }
+    sel.dataset.otherInited='1';
+    sel.addEventListener('change',function(){
+      if(sel.value==='__other__') showOtherInput(sel);
+    });
+  });
+}
+
+function showOtherInput(sel){
+  /* أنشئ خيار مخفي يحمل القيمة المكتوبة */
+  var dynOpt=document.createElement('option');
+  dynOpt.value='';dynOpt.dataset.dyn='1';
+  sel.insertBefore(dynOpt,sel.firstChild);
+  sel.value='';
+
+  /* أخفِ القائمة */
+  sel.style.display='none';
+
+  /* حقل النص */
+  var inp=document.createElement('input');
+  inp.type='text';
+  inp.placeholder='اكتب هنا...';
+  inp.style.cssText='width:100%;background:rgba(255,255,255,0.1);border:1.5px solid #00AEEF;'+
+    'border-radius:8px;padding:8px 40px 8px 11px;color:#fff;font-family:\'Cairo\',sans-serif;'+
+    'font-size:13px;outline:none;direction:rtl;box-sizing:border-box;display:block;';
+
+  /* زر الرجوع */
+  var wrap=document.createElement('div');
+  wrap.style.cssText='position:relative;width:100%;';
+  var btn=document.createElement('button');
+  btn.type='button';btn.textContent='↩';btn.title='العودة للقائمة';
+  btn.style.cssText='position:absolute;left:6px;top:50%;transform:translateY(-50%);'+
+    'background:rgba(0,174,239,0.2);border:1px solid rgba(0,174,239,0.4);border-radius:6px;'+
+    'color:#00AEEF;font-size:15px;cursor:pointer;padding:1px 8px;line-height:1.5;';
+
+  btn.onclick=function(){
+    /* إزالة الخيار الديناميكي وإعادة القائمة */
+    dynOpt.remove();
+    sel.style.display='';
+    sel.value='';
+    wrap.remove();
+    var ev=new Event('change');sel.dispatchEvent(ev);
+  };
+
+  /* تحديث الخيار الديناميكي عند الكتابة */
+  var onch=sel.getAttribute('onchange');
+  inp.addEventListener('input',function(){
+    dynOpt.value=inp.value;dynOpt.textContent=inp.value;
+    sel.value=inp.value;
+    if(onch){try{eval(onch);}catch(e){}}
+  });
+
+  wrap.appendChild(inp);
+  wrap.appendChild(btn);
+  sel.parentNode.insertBefore(wrap,sel.nextSibling);
+  inp.focus();
+}
+
+setTimeout(initOtherOptions,600);
 
 
 </script>
