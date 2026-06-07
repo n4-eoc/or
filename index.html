@@ -796,6 +796,7 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
   <button class="tab-btn"        data-card="fire"        onclick="switchCard('fire')">حريق</button>
   <button class="tab-btn"        data-card="injuries"    onclick="switchCard('injuries')">إصابات متعددة</button>
   <button class="tab-btn"        data-card="hypothesis"  onclick="switchCard('hypothesis')">تقرير الفرضية</button>
+  <button class="tab-btn"        data-card="hypothesis-sudden"  onclick="switchCard('hypothesis-sudden')">تقرير فرضية مفاجئة</button>
   <button class="tab-btn"        data-card="hazard-human"  onclick="switchCard('hazard-human')" style="">🧑 بشرية</button>
   <button class="tab-btn"        data-card="hazard-tech"   onclick="switchCard('hazard-tech')"  style="">💻 تكنولوجية</button>
   <button class="tab-btn"        data-card="hazard-nature" onclick="switchCard('hazard-nature')" style="">🌿 طبيعية</button>
@@ -1040,14 +1041,14 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
       <div class="hp-cat-btn" id="hp-cat-readiness" onclick="hpSelectCat('readiness')">
         <div class="hp-cat-icon" style="background:rgba(0,174,239,0.15);border:1.5px solid rgba(0,174,239,0.3);">🛡️</div>
         <div class="hp-cat-name">إدارة الاستعداد</div>
-        <div class="hp-cat-count">2 تقارير</div>
+        <div class="hp-cat-count">3 تقارير</div>
       </div>
 
       <!-- إدارة العمليات -->
       <div class="hp-cat-btn" id="hp-cat-operations" onclick="hpSelectCat('operations')">
         <div class="hp-cat-icon" style="background:rgba(239,68,68,0.12);border:1.5px solid rgba(239,68,68,0.25);">⚡</div>
         <div class="hp-cat-name">إدارة العمليات</div>
-        <div class="hp-cat-count">10 تقارير</div>
+        <div class="hp-cat-count">12 تقارير</div>
       </div>
 
       <!-- الإحصائيات -->
@@ -1072,6 +1073,11 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
           <div class="hp-sub-card-name">تقييم فرضية</div>
           <div class="hp-sub-card-code">HYPOTHESIS</div>
         </div>
+        <div class="hp-sub-card" onclick="switchCard('hypothesis-sudden')">
+          <div class="hp-sub-card-icon" style="background:rgba(239,68,68,0.15);">⚡</div>
+          <div class="hp-sub-card-name">فرضية مفاجئة</div>
+          <div class="hp-sub-card-code">SUDDEN</div>
+        </div>
       </div>
     </div>
 
@@ -1079,11 +1085,16 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
     <div class="hp-sub-area" id="hp-sub-operations">
       <div class="hp-sub-title">▸ إدارة العمليات</div>
       <div class="hp-sub-grid">
-        <!-- صف 1: تنبيهات لجنة الطوارئ -->
-        <div class="hp-sub-card" onclick="window.open('https://mn-ux23.github.io/medical-alert-massages/','_blank')" style="grid-column:span 4;border-color:rgba(239,83,80,0.4);">
+        <!-- صف 1: تنبيهات لجنة الطوارئ + رسائل التنبيه -->
+        <div class="hp-sub-card" onclick="window.open('https://mn-ux23.github.io/medical-alert-massages/','_blank')" style="grid-column:span 2;border-color:rgba(239,83,80,0.4);">
           <div class="hp-sub-card-icon" style="background:rgba(183,28,28,0.18);">🚨</div>
           <div class="hp-sub-card-name">تنبيهات لجنة الطوارئ</div>
           <div class="hp-sub-card-code" style="color:#EF5350;">EMERGENCY ALERTS</div>
+        </div>
+        <div class="hp-sub-card" onclick="window.open('تنبية.html','_blank')" style="grid-column:span 2;border-color:rgba(0,140,200,0.35);">
+          <div class="hp-sub-card-icon" style="background:rgba(0,100,160,0.15);">✉️</div>
+          <div class="hp-sub-card-name">رسائل التنبيه</div>
+          <div class="hp-sub-card-code" style="color:rgba(0,174,239,0.6);">ALERT MESSAGES</div>
         </div>
         <!-- صف 2: تحقق التأهب + مؤشر تحضير تترا -->
         <div class="hp-sub-card" onclick="switchCard('readiness-check')" style="grid-column:span 2;">
@@ -3691,6 +3702,862 @@ function hypReset(){
 </script>
 </div>
 
+<div id="panel-hypothesis-sudden" class="card-panel">
+<style>
+.hyps-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  margin: 0 auto 20px;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+}
+
+</style>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 1: بيانات + جهات + فريق التقييم
+══════════════════════════════════════════ -->
+<div class="hyps-page">
+    <div class="a4-header hdr-readiness">
+      <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
+      <div class="a4-org-block">
+        <div class="a4-org-main">تجمع حائل الصحي</div>
+        <div class="a4-org-sub">مركز إدارة الأزمات والكوارث الصحية</div>
+      </div>
+      <div class="a4-badge badge-readiness">تقرير فرضية مفاجئة</div>
+    </div>
+
+  <!-- spacer: الثلث الأول -->
+  <div id="hyps-spacer-p1" class="hyps-spacer" style="height:calc(297mm / 3 - 52px - 100px);flex-shrink:0;"></div>
+  <!-- المحتوى يبدأ من الثلث الثاني -->
+  <div style="flex:1;display:flex;flex-direction:column;padding:0 28px 0;">
+
+    <!-- العنوان المركزي -->
+    <div style="text-align:center;border-bottom:2px dashed #C8E4F0;padding-bottom:16px;margin-bottom:20px;">
+      <h2 style="font-size:42px;font-weight:900;color:#003D5C;margin:0 0 8px;">تقرير فرضية مفاجئة</h2>
+      <div style="font-size:20px;font-weight:800;color:#1A3A4A;" id="hyps-d-hosp">—</div>
+      <div style="font-size:15px;font-weight:700;color:#00AEEF;margin-top:6px;" id="hyps-d-dept">—</div>
+    </div>
+
+    <!-- مربعات التاريخ والأوقات -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;">
+      <!-- تاريخ الفرضية -->
+      <div style="background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 10px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:#4A5A6A;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">تاريخ الفرضية</div>
+        <div style="font-size:15px;font-weight:800;color:#003D5C;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <span>📅</span><span id="hyps-d-date">—</span>
+        </div>
+      </div>
+      <!-- نوع الكارثة -->
+      <div style="background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 10px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:#4A5A6A;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">نوع الكارثة</div>
+        <div style="font-size:13px;font-weight:800;color:#003D5C;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <span>🔥</span><span id="hyps-d-type">—</span>
+        </div>
+      </div>
+      <!-- بداية الحدث -->
+      <div style="background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 10px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:#4A5A6A;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">بداية الحدث</div>
+        <div style="font-size:15px;font-weight:800;color:#003D5C;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <span>🕐</span><span id="hyps-d-start">—</span>
+        </div>
+      </div>
+      <!-- نهاية الحدث -->
+      <div style="background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 10px;text-align:center;">
+        <div style="font-size:10px;font-weight:700;color:#4A5A6A;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">نهاية الحدث</div>
+        <div style="font-size:15px;font-weight:800;color:#003D5C;display:flex;align-items:center;justify-content:center;gap:6px;">
+          <span>🕐</span><span id="hyps-d-end">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- الجهات المشاركة + فريق التقييم -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;border-top:2px solid #E3F2FD;padding-top:20px;">
+      <!-- الجهات الخارجية -->
+      <div>
+        <div style="font-size:13px;font-weight:800;color:#003D5C;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px;">👥</span> الجهات الخارجية المشاركة
+        </div>
+        <div id="hyps-d-entities-list" style="display:flex;flex-direction:column;gap:6px;">
+          <span style="color:#aaa;font-size:11px;">—</span>
+        </div>
+      </div>
+      <!-- فريق التقييم -->
+      <div style="border-right:2px solid #E3F2FD;padding-right:24px;">
+        <div style="font-size:13px;font-weight:800;color:#003D5C;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px;">📋</span> فريق التقييم
+        </div>
+        <div id="hyps-d-evaluators-list" style="display:flex;flex-direction:column;gap:6px;">
+          <span style="color:#aaa;font-size:11px;">—</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end center content -->
+
+      <div class="a4-footer ft-blue"><span>تجمع حائل الصحي — Hail Health Cluster</span><span>تقرير فرضية مفاجئة — Sudden Hypothesis Report</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 2: جداول 1 و 2 (قيادة + تطهير)
+══════════════════════════════════════════ -->
+<div class="hyps-page">
+    <div class="a4-header hdr-readiness">
+      <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
+      <div class="a4-org-block">
+        <div class="a4-org-main">تجمع حائل الصحي</div>
+        <div class="a4-org-sub">مركز إدارة الأزمات والكوارث الصحية</div>
+      </div>
+      <div class="a4-badge badge-readiness">تقرير فرضية مفاجئة</div>
+    </div>
+    <div class="a4-title-bar" style="background:linear-gradient(90deg,#00AEEF,#005B82);">
+      <span style="opacity:0.75;font-size:12px;">تقرير فرضية مفاجئة</span><span class="title-sep">|</span><span id="hyps-hosp-disp">—</span>
+    </div>
+  <div style="padding:14px 16px;">
+    <div class="section-title" style="margin-bottom:14px;font-size:13px;">📊 أولاً: تفاصيل التقييم الميداني</div>
+
+        <div style="margin-bottom:14px;border:1px solid #C8E4F0;border-radius:8px;overflow:hidden;">
+          <div style="font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#005B82,#0078A8);padding:7px 12px;">📋 تقييم قيادة الحدث</div>
+          <table style="width:100%;border-collapse:collapse;" id="hyps-t1">
+            <thead style="background:linear-gradient(135deg,#003D5C,#005B82);"><tr><th style="padding:7px 12px;color:#fff;text-align:right;font-weight:700;font-size:12px;">البند</th><th style="padding:7px 12px;color:#fff;text-align:center;width:110px;font-weight:700;font-size:12px;">التقييم</th></tr></thead>
+            <tbody><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">تفعيل قيادة الحدث</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">وصول قائد الحدث في وقت مناسب</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">وجود غرفة قيادة الحدث في موقع مناسب</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توفر وسائل الاتصال</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">تواصل قائد الحدث وفريقه بشكل فعال</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">الهيكل التنظيمي لقيادة الحدث</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">تفعيل خطة الطوارئ</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توثيق معلومات الحدث</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">عمل مركز قيادة الحدث بشكل فعال</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr></tbody>
+          </table>
+        </div>
+        <div style="margin-bottom:14px;border:1px solid #C8E4F0;border-radius:8px;overflow:hidden;">
+          <div style="font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#005B82,#0078A8);padding:7px 12px;">📋 تقييم منطقة التطهير</div>
+          <table style="width:100%;border-collapse:collapse;" id="hyps-t2">
+            <thead style="background:linear-gradient(135deg,#003D5C,#005B82);"><tr><th style="padding:7px 12px;color:#fff;text-align:right;font-weight:700;font-size:12px;">البند</th><th style="padding:7px 12px;color:#fff;text-align:center;width:110px;font-weight:700;font-size:12px;">التقييم</th></tr></thead>
+            <tbody><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">وجود منطقة للتطهير مجهزة</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توفر وسائل الوقاية الشخصية</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">جميع العاملين يرتدون وسائل الوقاية</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توفر وسائل الاتصال</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">التواصل فعال في منطقة التطهير</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">وجود مسؤول عن منطقة التطهير</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">عزل متعلقات المصابين بطريقة آمنة</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">فحص المصابين بعد مغادرة منطقة التطهير</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">فريق التطهير كافٍ</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">عمل منطقة التطهير مطابق للخطة المعتمدة</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr></tbody>
+          </table>
+        </div>
+  </div>
+      <div class="a4-footer ft-blue"><span>تجمع حائل الصحي — Hail Health Cluster</span><span>تقرير فرضية مفاجئة — Sudden Hypothesis Report</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 3: جداول 3 و 4 و 5
+══════════════════════════════════════════ -->
+<div class="hyps-page">
+    <div class="a4-header hdr-readiness">
+      <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
+      <div class="a4-org-block">
+        <div class="a4-org-main">تجمع حائل الصحي</div>
+        <div class="a4-org-sub">مركز إدارة الأزمات والكوارث الصحية</div>
+      </div>
+      <div class="a4-badge badge-readiness">تقرير فرضية مفاجئة</div>
+    </div>
+    <div class="a4-title-bar" style="background:linear-gradient(90deg,#00AEEF,#005B82);">
+      <span style="opacity:0.75;font-size:12px;">تقرير فرضية مفاجئة</span><span class="title-sep">|</span><span class="hyps-hosp-disp-cls">—</span>
+    </div>
+  <div style="padding:14px 16px;">
+    <div class="section-title" style="margin-bottom:14px;font-size:13px;">📊 أولاً: تفاصيل التقييم الميداني (تابع)</div>
+
+        <div style="margin-bottom:14px;border:1px solid #C8E4F0;border-radius:8px;overflow:hidden;">
+          <div style="font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#005B82,#0078A8);padding:7px 12px;">📋 تقييم منطقة الفرز</div>
+          <table style="width:100%;border-collapse:collapse;" id="hyps-t3">
+            <thead style="background:linear-gradient(135deg,#003D5C,#005B82);"><tr><th style="padding:7px 12px;color:#fff;text-align:right;font-weight:700;font-size:12px;">البند</th><th style="padding:7px 12px;color:#fff;text-align:center;width:110px;font-weight:700;font-size:12px;">التقييم</th></tr></thead>
+            <tbody><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">المساحة والأمان وتقسيم الألوان</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">لافتة توضح منطقة الفرز</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">التزام الطاقم بوسائل الوقاية والفرز</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">وجود تواصل مع قيادة الحدث</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">تميز القائد الميداني بزي خاص والقيام بمهامه</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توفر الحقائب الإسعافية والمستلزمات وأسطوانات الأكسجين</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">حماس وجدية العاملين وتقديم الرعاية الطبية الملائمة</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">اتباع بروتوكول الفرز المعتمد ونقل الحالات</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">جاهزية سيارات الإسعاف وتنظيم حركتها ونقل المصابين</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr></tbody>
+          </table>
+        </div>
+        <div style="margin-bottom:14px;border:1px solid #C8E4F0;border-radius:8px;overflow:hidden;">
+          <div style="font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#005B82,#0078A8);padding:7px 12px;">📋 تقييم منطقة العلاج</div>
+          <table style="width:100%;border-collapse:collapse;" id="hyps-t4">
+            <thead style="background:linear-gradient(135deg,#003D5C,#005B82);"><tr><th style="padding:7px 12px;color:#fff;text-align:right;font-weight:700;font-size:12px;">البند</th><th style="padding:7px 12px;color:#fff;text-align:center;width:110px;font-weight:700;font-size:12px;">التقييم</th></tr></thead>
+            <tbody><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">جاهزية قسم الطوارئ ووجود كادر كافٍ</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">التزام الفرق الطبية بوسائل الوقاية الشخصية</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">وجود تواصل مع غرفة قيادة الحدث</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">وجود قائد لمنطقة العلاج</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">عمل فرز ثانٍ في مدخل الطوارئ</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">فتح ملف وتسجيل بيانات المريض</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">لافتات ومسارات توضح المناطق الحمراء والصفراء والخضراء</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">تقديم الخدمات العلاجية المتقدمة</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توفر المستلزمات الطبية</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr></tbody>
+          </table>
+        </div>
+        <div style="margin-bottom:14px;border:1px solid #C8E4F0;border-radius:8px;overflow:hidden;">
+          <div style="font-size:12px;font-weight:800;color:#fff;background:linear-gradient(90deg,#005B82,#0078A8);padding:7px 12px;">📋 تقييم منطقة الأمن والسلامة</div>
+          <table style="width:100%;border-collapse:collapse;" id="hyps-t5">
+            <thead style="background:linear-gradient(135deg,#003D5C,#005B82);"><tr><th style="padding:7px 12px;color:#fff;text-align:right;font-weight:700;font-size:12px;">البند</th><th style="padding:7px 12px;color:#fff;text-align:center;width:110px;font-weight:700;font-size:12px;">التقييم</th></tr></thead>
+            <tbody><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توفر وسائل الوقاية الشخصية</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توفر وسائل الاتصال</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">عدد رجال الأمن كافٍ</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">تأمين جميع المواقع المشاركة بالحدث</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">الإشراف والتأمين لعمليات الإخلاء</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">عمل الأمن والسلامة بشكل فعال</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr><tr style="border-bottom:1px solid #E3F2FD;background:#fff;"><td style="padding:6px 12px;color:#1A3A4A;font-weight:600;font-size:12px;">توجيه المركبات المشاركة</td><td style="padding:5px;text-align:center;"><select class="hyps-eval-sel" onchange="hypsEvalChanged(this)" style="font-family:Cairo,sans-serif;font-size:11px;font-weight:700;border:none;outline:none;cursor:pointer;text-align:center;text-align-last:center;color:#16a34a;width:100%;background:transparent;"><option value="c" selected>مكتمل</option><option value="p">مكتمل جزئي</option><option value="i">غير مكتمل</option><option value="n">لا ينطبق</option></select></td></tr></tbody>
+          </table>
+        </div>
+  </div>
+      <div class="a4-footer ft-blue"><span>تجمع حائل الصحي — Hail Health Cluster</span><span>تقرير فرضية مفاجئة — Sudden Hypothesis Report</span></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     الصفحة 4: النتائج + ملاحظات + توصيات
+══════════════════════════════════════════ -->
+<div class="hyps-page">
+    <div class="a4-header hdr-readiness">
+      <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
+      <div class="a4-org-block">
+        <div class="a4-org-main">تجمع حائل الصحي</div>
+        <div class="a4-org-sub">مركز إدارة الأزمات والكوارث الصحية</div>
+      </div>
+      <div class="a4-badge badge-readiness">تقرير فرضية مفاجئة</div>
+    </div>
+    <div class="a4-title-bar" style="background:linear-gradient(90deg,#00AEEF,#005B82);">
+      <span style="opacity:0.75;font-size:12px;">تقرير فرضية مفاجئة</span><span class="title-sep">|</span><span class="hyps-hosp-disp-cls">—</span>
+    </div>
+  <!-- spacer: القسم الأول من الخمسة -->
+  <div class="hyps-spacer" style="height:calc((297mm - 52px - 32px) / 5 - 180px);flex-shrink:0;"></div>
+  <!-- المحتوى يبدأ من القسم الثاني -->
+  <div style="flex:1;display:flex;flex-direction:column;">
+  <!-- نتائج التقييم -->
+  <div style="padding:12px 16px;border-bottom:2px solid #E3F2FD;">
+    <div class="section-title" style="margin-bottom:14px;">📊 ثانياً: نتائج التقييم النهائية</div>
+
+    <!-- الصف الأول: 5 رسوم للمناطق -->
+    <div id="hyps-charts-row" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px;">
+            <div style="text-align:center;background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 6px;" data-table="hyps-t1">
+              <svg viewBox="0 0 36 36" width="80" height="80" style="display:block;margin:0 auto;">
+                <path fill="none" stroke="#E3F2FD" stroke-width="3.8" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="hyps-mini-circle" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <text x="18" y="21" class="hyps-mini-pct" fill="currentColor" font-family="Cairo,sans-serif" font-weight="bold" font-size="7.5" text-anchor="middle">100%</text>
+              </svg>
+              <div style="font-size:11px;font-weight:700;color:#1A3A4A;margin-top:6px;">قيادة الحدث</div>
+            </div>
+            <div style="text-align:center;background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 6px;" data-table="hyps-t2">
+              <svg viewBox="0 0 36 36" width="80" height="80" style="display:block;margin:0 auto;">
+                <path fill="none" stroke="#E3F2FD" stroke-width="3.8" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="hyps-mini-circle" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <text x="18" y="21" class="hyps-mini-pct" fill="currentColor" font-family="Cairo,sans-serif" font-weight="bold" font-size="7.5" text-anchor="middle">100%</text>
+              </svg>
+              <div style="font-size:11px;font-weight:700;color:#1A3A4A;margin-top:6px;">التطهير</div>
+            </div>
+            <div style="text-align:center;background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 6px;" data-table="hyps-t3">
+              <svg viewBox="0 0 36 36" width="80" height="80" style="display:block;margin:0 auto;">
+                <path fill="none" stroke="#E3F2FD" stroke-width="3.8" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="hyps-mini-circle" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <text x="18" y="21" class="hyps-mini-pct" fill="currentColor" font-family="Cairo,sans-serif" font-weight="bold" font-size="7.5" text-anchor="middle">100%</text>
+              </svg>
+              <div style="font-size:11px;font-weight:700;color:#1A3A4A;margin-top:6px;">الفرز</div>
+            </div>
+            <div style="text-align:center;background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 6px;" data-table="hyps-t4">
+              <svg viewBox="0 0 36 36" width="80" height="80" style="display:block;margin:0 auto;">
+                <path fill="none" stroke="#E3F2FD" stroke-width="3.8" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="hyps-mini-circle" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <text x="18" y="21" class="hyps-mini-pct" fill="currentColor" font-family="Cairo,sans-serif" font-weight="bold" font-size="7.5" text-anchor="middle">100%</text>
+              </svg>
+              <div style="font-size:11px;font-weight:700;color:#1A3A4A;margin-top:6px;">العلاج</div>
+            </div>
+            <div style="text-align:center;background:#F7FBFD;border:1px solid #C8E4F0;border-radius:10px;padding:12px 6px;" data-table="hyps-t5">
+              <svg viewBox="0 0 36 36" width="80" height="80" style="display:block;margin:0 auto;">
+                <path fill="none" stroke="#E3F2FD" stroke-width="3.8" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="hyps-mini-circle" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <text x="18" y="21" class="hyps-mini-pct" fill="currentColor" font-family="Cairo,sans-serif" font-weight="bold" font-size="7.5" text-anchor="middle">100%</text>
+              </svg>
+              <div style="font-size:11px;font-weight:700;color:#1A3A4A;margin-top:6px;">الأمن والسلامة</div>
+            </div>
+    </div>
+
+    <!-- الصف الثاني: التقييم النهائي -->
+    <div style="background:linear-gradient(135deg,#F0F7FB,#E3F2FD);border:2px solid #00AEEF;border-radius:12px;padding:14px 20px;display:flex;align-items:center;justify-content:center;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <svg viewBox="0 0 36 36" width="100" height="100" style="display:block;">
+          <path fill="none" stroke="#C8E4F0" stroke-width="3.8" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+          <path id="hyps-final-circle" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-dasharray="100,100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+          <text x="18" y="21" fill="currentColor" font-family="Cairo,sans-serif" font-weight="bold" font-size="7" text-anchor="middle" id="hyps-final-pct">—</text>
+        </svg>
+        <div style="font-size:13px;font-weight:900;color:#003D5C;">التقييم النهائي</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- إحصائية المصابين + فريق قيادة الحدث + ملاحظات + توصيات -->
+  <div style="flex:1;display:grid;grid-template-rows:1fr 10px 1fr;min-height:0;">
+
+    <!-- الصف الأول: إحصائية المصابين | فريق قيادة الحدث -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;border-top:2px solid #E3F2FD;min-height:0;overflow:hidden;">
+      <!-- إحصائية المصابين -->
+      <div style="padding:14px 16px;border-left:2px solid #E3F2FD;background:#F7FBFD;overflow:hidden;">
+      <div class="section-title" style="margin-bottom:12px;">⚕️ إحصائية المصابين</div>
+
+      <!-- الإجمالي -->
+      <div style="background:linear-gradient(135deg,#003D5C,#005B82);border-radius:10px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;box-shadow:0 3px 10px rgba(0,61,92,0.25);">
+        <span style="color:rgba(255,255,255,0.8);font-size:12px;font-weight:700;">إجمالي المصابين</span>
+        <span id="hyps-d-total" style="color:#fff;font-size:30px;font-weight:900;line-height:1;">0</span>
+      </div>
+
+      <!-- الألوان الأربعة -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+
+        <!-- أسود -->
+        <div style="background:#fff;border-radius:10px;padding:10px 12px;border-right:5px solid #1a1a1a;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:9px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">الحالات السوداء</div>
+            <div style="font-size:9px;color:#9ca3af;font-weight:600;">متوفى / ميؤوس</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <span style="font-size:28px;font-weight:900;color:#1a1a1a;line-height:1;" id="hyps-d-black">0</span>
+            <span style="font-size:16px;line-height:1;">⚫</span>
+          </div>
+        </div>
+
+        <!-- أحمر -->
+        <div style="background:#fff;border-radius:10px;padding:10px 12px;border-right:5px solid #dc2626;box-shadow:0 2px 8px rgba(220,38,38,0.12);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:9px;font-weight:800;color:#991b1b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">الحالات الحمراء</div>
+            <div style="font-size:9px;color:#f87171;font-weight:600;">حرجة / أولوية قصوى</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <span style="font-size:28px;font-weight:900;color:#dc2626;line-height:1;" id="hyps-d-red">0</span>
+            <span style="font-size:16px;line-height:1;">🔴</span>
+          </div>
+        </div>
+
+        <!-- أصفر -->
+        <div style="background:#fff;border-radius:10px;padding:10px 12px;border-right:5px solid #ca8a04;box-shadow:0 2px 8px rgba(202,138,4,0.12);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:9px;font-weight:800;color:#713f12;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">الحالات الصفراء</div>
+            <div style="font-size:9px;color:#fbbf24;font-weight:600;">مستعجلة / متأخرة</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <span style="font-size:28px;font-weight:900;color:#ca8a04;line-height:1;" id="hyps-d-yellow">0</span>
+            <span style="font-size:16px;line-height:1;">🟡</span>
+          </div>
+        </div>
+
+        <!-- أخضر -->
+        <div style="background:#fff;border-radius:10px;padding:10px 12px;border-right:5px solid #16a34a;box-shadow:0 2px 8px rgba(22,163,74,0.12);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:9px;font-weight:800;color:#14532d;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">الحالات الخضراء</div>
+            <div style="font-size:9px;color:#4ade80;font-weight:600;">خفيفة / بسيطة</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <span style="font-size:28px;font-weight:900;color:#16a34a;line-height:1;" id="hyps-d-green">0</span>
+            <span style="font-size:16px;line-height:1;">🟢</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- فريق قيادة الحدث ICS -->
+    <div style="padding:10px 16px;background:#fff;overflow:hidden;">
+      <div class="section-title" style="margin-bottom:10px;">🏛️ فريق قيادة الحدث بالمستشفى (ICS)</div>
+      <!-- المستوى الأول: قائد الحدث -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+        <div style="background:linear-gradient(135deg,#003D5C,#005B82);color:#fff;padding:7px 18px;border-radius:8px;text-align:center;min-width:160px;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+          <div style="font-size:11px;font-weight:800;">قائد الحدث</div>
+          <div id="hyps-ics-commander" style="font-size:10px;color:rgba(255,255,255,0.75);border-top:1px solid rgba(255,255,255,0.3);margin-top:4px;padding-top:4px;">—</div>
+        </div>
+        <div style="width:2px;height:16px;background:#00AEEF;"></div>
+        <div style="width:80%;border-top:2px solid #00AEEF;"></div>
+        <!-- المستوى الثاني -->
+        <div style="display:flex;justify-content:space-between;width:80%;gap:6px;margin-top:0;">
+          <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+            <div style="width:2px;height:14px;background:#00AEEF;"></div>
+            <div style="background:linear-gradient(135deg,#005B82,#0078A8);color:#fff;padding:6px 6px;border-radius:7px;text-align:center;width:100%;box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+              <div style="font-size:10px;font-weight:800;">قائد العمليات</div>
+              <div id="hyps-ics-ops" style="font-size:9px;color:rgba(255,255,255,0.75);border-top:1px solid rgba(255,255,255,0.25);margin-top:3px;padding-top:3px;">—</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+            <div style="width:2px;height:14px;background:#00AEEF;"></div>
+            <div style="background:linear-gradient(135deg,#005B82,#0078A8);color:#fff;padding:6px 6px;border-radius:7px;text-align:center;width:100%;box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+              <div style="font-size:10px;font-weight:800;">قائد التخطيط</div>
+              <div id="hyps-ics-plan" style="font-size:9px;color:rgba(255,255,255,0.75);border-top:1px solid rgba(255,255,255,0.25);margin-top:3px;padding-top:3px;">—</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+            <div style="width:2px;height:14px;background:#00AEEF;"></div>
+            <div style="background:linear-gradient(135deg,#005B82,#0078A8);color:#fff;padding:6px 6px;border-radius:7px;text-align:center;width:100%;box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+              <div style="font-size:10px;font-weight:800;">ضابط السلامة</div>
+              <div id="hyps-ics-safety" style="font-size:9px;color:rgba(255,255,255,0.75);border-top:1px solid rgba(255,255,255,0.25);margin-top:3px;padding-top:3px;">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- فراغ فاصل -->
+    <div style="height:2px;background:#E3F2FD;flex-shrink:0;"></div>
+
+    <!-- الصف الثاني: أبرز الملاحظات | التوصيات -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;border-top:2px solid #E3F2FD;min-height:0;overflow:hidden;">
+      <div style="padding:10px 12px;border-left:2px solid #E3F2FD;background:#F7FBFD;overflow:hidden;">
+        <div class="section-title" style="margin-bottom:8px;">👁️ أبرز الملاحظات</div>
+        <div id="hyps-d-notes" style="font-size:11px;font-weight:600;color:#1A3A4A;line-height:1.8;white-space:pre-line;overflow:hidden;"></div>
+      </div>
+      <div style="padding:10px 16px;background:#fff;overflow:hidden;">
+        <div class="section-title" style="margin-bottom:8px;">💡 التوصيات وفرص التحسين</div>
+        <div id="hyps-d-recs" style="font-size:11px;font-weight:600;color:#1A3A4A;line-height:1.8;white-space:pre-line;overflow:hidden;"></div>
+      </div>
+    </div>
+
+  </div><!-- end bottom grid -->
+
+
+  </div>
+        <div class="a4-footer ft-blue"><span>تجمع حائل الصحي — Hail Health Cluster</span><span>تقرير فرضية مفاجئة — Sudden Hypothesis Report</span></div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     الصفحة 5: معرض الصور الميدانية
+══════════════════════════════════════════ -->
+<div class="hyps-page" id="hyps-page5" style="display:none;height:297mm;">
+    <div class="a4-header hdr-readiness">
+      <img class="a4-logo" src="logo-white.png" alt="شعار تجمع حائل الصحي"/>
+      <div class="a4-org-block">
+        <div class="a4-org-main">تجمع حائل الصحي</div>
+        <div class="a4-org-sub">مركز إدارة الأزمات والكوارث الصحية</div>
+      </div>
+      <div class="a4-badge badge-readiness">تقرير فرضية مفاجئة</div>
+    </div>
+    <div class="a4-title-bar" style="background:linear-gradient(90deg,#00AEEF,#005B82);">
+      <span style="opacity:0.75;font-size:12px;">الصور الميدانية</span><span class="title-sep">|</span><span class="hyps-hosp-disp-cls">—</span>
+    </div>
+  <div style="padding:10px 14px 4px;flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;">
+    <div class="section-title" style="margin-bottom:8px;font-size:12px;flex-shrink:0;">📸 الصور الميدانية للفرضية المفاجئة</div>
+    <div id="hyps-photos-grid" style="display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;">
+      <div id="hyps-no-photos" style="text-align:center;padding:40px;color:#9ca3af;font-size:13px;">لا توجد صور مضافة</div>
+    </div>
+  </div>
+      <div class="a4-footer ft-blue"><span>تجمع حائل الصحي — Hail Health Cluster</span><span>تقرير فرضية مفاجئة — Sudden Hypothesis Report</span></div>
+</div>
+
+
+<!-- Toggle button for screen view -->
+<div class="no-print" style="max-width:297mm;margin:10px auto;display:flex;gap:8px;justify-content:center;">
+  <button onclick="hypsTogglePages()" style="padding:8px 20px;background:rgba(0,174,239,0.15);border:1.5px solid #00AEEF;border-radius:8px;color:#fff;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;cursor:pointer;" id="hyps-toggle-btn">📄 عرض الصفحات المنفصلة</button>
+</div>
+
+  <!-- Form Section -->
+  <div class="form-section no-print">
+    <div class="form-title">✏️ بيانات تقرير فرضية مفاجئة</div>
+    <div class="form-grid">
+      <div class="rc-field"><label>جهة الحدث / المستشفى</label>
+        <select id="hyps-f-hosp" onchange="hypsUpdate()">
+          <option value="">— اختر —</option>
+          <option>مستشفى الملك سلمان التخصصي</option><option>مستشفى الملك خالد</option>
+          <option>مستشفى حائل العام</option><option>مستشفى الولادة والأطفال</option>
+          <option>مجمع إرادة والصحة النفسية</option><option>مستشفى أجا للرعاية المديدة</option>
+          <option>مستشفى شراف للرعاية العاجلة</option><option>مستشفى موقق العام</option>
+          <option>مستشفى بقعاء العام</option><option>مستشفى الغزالة العام</option>
+          <option>مستشفى الشنان العام</option><option>مستشفى الشملي العام</option>
+          <option>مستشفى السليمي العام</option><option>مستشفى الحائط العام</option>
+          <option>مستشفى سميراء العام</option>
+        </select>
+      </div>
+      <div class="rc-field"><label>نوع الكارثة</label>
+        <select id="hyps-f-type" onchange="hypsUpdate()">
+          <option value="">— اختر —</option>
+          <option>طبيعي / الحرائق</option><option>تقني / انقطاع الكهرباء</option>
+          <option>تقني / إخفاق الغازات الطبية</option><option>حريق داخلي</option>
+          <option>حريق خارجي</option><option>تسرب مواد كيميائية خطرة</option>
+          <option>حادث كتلة (MCI)</option><option>سيول وفيضانات</option>
+          <option>انقطاع التيار الكهربائي العام</option><option>نقص حاد في إمدادات الأكسجين</option>
+          <option>تهديد أمني / هجوم</option><option>وباء / تفشي مرضي معدي</option>
+          <option>زلزال</option><option>أخرى</option>
+        </select>
+      </div>
+      <div class="rc-field"><label>القسم (اختياري)</label><input type="text" id="hyps-f-dept" placeholder="مثال: قسم الطوارئ" oninput="hypsUpdate()"/></div>
+      <div class="rc-field"><label>التاريخ</label><input type="date" id="hyps-f-date" oninput="hypsUpdate()"/></div>
+      <div class="rc-field"><label>وقت بداية الحدث</label><input type="time" id="hyps-f-start" oninput="hypsUpdate()"/></div>
+      <div class="rc-field"><label>وقت نهاية الحدث</label><input type="time" id="hyps-f-end" oninput="hypsUpdate()"/></div>
+      <div class="rc-field" style="grid-column:span 3;"><label>🏛️ الجهات الخارجية المشاركة</label>
+        <div id="hyps-entities-checks" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <label class="check-item"><input type="checkbox" value="مركز إدارة الأزمات والكوارث الصحية بفرع الوزارة" onchange="hypsUpdate()"/><label>مركز إدارة الأزمات والكوارث الصحية بفرع الوزارة</label></label>
+          <label class="check-item"><input type="checkbox" value="المديرية العامة للدفاع المدني" onchange="hypsUpdate()"/><label>المديرية العامة للدفاع المدني</label></label>
+          <label class="check-item"><input type="checkbox" value="هيئة الهلال الأحمر السعودي" onchange="hypsUpdate()"/><label>هيئة الهلال الأحمر السعودي</label></label>
+          <label class="check-item"><input type="checkbox" value="إدارة المرور" onchange="hypsUpdate()"/><label>إدارة المرور</label></label>
+          <label class="check-item"><input type="checkbox" value="شرطة منطقة حائل" onchange="hypsUpdate()"/><label>شرطة منطقة حائل</label></label>
+          <label class="check-item"><input type="checkbox" value="أمانة منطقة حائل" onchange="hypsUpdate()"/><label>أمانة منطقة حائل</label></label>
+          <label class="check-item"><input type="checkbox" value="جامعة حائل" onchange="hypsUpdate()"/><label>جامعة حائل</label></label>
+          <label class="check-item"><input type="checkbox" value="شركة الكهرباء السعودية" onchange="hypsUpdate()"/><label>شركة الكهرباء السعودية</label></label>
+          <label class="check-item"><input type="checkbox" value="شركة المياه الوطنية" onchange="hypsUpdate()"/><label>شركة المياه الوطنية</label></label>
+          <label class="check-item"><input type="checkbox" value="شركة الغاز والتصنيع الأهلية" onchange="hypsUpdate()"/><label>شركة الغاز والتصنيع الأهلية</label></label>
+          <label class="check-item"><input type="checkbox" value="إدارة التعليم بمنطقة حائل" onchange="hypsUpdate()"/><label>إدارة التعليم بمنطقة حائل</label></label>
+          <label class="check-item"><input type="checkbox" value="فرع وزارة الموارد البشرية" onchange="hypsUpdate()"/><label>فرع وزارة الموارد البشرية</label></label>
+        </div>
+      </div>
+      <div class="rc-field" style="grid-column:span 3;"><label>📋 فريق التقييم</label>
+        <div id="hyps-evaluators-checks" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+          <label class="check-item"><input type="checkbox" value="عبدالعزيز محمد الشمري" onchange="hypsUpdate()"/><label>عبدالعزيز محمد الشمري</label></label>
+          <label class="check-item"><input type="checkbox" value="عبدالعزيز عبدالمحسن الشمري" onchange="hypsUpdate()"/><label>عبدالعزيز عبدالمحسن الشمري</label></label>
+          <label class="check-item"><input type="checkbox" value="وليد حبيب الشمري" onchange="hypsUpdate()"/><label>وليد حبيب الشمري</label></label>
+          <label class="check-item"><input type="checkbox" value="بندر مصلح الرشيدي" onchange="hypsUpdate()"/><label>بندر مصلح الرشيدي</label></label>
+          <label class="check-item"><input type="checkbox" value="عبدالله محمد الخلف" onchange="hypsUpdate()"/><label>عبدالله محمد الخلف</label></label>
+          <label class="check-item"><input type="checkbox" value="سعود سعد الشمري" onchange="hypsUpdate()"/><label>سعود سعد الشمري</label></label>
+          <label class="check-item"><input type="checkbox" value="احمد صبيح العنزي" onchange="hypsUpdate()"/><label>احمد صبيح العنزي</label></label>
+          <label class="check-item"><input type="checkbox" value="سلطان سليمان الشمري" onchange="hypsUpdate()"/><label>سلطان سليمان الشمري</label></label>
+          <label class="check-item"><input type="checkbox" value="احمد خلف الرشيدي" onchange="hypsUpdate()"/><label>احمد خلف الرشيدي</label></label>
+          <label class="check-item"><input type="checkbox" value="ممدوح محمد الرشيدي" onchange="hypsUpdate()"/><label>ممدوح محمد الرشيدي</label></label>
+          <label class="check-item"><input type="checkbox" value="معاذ حبيب الشمري" onchange="hypsUpdate()"/><label>معاذ حبيب الشمري</label></label>
+          <label class="check-item"><input type="checkbox" value="خلف محمد الشمري" onchange="hypsUpdate()"/><label>خلف محمد الشمري</label></label>
+          <label class="check-item"><input type="checkbox" value="نادر خلف العنزي" onchange="hypsUpdate()"/><label>نادر خلف العنزي</label></label>
+          <label class="check-item"><input type="checkbox" value="محمد نايف الشمري" onchange="hypsUpdate()"/><label>محمد نايف الشمري</label></label>
+        </div>
+      </div>
+      <div class="rc-field" style="grid-column:span 3;"><label>👁️ أبرز الملاحظات</label>
+        <textarea id="hyps-f-notes" rows="3" placeholder="اكتب الملاحظات..." oninput="hypsUpdate()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea>
+      </div>
+      <div class="rc-field" style="grid-column:span 3;"><label>💡 التوصيات وفرص التحسين</label>
+        <textarea id="hyps-f-recs" rows="3" placeholder="اكتب التوصيات..." oninput="hypsUpdate()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;resize:vertical;width:100%;direction:rtl;"></textarea>
+      </div>
+    </div>
+    <div class="num-section">
+      <div class="num-section-lbl">📊 إحصائية المصابين</div>
+      <div class="num-grid">
+        <div class="num-field"><label>⚫ سوداء</label><input type="number" inputmode="numeric" id="hyps-f-black" min="0" value="0" oninput="hypsUpdate()"/></div>
+        <div class="num-field nf-red"><label>🔴 حمراء</label><input type="number" inputmode="numeric" id="hyps-f-red" min="0" value="0" oninput="hypsUpdate()"/></div>
+        <div class="num-field nf-yellow"><label>🟡 صفراء</label><input type="number" inputmode="numeric" id="hyps-f-yellow" min="0" value="0" oninput="hypsUpdate()"/></div>
+        <div class="num-field nf-green"><label>🟢 خضراء</label><input type="number" inputmode="numeric" id="hyps-f-green" min="0" value="0" oninput="hypsUpdate()"/></div>
+        <div class="num-field num-total"><label>📊 الإجمالي</label><input type="number" inputmode="numeric" id="hyps-f-total" value="0" readonly/></div>
+      </div>
+    </div>
+    <!-- فريق قيادة الحدث ICS -->
+    <div style="margin-top:14px;">
+      <div class="form-title">🏛️ فريق قيادة الحدث بالمستشفى (ICS)</div>
+      <div class="form-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="rc-field"><label>قائد الحدث</label><input type="text" id="hyps-f-ics-commander" placeholder="اسم قائد الحدث..." oninput="hypsUpdate()" onchange="hypsUpdate()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;width:100%;direction:rtl;"/></div>
+        <div class="rc-field"><label>قائد العمليات</label><input type="text" id="hyps-f-ics-ops" placeholder="اسم قائد العمليات..." oninput="hypsUpdate()" onchange="hypsUpdate()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;width:100%;direction:rtl;"/></div>
+        <div class="rc-field"><label>قائد التخطيط</label><input type="text" id="hyps-f-ics-plan" placeholder="اسم قائد التخطيط..." oninput="hypsUpdate()" onchange="hypsUpdate()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;width:100%;direction:rtl;"/></div>
+        <div class="rc-field"><label>ضابط السلامة</label><input type="text" id="hyps-f-ics-safety" placeholder="اسم ضابط السلامة..." oninput="hypsUpdate()" onchange="hypsUpdate()" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Cairo',sans-serif;font-size:12px;outline:none;width:100%;direction:rtl;"/></div>
+      </div>
+    </div>
+    <!-- قسم رفع الصور -->
+    <input type="file" id="hyps-photo-input" accept="image/*" multiple style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;" onchange="hypsAddPhotos(this)"/>
+    <div style="margin-top:14px;background:rgba(0,174,239,0.07);border:1.5px solid rgba(0,174,239,0.25);border-radius:12px;padding:14px;">
+      <div class="form-title" style="margin-bottom:10px;">📸 صور الفرضية الميدانية</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
+        <button type="button" onclick="document.getElementById('hyps-photo-input').click()" style="display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:rgba(0,174,239,0.15);border:1.5px solid #00AEEF;border-radius:8px;color:#fff;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">
+          📁 إضافة صور
+        </button>
+        <button type="button" onclick="hypsClearPhotos()" style="padding:9px 16px;background:rgba(220,38,38,0.15);border:1.5px solid rgba(220,38,38,0.4);border-radius:8px;color:#fca5a5;font-family:Cairo,sans-serif;font-size:12px;font-weight:700;cursor:pointer;">🗑️ مسح الكل</button>
+        <span id="hyps-photo-count" style="color:rgba(255,255,255,0.6);font-size:11px;font-weight:600;">لا توجد صور</span>
+      </div>
+      <div id="hyps-photo-preview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;"></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn-print" onclick="window.print()">🖨️ طباعة A4</button>
+      <button class="btn-reset" onclick="hypsReset()">🔄 إعادة تعيين</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== تقرير فرضية LOGIC =====
+function hypsGetNum(id){const el=document.getElementById(id);return el?parseInt(el.value)||0:0;}
+function hypsGetVal(id){const el=document.getElementById(id);return el?el.value||'':''; }
+function hypsSetTxt(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+
+function hypsCalcTable(tid){
+  const sels=document.querySelectorAll('#'+tid+' .hyps-eval-sel');
+  let total=0,gained=0,allNA=true;
+  sels.forEach(s=>{
+    if(s.value==='n') return;
+    allNA=false; total+=100;
+    if(s.value==='c') gained+=100;
+    else if(s.value==='p') gained+=80;
+  });
+  if(allNA||total===0) return null;
+  return(gained/total)*100;
+}
+
+function hypsEvalChanged(sel){
+  const colors={c:'#16a34a',p:'#ca8a04',i:'#dc2626',n:'#6b7280'};
+  sel.style.color=colors[sel.value]||'#16a34a';
+  hypsRefreshCharts();
+}
+
+function hypsRefreshCharts(){
+  const cards=document.querySelectorAll('#hyps-charts-row [data-table]');
+  let total=0,count=0;
+  cards.forEach(card=>{
+    const tid=card.getAttribute('data-table');
+    const score=hypsCalcTable(tid);
+    const circle=card.querySelector('.hyps-mini-circle');
+    const pctEl=card.querySelector('.hyps-mini-pct');
+    if(score===null){
+      circle.setAttribute('stroke-dasharray','0,100');
+      circle.style.color='#9ca3af';
+      if(pctEl){pctEl.textContent='N/A';pctEl.setAttribute('fill','#9ca3af');}
+    } else {
+      circle.setAttribute('stroke-dasharray',score+',100');
+      const col=score>=95?'#16a34a':score>=85?'#ca8a04':'#dc2626';
+      circle.style.color=col;
+      if(pctEl){pctEl.textContent=Math.round(score)+'%';pctEl.setAttribute('fill',col);}
+      total+=score; count++;
+    }
+  });
+  const finalPct=count>0?Math.round(total/count):null;
+  const fp=document.getElementById('hyps-final-pct');
+  const fc=document.getElementById('hyps-final-circle');
+  if(fp){
+    if(finalPct===null){
+      fp.textContent='—';
+      if(fc){fc.setAttribute('stroke-dasharray','0,100');fc.style.color='#9ca3af';}
+    } else {
+      const col=finalPct>=95?'#16a34a':finalPct>=85?'#ca8a04':'#dc2626';
+      fp.textContent=finalPct+'%';
+      fp.setAttribute('fill',col);
+      if(fc){fc.setAttribute('stroke-dasharray',finalPct+',100');fc.style.color=col;}
+    }
+  }
+}
+
+function hypsUpdate(){
+  const hosp=hypsGetVal('hyps-f-hosp');
+  const type=hypsGetVal('hyps-f-type');
+  const dept=hypsGetVal('hyps-f-dept');
+  const date=hypsGetVal('hyps-f-date');
+  const start=hypsGetVal('hyps-f-start');
+  const end=hypsGetVal('hyps-f-end');
+
+  hypsSetTxt('hyps-hosp-disp', hosp||'—');
+  document.querySelectorAll('.hyps-hosp-disp-cls').forEach(el=>el.textContent=hosp||'—');
+  hypsSetTxt('hyps-type-disp', type||'—');
+  hypsSetTxt('hyps-date-disp', date||'—');
+  hypsSetTxt('hyps-d-hosp', hosp||'—');
+  hypsSetTxt('hyps-d-type', type||'—');
+  hypsSetTxt('hyps-d-dept', dept||'—');
+  hypsSetTxt('hyps-d-date', date||'—');
+  function fmt12(t){
+    if(!t) return '—';
+    var parts=t.split(':');
+    var h=parseInt(parts[0]),m=parts[1];
+    var period=h>=12?'مساءً':'صباحاً';
+    var h12=h%12||12;
+    return String(h12).padStart(2,'0')+':'+m+' '+period;
+  }
+  hypsSetTxt('hyps-d-start', fmt12(start));
+  hypsSetTxt('hyps-d-end', fmt12(end));
+
+  // Patients
+  const b=hypsGetNum('hyps-f-black'),r=hypsGetNum('hyps-f-red'),y=hypsGetNum('hyps-f-yellow'),g=hypsGetNum('hyps-f-green');
+  const tot=b+r+y+g;
+  document.getElementById('hyps-f-total').value=tot;
+  hypsSetTxt('hyps-d-black',b);hypsSetTxt('hyps-d-red',r);hypsSetTxt('hyps-d-yellow',y);hypsSetTxt('hyps-d-green',g);
+  hypsSetTxt('hyps-d-total',tot);
+
+  // Entities (checkboxes)
+  const entChecks=document.querySelectorAll('#hyps-entities-checks input:checked');
+  const entList=document.getElementById('hyps-d-entities-list');
+  if(entList){
+    const selected=Array.from(entChecks).map(c=>c.value);
+    entList.innerHTML=selected.length
+      ? selected.map(e=>'<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #F0F7FB;"><span style="color:#00AEEF;font-size:13px;">•</span><span style="font-size:12px;font-weight:600;color:#1A3A4A;">'+e+'</span></div>').join('')
+      : '<span style="color:#aaa;font-size:11px;">— لم يتم الاختيار —</span>';
+  }
+
+  // Evaluators (checkboxes)
+  const evChecks=document.querySelectorAll('#hyps-evaluators-checks input:checked');
+  const evList=document.getElementById('hyps-d-evaluators-list');
+  if(evList){
+    const selected=Array.from(evChecks).map(c=>c.value);
+    evList.innerHTML=selected.length
+      ? selected.map(e=>'<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #F0F7FB;"><span style="color:#00AEEF;font-size:13px;">•</span><span style="font-size:12px;font-weight:600;color:#1A3A4A;">'+e+'</span></div>').join('')
+      : '<span style="color:#aaa;font-size:11px;">— لم يتم الاختيار —</span>';
+  }
+
+  // Notes & Recs
+  hypsSetTxt('hyps-d-notes', document.getElementById('hyps-f-notes').value||'—');
+  hypsSetTxt('hyps-d-recs', document.getElementById('hyps-f-recs').value||'—');
+
+  // ICS
+  const icsFields = ['commander','ops','plan','safety'];
+  icsFields.forEach(f=>{
+    const inp = document.getElementById('hyps-f-ics-'+f);
+    hypsSetTxt('hyps-ics-'+f, inp&&inp.value ? inp.value : '—');
+  });
+}
+
+function hypsToggleTables(){
+  const cont=document.getElementById('hyps-tables-container');
+  const icon=document.getElementById('hyps-tables-toggle-icon');
+  if(cont.style.display==='none'){cont.style.display='block';icon.textContent='▲ إخفاء';}
+  else{cont.style.display='none';icon.textContent='▼ عرض';}
+}
+
+function hypsReset(){
+  ['hyps-f-hosp','hyps-f-type','hyps-f-dept','hyps-f-date','hyps-f-start','hyps-f-end','hyps-f-notes','hyps-f-recs'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  ['hyps-f-black','hyps-f-red','hyps-f-yellow','hyps-f-green'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value=0;
+  });
+  document.querySelectorAll('#hyps-entities-checks input,#hyps-evaluators-checks input').forEach(c=>c.checked=false);
+  ['hyps-f-ics-commander','hyps-f-ics-ops','hyps-f-ics-plan','hyps-f-ics-safety'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.querySelectorAll('.hyps-eval-sel').forEach(s=>{s.value='c';s.style.color='#16a34a';});
+  if(typeof hypsClearPhotos==='function') hypsClearPhotos();
+  hypsUpdate();hypsRefreshCharts();
+}
+
+// Init
+(function(){
+  const now=new Date();
+  const d=document.getElementById('hyps-f-date');
+  if(d) d.value=now.toISOString().split('T')[0];
+  hypsUpdate();
+  hypsRefreshCharts();
+})();
+</script>
+
+<script>
+(function(){
+  // Toggle pages visibility on screen
+  var pagesVisible = false;
+  window.hypsTogglePages = function(){
+    pagesVisible = !pagesVisible;
+    var pages = document.querySelectorAll('#panel-hypothesis-sudden .hyps-page');
+    pages.forEach(function(p, i){
+      if(i === 0) return; // always show page 1
+      if(p.id === 'hyps-page5'){
+        p.style.display = (pagesVisible && window._hypsPhotos && window._hypsPhotos.length > 0) ? 'block' : 'none';
+        return;
+      }
+      p.style.display = pagesVisible ? 'block' : 'none';
+    });
+    var btn = document.getElementById('hyps-toggle-btn');
+    if(btn) btn.textContent = pagesVisible ? '📄 إخفاء الصفحات' : '📄 عرض الصفحات المنفصلة';
+  };
+  // On screen: show only page 1 by default, hide others
+  var pages = document.querySelectorAll('#panel-hypothesis-sudden .hyps-page');
+  pages.forEach(function(p, i){ if(i > 0) p.style.display = 'none'; });
+  // Init date
+  var d = document.getElementById('hyps-f-date');
+  if(d && !d.value){ var now=new Date(); d.value=now.toISOString().split('T')[0]; }
+  hypsUpdate();
+  hypsRefreshCharts();
+})();
+</script>
+
+
+<script>
+// ===== PHOTO MANAGEMENT FOR تقرير فرضية مفاجئة =====
+window._hypsPhotos = [];
+
+window.hypsAddPhotos = function(input){
+  var files = Array.from(input.files);
+  files.forEach(function(file){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      var photoData = { src: e.target.result, caption: file.name.replace(/\.[^.]+$/, ''), id: Date.now() + Math.random() };
+      window._hypsPhotos.push(photoData);
+      hypsRenderPhotos();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+};
+
+window.hypsRemovePhoto = function(id){
+  window._hypsPhotos = window._hypsPhotos.filter(function(p){ return p.id !== id; });
+  hypsRenderPhotos();
+};
+
+window.hypsUpdateCaption = function(id, val){
+  var p = window._hypsPhotos.find(function(p){ return p.id === id; });
+  if(p) p.caption = val;
+  hypsRenderPhotosPage();
+};
+
+window.hypsClearPhotos = function(){
+  window._hypsPhotos = [];
+  hypsRenderPhotos();
+};
+
+function hypsRenderPhotos(){
+  var cnt = document.getElementById('hyps-photo-count');
+  if(cnt) cnt.textContent = window._hypsPhotos.length ? window._hypsPhotos.length + ' صورة' : 'لا توجد صور';
+
+  var preview = document.getElementById('hyps-photo-preview');
+  if(preview){
+    if(window._hypsPhotos.length === 0){
+      preview.innerHTML = '';
+    } else {
+      preview.innerHTML = window._hypsPhotos.map(function(p){
+        return '<div style="position:relative;border-radius:10px;overflow:hidden;background:rgba(0,0,0,0.3);border:1px solid rgba(0,174,239,0.2);">'
+          + '<img src="'+p.src+'" style="width:100%;height:100px;object-fit:contain;display:block;background:#1a2a3a;"/>'
+          + '<button onclick="hypsRemovePhoto('+p.id+')" style="position:absolute;top:4px;left:4px;background:rgba(220,38,38,0.8);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:13px;font-weight:900;line-height:1;padding:0;">×</button>'
+          + '</div>';
+      }).join('');
+    }
+  }
+  hypsRenderPhotosPage();
+}
+
+function hypsRenderPhotosPage(){
+  var grid = document.getElementById('hyps-photos-grid');
+  var noPhotos = document.getElementById('hyps-no-photos');
+  var page5 = document.getElementById('hyps-page5');
+  if(!grid) return;
+
+  if(window._hypsPhotos.length === 0){
+    if(noPhotos) noPhotos.style.display = '';
+    grid.querySelectorAll('.hyps-photo-card,.hyps-photo-row').forEach(function(el){ el.remove(); });
+    if(page5) page5.style.display = 'none';
+    return;
+  }
+
+  if(noPhotos) noPhotos.style.display = 'none';
+  if(page5) page5.style.display = '';
+
+  var n = window._hypsPhotos.length;
+
+  // تحديد الصفوف حسب عدد الصور
+  var rows = [];
+  if(n === 1){
+    rows = [[0]];
+  } else if(n === 2){
+    rows = [[0,1]];
+  } else if(n === 3){
+    // صورة كاملة + صورتان
+    rows = [[0],[1,2]];
+  } else if(n === 4){
+    // صفان بصورتين
+    rows = [[0,1],[2,3]];
+  } else if(n === 5){
+    rows = [[0,1],[2,3],[4]];
+  } else if(n === 6){
+    rows = [[0,1],[2,3],[4,5]];
+  } else {
+    for(var i=0;i<n;i+=2){
+      rows.push(i+1<n ? [i,i+1] : [i]);
+    }
+  }
+
+  // حساب الارتفاع المتاح:
+  // الصفحة = 297mm = ~1122px (at 3.78px/mm)
+  // رأس الصفحة ~52px + titlebar ~32px + section-title ~30px + padding ~18px + footer ~30px = ~162px
+  var PX_PER_MM = 3.7795;
+  var pageH = Math.round(297 * PX_PER_MM);         // ~1122px
+  var reserved = 162;                               // header+bar+title+footer+padding
+  var gapSize = 8;
+  var rowCount = rows.length;
+  var totalGaps = gapSize * (rowCount - 1);
+  var availH = pageH - reserved - totalGaps;
+  var rowH = Math.floor(availH / rowCount);         // ارتفاع كل صف بالبكسل
+
+  // إعادة بناء الشبكة
+  grid.style.cssText = 'display:flex;flex-direction:column;gap:'+gapSize+'px;flex:1;min-height:0;';
+  grid.querySelectorAll('.hyps-photo-card,.hyps-photo-row').forEach(function(el){ el.remove(); });
+
+  rows.forEach(function(rowIdxArr){
+    var rowEl = document.createElement('div');
+    rowEl.className = 'hyps-photo-row';
+    rowEl.style.cssText = 'display:flex;gap:8px;height:'+rowH+'px;flex-shrink:0;';
+
+    rowIdxArr.forEach(function(photoIdx){
+      var p = window._hypsPhotos[photoIdx];
+      var imgH = rowH;
+      var card = document.createElement('div');
+      card.className = 'hyps-photo-card';
+      card.style.cssText = 'flex:1;min-width:0;border-radius:8px;overflow:hidden;border:1px solid #C8E4F0;background:#fff;display:flex;flex-direction:column;';
+      card.innerHTML = '<img src="'+p.src+'" style="width:100%;height:'+imgH+'px;object-fit:contain;display:block;flex-shrink:0;background:#fff;"/>';
+      rowEl.appendChild(card);
+    });
+
+    grid.appendChild(rowEl);
+  });
+}
+</script>
+
+</div>
+
 <script>
 const HOSPITALS = [
   "مستشفى الملك سلمان التخصصي","مستشفى الملك خالد","مستشفى حائل العام",
@@ -3953,13 +4820,13 @@ function switchCard(card){
 
   window.addEventListener('beforeprint', function(){
     var active = document.querySelector('.card-panel.active');
-    var isHyp  = active && active.id === 'panel-hypothesis';
+    var isHyp  = active && active.id === 'panel-hypothesis' || active.id === 'panel-hypothesis-sudden';
 
     if(isHyp){
       // Portrait + fix all hyp-page sizing
       _ps.textContent = [
         '@page { size: 210mm 297mm; margin: 0; }',
-        '.hyp-page {',
+        '.hyp-page, .hyps-page {',
         '  width: 210mm !important;',
         '  height: 297mm !important;',
         '  min-height: unset !important;',
@@ -3982,6 +4849,11 @@ function switchCard(card){
         /* تمديد المحتوى ليملأ الصفحة */
         '.hyp-page > [style*="flex:1"] { flex:1 !important; justify-content:center !important; }',
         '.hyp-page > [style*="flex: 1"] { flex:1 !important; justify-content:center !important; }',
+        /* hyps-page centering */
+        '.hyps-page > [style*="flex:1"] { flex:1 !important; justify-content:center !important; }',
+        '.hyps-page > [style*="flex: 1"] { flex:1 !important; justify-content:center !important; }',
+        /* hyps footer */
+        '.hyps-page .a4-footer { position: absolute !important; bottom: 0 !important; left: 0 !important; right: 0 !important; }',
         /* الألوان */
         '.hyp-page * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }',
         /* الفوتر */
@@ -3989,13 +4861,22 @@ function switchCard(card){
         /* select */
         '.hyp-page select { -webkit-appearance: none !important; appearance: none !important; border: none !important; background: transparent !important; }',
         /* إخفاء النموذج */
-        '#panel-hypothesis .no-print, #panel-hypothesis .form-section { display: none !important; }',
+        '#panel-hypothesis .no-print, #panel-hypothesis .form-section, #panel-hypothesis-sudden .no-print, #panel-hypothesis-sudden .form-section { display: none !important; }',
         /* التأكد من ظهور الفرضية فقط */
         '.card-panel { display: none !important; }',
-        '#panel-hypothesis { display: block !important; }',
+        (active.id === 'panel-hypothesis-sudden' ? '#panel-hypothesis-sudden { display: block !important; }' : '#panel-hypothesis { display: block !important; }'),
         '.top-bar { display: none !important; }',
         '.tab-nav { display: none !important; }',
       ].join('\n');
+
+      // إخفاء صفحة 5 عند الطباعة إذا لم تكن هناك صور
+      if(active.id === 'panel-hypothesis-sudden'){
+        var p5 = document.getElementById('hyps-page5');
+        if(p5){
+          var hasPhotos = window._hypsPhotos && window._hypsPhotos.length > 0;
+          p5.style.setProperty('display', hasPhotos ? 'block' : 'none', 'important');
+        }
+      }
     } else {
       _ps.textContent = '@page { size: A4 landscape; margin: 0; }';
     }
@@ -5615,89 +6496,4 @@ function rckRender(){
   var tbody=document.getElementById('rck-tbody');if(!tbody)return;
   var rows=rckGetRows();var period=rckCurrentPeriod();
   if(rows.length===0){
-    var msg=period?'لا توجد مستشفيات — أضف من النموذج أدناه':'اختر الفترة أولاً من القائمة أدناه';
-    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:28px;color:#999;font-size:12px;">'+msg+'</td></tr>';
-    rckUpdateSummary([]);return;
-  }
-  var html='';
-  rows.forEach(function(row,i){
-    var ind=rckCalcInd(row.cells);
-    html+='<tr><td class="td-hosp">'+row.name+'<button class="rck-remove-btn no-print" onclick="rckRemove('+i+')" style="float:left;background:rgba(255,80,80,0.12);border:1px solid rgba(255,80,80,0.3);color:#c62828;border-radius:4px;padding:1px 6px;font-size:9px;cursor:pointer;font-family:Cairo,sans-serif;">✕</button></td>';
-    row.cells.forEach(function(v,c){
-      var cls=v==='1'?'rck-avail':v==='0'?'rck-unavail':'rck-empty';
-      var txt=v==='1'?'✔ متحقق':v==='0'?'✘ غير متحقق':'—';
-      html+='<td class="'+cls+'" onclick="rckCycle('+i+','+c+')" style="cursor:pointer;" title="اضغط للتغيير">'+txt+'</td>';
-    });
-    html+='<td><span class="'+ind.cls+'">'+ind.label+'</span></td>';
-    html+='</tr>';
-  });
-  tbody.innerHTML=html;rckUpdateSummary(rows);
-}
-function rckCycle(ri,ci){
-  var rows=rckGetRows();if(!rows[ri])return;
-  var cur=rows[ri].cells[ci];rows[ri].cells[ci]=cur===''?'1':cur==='1'?'0':'';
-  rckSave();rckRender();
-}
-function rckRemove(i){var rows=rckGetRows();rows.splice(i,1);rckSave();rckRender();}
-function rckAddRow(){
-  var period=rckCurrentPeriod();if(!period){alert('اختر الفترة أولاً');return;}
-  var sel=document.getElementById('rck-f-addhosp');if(!sel||!sel.value)return;
-  var name=sel.value;
-  if(!rckData[period])rckData[period]=[];
-  for(var i=0;i<rckData[period].length;i++){if(rckData[period][i].name===name)return;}
-  rckData[period].push({name:name,cells:['','','','','','']});
-  rckSave();rckRender();sel.value='';
-}
-function rckAddAll(){
-  var period=rckCurrentPeriod();if(!period){alert('اختر الفترة أولاً');return;}
-  var hosps=getHospitals();
-  if(!rckData[period])rckData[period]=[];
-  hosps.forEach(function(h){
-    for(var i=0;i<rckData[period].length;i++){if(rckData[period][i].name===h)return;}
-    rckData[period].push({name:h,cells:['','','','','','']});
-  });
-  rckSave();rckRender();
-}
-function rckClear(){
-  rckSave();rckRender();
-}
-function rckCheckAll(){
-  var rows=rckGetRows();
-  rows.forEach(function(r){r.cells=r.cells.map(function(){return '1';});});
-  rckSave();rckRender();
-}
-function rckUncheckAll(){
-  var rows=rckGetRows();
-  rows.forEach(function(r){r.cells=r.cells.map(function(){return '0';});});
-  rckSave();rckRender();
-}
-function rckUpdateSummary(rows){
-  var avail=0,unavail=0,empty=0;
-  rows.forEach(function(r){r.cells.forEach(function(v){if(v==='1')avail++;else if(v==='0')unavail++;else empty++;});});
-  var total=avail+unavail;var pct=total>0?Math.round(avail/total*100)+'%':'—';
-  var a=document.getElementById('rck-cnt-avail');if(a)a.textContent=avail;
-  var u=document.getElementById('rck-cnt-unavail');if(u)u.textContent=unavail;
-  var e=document.getElementById('rck-cnt-empty');if(e)e.textContent=empty;
-  var o=document.getElementById('rck-overall');if(o)o.textContent=pct;
-}
-function rckUpdate(){
-  var d=document.getElementById('rck-f-date');var p=document.getElementById('rck-f-period');
-  var dateVal=d?d.value:'';var periodVal=p?p.value:'';var dispDate='—';
-  if(dateVal){
-    var dt=new Date(dateVal+'T00:00:00');
-    var days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    dispDate=days[dt.getDay()]+' '+dt.getFullYear()+'/'+String(dt.getMonth()+1).padStart(2,'0')+'/'+String(dt.getDate()).padStart(2,'0');
-  }
-  var dd=document.getElementById('rck-disp-date');if(dd)dd.textContent=dispDate;
-  var dp=document.getElementById('rck-disp-period');if(dp)dp.textContent=periodVal||'—';
-  rckSave();rckRender();
-}
-function rckPopulateAddSelect(){
-  var sel=document.getElementById('rck-f-addhosp');if(!sel)return;
-  var hosps=getHospitals();
-  sel.innerHTML='<option value="">— اختر —</option>'+hosps.map(function(h){return'<option value="'+h+'">'+h+'</option>';}).join('');
-}
-function rckInit(){rckLoad();rckPopulateAddSelect();rckUpdate();}
-</script>
-</body>
-</html>                                              
+    var msg=period?'لا توجد مستشفيات — أضف من النموذج أدناه':'اختر الفترة أولاً م
