@@ -763,6 +763,10 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
     <span class="mob-bar-btn-icon">🖨️</span>
     <span class="mob-bar-btn-lbl">طباعة</span>
   </button>
+  <button class="mob-bar-btn" id="hhglobal-save-btn" onclick="hhGlobalSave()" style="background:rgba(16,185,129,0.14);border-color:rgba(16,185,129,0.38);color:#6ee7b7;">
+    <span class="mob-bar-btn-icon">💾</span>
+    <span class="mob-bar-btn-lbl">حفظ</span>
+  </button>
   <button class="mob-bar-btn mob-danger" onclick="resetActive()">
     <span class="mob-bar-btn-icon">🔄</span>
     <span class="mob-bar-btn-lbl">إعادة تعيين</span>
@@ -801,6 +805,7 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
   <button class="tab-btn"        data-card="hazard-tech"   onclick="switchCard('hazard-tech')"  style="">💻 تكنولوجية</button>
   <button class="tab-btn"        data-card="hazard-nature" onclick="switchCard('hazard-nature')" style="">🌿 طبيعية</button>
   <button class="tab-btn"        data-card="hazard-hazmat" onclick="switchCard('hazard-hazmat')" style="">☣️ مواد خطرة</button>
+  <button class="tab-btn" data-card="stats-log" onclick="switchCard('stats-log')">📊 السجل والإحصائيات</button>
 </div>
 
 <!-- ================================================================
@@ -6492,8 +6497,451 @@ function rckCalcInd(cells){
   var cls=pct===100?'rck-ind rck-ind-100':pct>=75?'rck-ind rck-ind-hi':pct>=50?'rck-ind rck-ind-mid':'rck-ind rck-ind-low';
   return{label:pct+'%',cls:cls};
 }
+
+var RCK_HOSPITALS = [
+  'مستشفى الملك سلمان التخصصي',
+  'مستشفى الملك خالد',
+  'مستشفى حائل العام',
+  'مستشفى الولادة والأطفال',
+  'مجمع إرادة والصحة النفسية',
+  'مستشفى أجا للرعاية المديدة',
+  'مستشفى شراف للرعاية العاجلة',
+  'مستشفى موقق العام',
+  'مستشفى بقعاء العام',
+  'مستشفى الغزالة العام',
+  'مستشفى الشنان العام',
+  'مستشفى الشملي العام',
+  'مستشفى السليمي العام',
+  'مستشفى الحائط العام',
+  'مستشفى سميراء العام'
+];
+
 function rckRender(){
   var tbody=document.getElementById('rck-tbody');if(!tbody)return;
   var rows=rckGetRows();var period=rckCurrentPeriod();
   if(rows.length===0){
-    var msg=period?'لا توجد مستشفيات — أضف من النموذج أدناه':'اختر الفترة أولاً م
+    var msg=period?'لا توجد مستشفيات — أضف من النموذج أدناه':'اختر الفترة أولاً من القائمة';
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:#9E9E9E;font-size:12px;">'+msg+'</td></tr>';
+    var z=document.getElementById('rck-cnt-avail');if(z)z.textContent='0';
+    var z2=document.getElementById('rck-cnt-unavail');if(z2)z2.textContent='0';
+    var z3=document.getElementById('rck-cnt-empty');if(z3)z3.textContent='0';
+    var z4=document.getElementById('rck-overall');if(z4)z4.textContent='—';
+    rckPopulateAddSelect();return;
+  }
+  var avail=0,unavail=0,empty=0;
+  var html='';
+  rows.forEach(function(row,ri){
+    html+='<tr>';
+    html+='<td class="td-hosp">'+row.name+'</td>';
+    var cells=row.cells||['','','','','',''];
+    cells.forEach(function(v,ci){
+      var cls=v==='1'?'rck-avail':v==='0'?'rck-unavail':'rck-empty';
+      var lbl=v==='1'?'✓':v==='0'?'✗':'—';
+      if(v==='1')avail++;else if(v==='0')unavail++;else empty++;
+      html+='<td class="'+cls+'" onclick="rckToggleCell('+ri+','+ci+')" style="cursor:pointer;min-width:38px;">'+lbl+'</td>';
+    });
+    var ind=rckCalcInd(cells);
+    html+='<td><span class="'+ind.cls+'">'+ind.label+'</span></td>';
+    html+='</tr>';
+  });
+  tbody.innerHTML=html;
+  var el1=document.getElementById('rck-cnt-avail');if(el1)el1.textContent=avail;
+  var el2=document.getElementById('rck-cnt-unavail');if(el2)el2.textContent=unavail;
+  var el3=document.getElementById('rck-cnt-empty');if(el3)el3.textContent=empty;
+  var allCells=[];rows.forEach(function(r){allCells=allCells.concat(r.cells||[]);});
+  var ov=rckCalcInd(allCells);
+  var el4=document.getElementById('rck-overall');if(el4)el4.textContent=ov.label;
+  rckPopulateAddSelect();
+}
+
+function rckToggleCell(ri,ci){
+  var period=rckCurrentPeriod();if(!period)return;
+  var rows=rckGetRows();if(!rows[ri])return;
+  if(!rows[ri].cells)rows[ri].cells=['','','','','',''];
+  var v=rows[ri].cells[ci];
+  rows[ri].cells[ci]=v==='1'?'0':v==='0'?'':'1';
+  rckData[period]=rows;
+  rckSave();rckRender();
+}
+
+function rckPopulateAddSelect(){
+  var sel=document.getElementById('rck-f-addhosp');if(!sel)return;
+  var rows=rckGetRows();
+  var used={};rows.forEach(function(r){used[r.name]=1;});
+  var prev=sel.value;
+  sel.innerHTML='<option value="">— اختر —</option>';
+  RCK_HOSPITALS.forEach(function(h){
+    if(!used[h]){
+      var opt=document.createElement('option');
+      opt.value=h;opt.textContent=h;
+      sel.appendChild(opt);
+    }
+  });
+  if(prev&&sel.querySelector('option[value="'+prev+'"]'))sel.value=prev;
+}
+
+function rckAddRow(){
+  var period=rckCurrentPeriod();
+  if(!period){alert('اختر الفترة أولاً');return;}
+  var sel=document.getElementById('rck-f-addhosp');
+  var name=sel?sel.value:'';
+  if(!name){alert('اختر مستشفى');return;}
+  var rows=rckGetRows();
+  if(rows.find(function(r){return r.name===name;})){alert('المستشفى موجود مسبقاً');return;}
+  rows.push({name:name,cells:['','','','','','']});
+  rckData[period]=rows;rckSave();rckRender();
+}
+
+function rckAddAll(){
+  var period=rckCurrentPeriod();
+  if(!period){alert('اختر الفترة أولاً');return;}
+  var rows=rckGetRows();
+  var used={};rows.forEach(function(r){used[r.name]=1;});
+  RCK_HOSPITALS.forEach(function(h){
+    if(!used[h])rows.push({name:h,cells:['','','','','','']});
+  });
+  rckData[period]=rows;rckSave();rckRender();
+}
+
+function rckCheckAll(){
+  var period=rckCurrentPeriod();if(!period)return;
+  var rows=rckGetRows();
+  rows.forEach(function(r){r.cells=['1','1','1','1','1','1'];});
+  rckData[period]=rows;rckSave();rckRender();
+}
+
+function rckUncheckAll(){
+  var period=rckCurrentPeriod();if(!period)return;
+  var rows=rckGetRows();
+  rows.forEach(function(r){r.cells=['0','0','0','0','0','0'];});
+  rckData[period]=rows;rckSave();rckRender();
+}
+
+function rckClear(){
+  if(!confirm('مسح كل المستشفيات من هذه الفترة؟'))return;
+  var period=rckCurrentPeriod();if(!period)return;
+  rckData[period]=[];rckSave();rckRender();
+}
+
+function rckUpdate(){
+  var period=rckCurrentPeriod();
+  var date=document.getElementById('rck-f-date');
+  var dateVal=date?date.value:'';
+  var dp=document.getElementById('rck-disp-period');if(dp)dp.textContent=period||'—';
+  var dd=document.getElementById('rck-disp-date');
+  if(dd&&dateVal){
+    var d=new Date(dateVal);
+    dd.textContent=d.toLocaleDateString('ar-SA',{year:'numeric',month:'long',day:'numeric'});
+  }
+  rckSave();rckRender();
+}
+
+</script>
+
+
+<!-- ================================================================
+     STATS & LOG PANEL
+================================================================ -->
+<div id="panel-stats-log" class="card-panel">
+<style>
+.sl-wrap { max-width: 900px; margin: 0 auto; padding: 20px 16px; font-family: 'Cairo', sans-serif; direction: rtl; }
+.sl-summary { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+.sl-sum-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 16px; text-align: center; }
+.sl-sum-num { font-size: 32px; font-weight: 900; color: #00AEEF; }
+.sl-sum-lbl { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+.sl-filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.sl-filter-btn { padding: 7px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #fff; font-family: 'Cairo',sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s; }
+.sl-filter-btn.active { background: rgba(0,174,239,0.25); border-color: rgba(0,174,239,0.6); color: #7dd8f7; }
+.sl-section-title { font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.7); margin-bottom: 10px; border-right: 3px solid #00AEEF; padding-right: 10px; }
+.sl-chart-wrap { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+.sl-table-wrap { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
+.sl-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.sl-table th { background: rgba(0,174,239,0.15); color: rgba(255,255,255,0.8); padding: 10px 12px; font-weight: 800; font-size: 11px; }
+.sl-table td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+.sl-table tr:last-child td { border-bottom: none; }
+.sl-table tr:hover td { background: rgba(255,255,255,0.04); }
+.sl-empty { text-align:center; padding: 40px; color: rgba(255,255,255,0.3); font-size: 13px; }
+.sl-del-btn { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #f87171; border-radius: 6px; padding: 3px 10px; cursor: pointer; font-family: 'Cairo',sans-serif; font-size: 11px; }
+.sl-del-btn:hover { background: rgba(239,68,68,0.3); }
+.sl-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.sl-action-btn { padding: 8px 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); color: #fff; font-family: 'Cairo',sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; }
+.sl-action-btn:hover { background: rgba(255,255,255,0.12); }
+@media (max-width: 600px) { .sl-summary { grid-template-columns: repeat(2,1fr); } }
+</style>
+
+<div class="sl-wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div style="font-size:20px;font-weight:900;color:#fff;">📊 السجل والإحصائيات</div>
+    <div class="sl-actions">
+      <button class="sl-action-btn" onclick="hhExportLog()">⬇️ تصدير JSON</button>
+      <button class="sl-action-btn" style="border-color:rgba(239,68,68,0.4);color:#f87171;" onclick="hhClearLog()">🗑️ مسح الكل</button>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="sl-summary">
+    <div class="sl-sum-card"><div class="sl-sum-num" id="sl-today">0</div><div class="sl-sum-lbl">اليوم</div></div>
+    <div class="sl-sum-card"><div class="sl-sum-num" id="sl-week">0</div><div class="sl-sum-lbl">هذا الأسبوع</div></div>
+    <div class="sl-sum-card"><div class="sl-sum-num" id="sl-month">0</div><div class="sl-sum-lbl">هذا الشهر</div></div>
+    <div class="sl-sum-card"><div class="sl-sum-num" id="sl-total">0</div><div class="sl-sum-lbl">الإجمالي</div></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="sl-filters">
+    <button class="sl-filter-btn active" id="slf-day"   onclick="hhSetFilter('day')">اليوم</button>
+    <button class="sl-filter-btn"        id="slf-week"  onclick="hhSetFilter('week')">هذا الأسبوع</button>
+    <button class="sl-filter-btn"        id="slf-month" onclick="hhSetFilter('month')">هذا الشهر</button>
+    <button class="sl-filter-btn"        id="slf-all"   onclick="hhSetFilter('all')">الكل</button>
+  </div>
+
+  <!-- Chart -->
+  <div class="sl-chart-wrap">
+    <div class="sl-section-title">الأحداث حسب النوع</div>
+    <canvas id="sl-chart" style="width:100%;height:180px;display:block;"></canvas>
+  </div>
+
+  <!-- Table -->
+  <div class="sl-section-title">قائمة الأحداث</div>
+  <div class="sl-table-wrap">
+    <table class="sl-table">
+      <thead><tr>
+        <th>التاريخ والوقت</th>
+        <th>النوع</th>
+        <th>الجهة</th>
+        <th>التفاصيل</th>
+        <th></th>
+      </tr></thead>
+      <tbody id="sl-tbody"><tr><td colspan="5" class="sl-empty">لا توجد أحداث محفوظة</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+/* ===== INCIDENT LOG SYSTEM ===== */
+var HH_LOG_KEY = 'hh_incident_log_v1';
+var _hhFilter = 'day';
+
+var HH_PANEL_LABELS = {
+  'readiness':'بطاقة الاستعداد','electricity':'انقطاع كهرباء','oxygen':'انقطاع أكسجين',
+  'fire':'حريق','injuries':'إصابات متعددة','hypothesis':'تقرير الفرضية',
+  'hypothesis-sudden':'فرضية مفاجئة','hazard-human':'خطر بشري','hazard-tech':'خطر تكنولوجي',
+  'hazard-nature':'خطر طبيعي','hazard-hazmat':'مواد خطرة','readiness-check':'قائمة الاستعداد','ops':'مؤشر تترا'
+};
+var HH_PANEL_COLORS = {
+  'readiness':'#00AEEF','electricity':'#F59E0B','oxygen':'#60A5FA','fire':'#EF4444',
+  'injuries':'#F97316','hypothesis':'#8B5CF6','hypothesis-sudden':'#EC4899',
+  'hazard-human':'#EF4444','hazard-tech':'#06B6D4','hazard-nature':'#10B981',
+  'hazard-hazmat':'#84CC16','readiness-check':'#A78BFA','ops':'#14B8A6'
+};
+
+function hhGetLogs(){ return JSON.parse(localStorage.getItem(HH_LOG_KEY)||'[]'); }
+function hhSaveLogs(logs){ localStorage.setItem(HH_LOG_KEY, JSON.stringify(logs)); }
+
+function hhGlobalSave(){
+  var active = document.querySelector('.card-panel.active');
+  if(!active || active.id === 'panel-stats-log' || active.id === 'panel-home') {
+    alert('افتح بطاقة الحادثة أولاً ثم اضغط حفظ');
+    return;
+  }
+  var panelId = active.id.replace('panel-','');
+
+  // Explicit per-panel data extraction
+  function gid(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+  function gta(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+  var HH_EXTRACTORS = {
+    'readiness':         function(){ return { hospital:gid('rd-f-hosp'),  type:gid('rd-f-hyp')||gid('rd-f-ev'), date:gid('rd-f-date') }; },
+    'electricity':       function(){ return { hospital:gid('el-f-hosp'),  type:gid('el-f-outage-type'),          date:gid('el-f-date') }; },
+    'oxygen':            function(){ return { hospital:gid('ox-f-hosp'),  type:gid('ox-f-outage-type'),          date:gid('ox-f-date') }; },
+    'fire':              function(){ return { hospital:gid('fi-f-hosp'),  type:gid('fi-f-event-type'),           date:gid('fi-f-date') }; },
+    'injuries':          function(){ return { hospital:gid('inj-f-hosp'), type:gid('inj-f-type'),               date:gid('inj-f-date') }; },
+    'hypothesis':        function(){ return { hospital:gid('hyp-f-hosp'), type:gid('hyp-f-type'),               date:gid('hyp-f-date') }; },
+    'hypothesis-sudden': function(){ return { hospital:gid('hyps-f-hosp'),type:gid('hyps-f-type'),              date:gid('hyps-f-date') }; },
+    'hazard-human':      function(){ return { hospital:gid('hh-f-hosp'),  type:gid('hh-f-event'),               date:gid('hh-f-date') }; },
+    'hazard-tech':       function(){ return { hospital:gid('ht-f-hosp'),  type:gid('ht-f-event'),               date:gid('ht-f-date') }; },
+    'hazard-nature':     function(){ return { hospital:gid('hn-f-hosp'),  type:gid('hn-f-event'),               date:gid('hn-f-date') }; },
+    'hazard-hazmat':     function(){ return { hospital:gid('hz-f-hosp'),  type:gid('hz-f-event'),               date:gid('hz-f-date') }; },
+    'readiness-check':   function(){ return { hospital:'—', type:'—', date:new Date().toISOString().split('T')[0] }; },
+    'ops':               function(){ return { hospital:'—', type:'—', date:new Date().toISOString().split('T')[0] }; }
+  };
+  var extractor = HH_EXTRACTORS[panelId] || function(){ return {hospital:'—',type:'—',date:new Date().toISOString().split('T')[0]}; };
+  var extracted = extractor();
+  var hospital = extracted.hospital || '—';
+  var type     = extracted.type     || '—';
+  var date     = extracted.date     || new Date().toISOString().split('T')[0];
+  var notes    = '';
+
+  var logs = hhGetLogs();
+  logs.unshift({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,5),
+    ts: new Date().toISOString(),
+    panel: panelId,
+    label: HH_PANEL_LABELS[panelId] || panelId,
+    hospital: hospital,
+    type: type,
+    date: date,
+    notes: notes.slice(0,80)
+  });
+  hhSaveLogs(logs);
+
+  // Feedback
+  var btn = document.getElementById('hhglobal-save-btn');
+  if(btn){
+    var orig = btn.innerHTML;
+    btn.innerHTML = '<span class="mob-bar-btn-icon">✅</span><span class="mob-bar-btn-lbl">تم</span>';
+    btn.style.background = 'rgba(16,185,129,0.35)';
+    setTimeout(function(){ btn.innerHTML = orig; btn.style.background = 'rgba(16,185,129,0.14)'; }, 2000);
+  }
+
+  if(document.getElementById('panel-stats-log').classList.contains('active')) hhRenderStats();
+}
+
+function hhFilterLogs(logs, f){
+  var now = new Date();
+  if(f==='day'){
+    var today = now.toISOString().split('T')[0];
+    return logs.filter(function(l){ return l.ts && l.ts.startsWith(today); });
+  } else if(f==='week'){
+    var ago = new Date(now - 7*24*60*60*1000);
+    return logs.filter(function(l){ return new Date(l.ts) >= ago; });
+  } else if(f==='month'){
+    var ago2 = new Date(now - 30*24*60*60*1000);
+    return logs.filter(function(l){ return new Date(l.ts) >= ago2; });
+  }
+  return logs;
+}
+
+function hhSetFilter(f){
+  _hhFilter = f;
+  ['day','week','month','all'].forEach(function(x){
+    var b = document.getElementById('slf-'+x);
+    if(b) b.className = 'sl-filter-btn' + (x===f?' active':'');
+  });
+  hhRenderStats();
+}
+
+function hhRenderStats(){
+  var logs = hhGetLogs();
+  var filtered = hhFilterLogs(logs, _hhFilter);
+
+  // Summary counts
+  document.getElementById('sl-today').textContent  = hhFilterLogs(logs,'day').length;
+  document.getElementById('sl-week').textContent   = hhFilterLogs(logs,'week').length;
+  document.getElementById('sl-month').textContent  = hhFilterLogs(logs,'month').length;
+  document.getElementById('sl-total').textContent  = logs.length;
+
+  // Chart
+  hhDrawChart(filtered);
+
+  // Table
+  var tbody = document.getElementById('sl-tbody');
+  tbody.innerHTML = '';
+  if(!filtered.length){
+    tbody.innerHTML = '<tr><td colspan="5" class="sl-empty">لا توجد أحداث في هذه الفترة</td></tr>';
+    return;
+  }
+  filtered.forEach(function(l){
+    var d = new Date(l.ts);
+    var ds = d.toLocaleDateString('ar-SA',{day:'2-digit',month:'2-digit',year:'numeric'})
+           + ' ' + d.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td style="font-size:11px;white-space:nowrap;">'+ds+'</td>'+
+      '<td><span style="background:rgba(0,174,239,0.15);padding:2px 8px;border-radius:6px;font-size:11px;">'+escHtml(l.label||'—')+'</span></td>'+
+      '<td style="font-size:12px;">'+escHtml(l.hospital||'—')+'</td>'+
+      '<td style="font-size:11px;color:rgba(255,255,255,0.6);">'+escHtml(l.type||'—')+'</td>'+
+      '<td><button class="sl-del-btn" onclick="hhDeleteLog(\'' + l.id + '\')">حذف</button></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function hhDeleteLog(id){
+  if(!confirm('حذف هذا الحدث؟')) return;
+  var logs = hhGetLogs().filter(function(l){ return l.id!==id; });
+  hhSaveLogs(logs);
+  hhRenderStats();
+}
+
+function hhClearLog(){
+  if(!confirm('مسح كامل السجل؟ لا يمكن التراجع.')) return;
+  localStorage.removeItem(HH_LOG_KEY);
+  hhRenderStats();
+}
+
+function hhExportLog(){
+  var logs = hhGetLogs();
+  var blob = new Blob([JSON.stringify(logs, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'hh-log-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+}
+
+function hhDrawChart(logs){
+  var canvas = document.getElementById('sl-chart');
+  if(!canvas) return;
+  var W = canvas.offsetWidth || 800;
+  canvas.width = W; canvas.height = 180;
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,180);
+
+  // Count by panel
+  var counts = {};
+  logs.forEach(function(l){ counts[l.panel] = (counts[l.panel]||0)+1; });
+  var keys = Object.keys(counts);
+  if(!keys.length){
+    ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.font='13px Cairo'; ctx.textAlign='center';
+    ctx.fillText('لا توجد بيانات للعرض', W/2, 90); return;
+  }
+
+  var max = Math.max.apply(null, keys.map(function(k){ return counts[k]; }));
+  var barW = Math.max(20, Math.floor((W - 40) / keys.length) - 10);
+  var chartH = 130;
+
+  keys.forEach(function(k, i){
+    var x = 20 + i * (barW + 10);
+    var h = Math.max(4, Math.floor((counts[k]/max) * chartH));
+    var y = chartH + 10 - h;
+    var color = HH_PANEL_COLORS[k] || '#00AEEF';
+
+    // Bar
+    ctx.fillStyle = color + '99';
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(x,y,barW,h,4);
+    else ctx.rect(x,y,barW,h);
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Count
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px Cairo'; ctx.textAlign = 'center';
+    ctx.fillText(counts[k], x+barW/2, y-4);
+
+    // Label (short)
+    var lbl = (HH_PANEL_LABELS[k]||k).slice(0,5);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '9px Cairo';
+    ctx.fillText(lbl, x+barW/2, chartH+24);
+  });
+}
+
+// Auto-render when panel becomes visible
+var _slOrigSwitch = window.switchCard;
+window.switchCard = function(card){
+  if(_slOrigSwitch) _slOrigSwitch(card);
+  if(card==='stats-log') setTimeout(hhRenderStats, 50);
+};
+
+window.hhGlobalSave = hhGlobalSave;
+window.hhSetFilter  = hhSetFilter;
+window.hhDeleteLog  = hhDeleteLog;
+window.hhClearLog   = hhClearLog;
+window.hhExportLog  = hhExportLog;
+window.hhRenderStats= hhRenderStats;
+</script>
+</div>
+
+
+</body>
+</html>
