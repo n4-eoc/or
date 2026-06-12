@@ -4921,7 +4921,8 @@ function switchCard(card){
     if(id === 'panel-readiness-check'){
       var period = gv('rck-f-period') || '....';
       var today = new Date();
-      var todayStr = today.getDate() + ' ' + AR_MONTHS[today.getMonth()] + ' ' + today.getFullYear();
+      var AR_DAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+      var todayStr = AR_DAYS[today.getDay()] + ' ' + today.getDate() + ' ' + AR_MONTHS[today.getMonth()] + ' ' + today.getFullYear();
       return 'تحقق تأهب مستشفيات التجمع للفترة ' + period + ' ' + todayStr;
     }
 
@@ -6631,7 +6632,8 @@ function rckUpdate(){
   var dd=document.getElementById('rck-disp-date');
   if(dd&&dateVal){
     var d=new Date(dateVal);
-    dd.textContent=d.toLocaleDateString('ar-SA',{year:'numeric',month:'long',day:'numeric'});
+    var dayName=d.toLocaleDateString('ar-SA',{weekday:'long'});
+    dd.textContent=dayName+' '+d.toLocaleDateString('ar-SA',{year:'numeric',month:'long',day:'numeric'});
   }
   rckSave();rckRender();
 }
