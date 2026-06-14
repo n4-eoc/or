@@ -4,6 +4,17 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>لوحة تحكم البطاقات — تجمع حائل الصحي</title>
+
+<!-- ══ PWA ══ -->
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#003D5C"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="حائل الصحي"/>
+<link rel="apple-touch-icon" href="logo-white.png"/>
+<meta name="description" content="لوحة تحكم البطاقات الطارئة لمركز إدارة الأزمات والكوارث الصحية بتجمع حائل الصحي"/>
+
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -795,6 +806,7 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
     <button class="btn-print" onclick="hhCopyImage(this)">📸 نسخ كصورة</button>
     <button class="btn-reset" onclick="resetActive()">🔄 إعادة تعيين</button>
     <button class="btn-settings no-print" onclick="openSettings()">⚙️ الإعدادات</button>
+    <button id="pwa-install-btn" class="btn-print no-print" onclick="hhPwaInstall()" style="display:none;background:rgba(0,174,239,0.25);border-color:rgba(0,174,239,0.6);">📲 تثبيت التطبيق</button>
   </div>
 </div>
 
@@ -1072,7 +1084,7 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
       <div class="hp-cat-btn" id="hp-cat-readiness" onclick="hpSelectCat('readiness')">
         <div class="hp-cat-icon" style="background:rgba(0,174,239,0.15);border:1.5px solid rgba(0,174,239,0.3);">🛡️</div>
         <div class="hp-cat-name">إدارة الاستعداد</div>
-        <div class="hp-cat-count">3 تقارير</div>
+        <div class="hp-cat-count">4 تقارير</div>
       </div>
 
       <!-- إدارة العمليات -->
@@ -1108,6 +1120,11 @@ button,.tab-btn,.home-card,.hp-cat-btn,.hp-sub-card,.check-item,
           <div class="hp-sub-card-icon" style="background:rgba(239,68,68,0.15);">⚡</div>
           <div class="hp-sub-card-name">فرضية مفاجئة</div>
           <div class="hp-sub-card-code">SUDDEN</div>
+        </div>
+        <div class="hp-sub-card" onclick="window.open('CEO On-Call Monthly Rota 2026.html','_blank')">
+          <div class="hp-sub-card-icon" style="background:rgba(0,120,168,0.15);">📅</div>
+          <div class="hp-sub-card-name">الرئيس التنفيذي المناوب</div>
+          <div class="hp-sub-card-code">ON-CALL ROTA</div>
         </div>
       </div>
     </div>
@@ -7332,18 +7349,48 @@ function hhCopyImage(btn){
   var s=document.createElement('script');
   s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
   s.onload=run;
-  s.onerror=function(){if(btn)btn.innerHTML=orig;alert('نسخ الصورة يتطلب اتصالاً بالإنترنت (لمرة واحدة)');};
+  s.onerror=function(){if(btn)btn.innerHTML=orig;alert('نسخ الصورة يتطلب اتصالاً بالإنترنت (لمرة واحدة فقط)');};
   document.head.appendChild(s);
 }
+</script>
 
-/* ════ ختم التوليد عند الطباعة ════ */
-window.addEventListener('beforeprint',function(){
-  var n=new Date();
-  var day=n.toLocaleDateString('ar-SA',{weekday:'long'});
-  var date=n.toLocaleDateString('ar-SA',{day:'numeric',month:'long',year:'numeric'});
-  var time=n.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('print-stamp').textContent='تم توليد التقرير: '+day+' '+date+' — '+time+' · لوحة تحكم تجمع حائل الصحي v2.0';
-});
+<!-- ════ PWA — Service Worker + تثبيت ════ -->
+<script>
+(function(){
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js')
+        .then(function(reg){ console.log('[PWA] تسجيل ناجح:', reg.scope); })
+        .catch(function(err){ console.warn('[PWA] فشل التسجيل:', err); });
+    });
+  }
+
+  var _deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    _deferredPrompt = e;
+    var btn = document.getElementById('pwa-install-btn');
+    if(btn) btn.style.display = '';
+  });
+
+  window.hhPwaInstall = function(){
+    if(!_deferredPrompt) return;
+    _deferredPrompt.prompt();
+    _deferredPrompt.userChoice.then(function(choice){
+      if(choice.outcome === 'accepted'){
+        var btn = document.getElementById('pwa-install-btn');
+        if(btn) btn.style.display = 'none';
+      }
+      _deferredPrompt = null;
+    });
+  };
+
+  window.addEventListener('appinstalled', function(){
+    var btn = document.getElementById('pwa-install-btn');
+    if(btn) btn.style.display = 'none';
+    _deferredPrompt = null;
+  });
+})();
 </script>
 
 </body>
