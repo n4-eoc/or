@@ -39,8 +39,21 @@ body{font-family:'Cairo',sans-serif;}
 @media print{
   .toolbar{display:none!important;}
   body{background:#fff;}
+  /* fixed height + hidden overflow = every .page is exactly ONE physical
+     sheet — this guarantees the PDF always has the same page count
+     (cover + 4 tables = 5 pages here / 4 pages in the quarterly file). */
   .page{width:277mm;height:190mm;margin:0;border-radius:0;
-    box-shadow:none;overflow:hidden;page-break-after:always;display:flex;flex-direction:column;}
+    box-shadow:none;overflow:hidden;page-break-after:always;break-after:page;
+    display:block;}
+  .page:last-child{page-break-after:auto;break-after:auto;}
+  table{width:100%;}
+  thead{display:table-header-group;}
+  /* tighten spacing a bit so the fixed 15-row tables always fit inside
+     the single-page budget without needing to spill onto an extra page */
+  table caption{padding:6px 10px!important;font-size:12px!important;}
+  thead th{padding:4px 6px!important;font-size:10px!important;}
+  tbody td{padding:3px 6px!important;font-size:10px!important;}
+  .legend{margin-top:4px!important;}
   @page{size:A4 landscape;margin:10mm;}
 }
 
@@ -214,7 +227,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
         <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى شراف</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقف العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
@@ -275,7 +288,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
         <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى شراف</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقف العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
@@ -339,7 +352,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
         <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى شراف</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقف العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
@@ -403,7 +416,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
         <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى شراف</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقف العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>

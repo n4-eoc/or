@@ -19,8 +19,10 @@ body{font-family:'Cairo',sans-serif;}
 .tb-title{color:#fff;font-size:13px;font-weight:900;flex:1;}
 .tb-period{background:rgba(255,255,255,.1);border:1px solid rgba(0,174,239,.5);
   color:#00AEEF;font-size:12px;font-weight:800;padding:4px 10px;border-radius:6px;
-  min-width:100px;text-align:center;}
+  min-width:100px;text-align:center;font-family:'Cairo',sans-serif;
+  appearance:none;-webkit-appearance:none;cursor:pointer;}
 .tb-period:focus{outline:2px solid #00AEEF;background:rgba(255,255,255,.15);}
+.tb-period option{background:#003D5C;color:#fff;}
 .tb-btn{padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;font-weight:800;}
 .tb-btn.edit{background:#00AEEF;color:#fff;}
 .tb-btn.edit.on{background:#ff9800;}
@@ -39,8 +41,21 @@ body{font-family:'Cairo',sans-serif;}
 @media print{
   .toolbar{display:none!important;}
   body{background:#fff;}
+  /* fixed height + hidden overflow = every .page is exactly ONE physical
+     sheet — this guarantees the PDF always has the same page count
+     (cover + 3 tables = 4 pages here / 5 pages in the monthly file). */
   .page{width:277mm;height:190mm;margin:0;border-radius:0;
-    box-shadow:none;overflow:hidden;page-break-after:always;display:flex;flex-direction:column;}
+    box-shadow:none;overflow:hidden;page-break-after:always;break-after:page;
+    display:block;}
+  .page:last-child{page-break-after:auto;break-after:auto;}
+  table{width:100%;}
+  thead{display:table-header-group;}
+  /* tighten spacing a bit so the fixed 15-row tables always fit inside
+     the single-page budget without needing to spill onto an extra page */
+  table caption{padding:6px 10px!important;font-size:12px!important;}
+  thead th{padding:4px 6px!important;font-size:10px!important;}
+  tbody td{padding:3px 6px!important;font-size:10px!important;}
+  .legend{margin-top:4px!important;}
   @page{size:A4 landscape;margin:10mm;}
 }
 
@@ -150,7 +165,12 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
 <div class="toolbar">
   <div class="tb-title">📊 المؤشرات الربع سنوية — مركز إدارة الأزمات والكوارث الصحية</div>
   <span class="tb-hint">الربع:</span>
-  <div class="tb-period" id="tb-period" contenteditable="true">الربع الأول 2026</div>
+  <select class="tb-period" id="tb-period">
+    <option value="الربع الأول 2026">الربع الأول 2026</option>
+    <option value="الربع الثاني 2026">الربع الثاني 2026</option>
+    <option value="الربع الثالث 2026">الربع الثالث 2026</option>
+    <option value="الربع الرابع 2026">الربع الرابع 2026</option>
+  </select>
   <button class="tb-btn edit" id="editBtn" onclick="toggleEdit()">✏️ تفعيل التحرير</button>
   <button class="tb-btn save" onclick="saveData()">💾 حفظ</button>
   <button class="tb-btn print" onclick="window.print()">🖨️ طباعة</button>
@@ -206,7 +226,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
         <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى شراف</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقف العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
@@ -247,7 +267,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
   </div>
   <div class="tbl-area">
     <table id="tbl-hypothesis">
-      <caption>مؤشر تنفيذ الفرضيات للربع الأول</caption>
+      <caption>مؤشر تنفيذ الفرضيات <span class="fp">للربع الأول</span></caption>
       <thead>
         <tr>
           <th rowspan="2" style="width:28px;">م</th>
@@ -268,7 +288,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
         <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة للصحة النفسية</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى شراف</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقف العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
         <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">0</td><td class="num" contenteditable="false">0</td><td class="pct g">100</td></tr>
         <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">1</td><td class="num" contenteditable="false">1</td><td class="pct g">100</td></tr>
@@ -333,7 +353,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
         <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
         <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى شراف</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
         <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقف العام</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
         <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
         <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
         <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">1620</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td><td class="num" contenteditable="false">1620</td><td class="pct g">100</td></tr>
@@ -375,13 +395,20 @@ function toggleEdit(){
   }
 }
 
+function quarterPhrase(val){
+  // "الربع الأول 2026" -> "للربع الأول"
+  var q = val.replace(/\s*\d{4}\s*$/,'');
+  return q.replace(/^ال/, 'لل');
+}
+
 function syncPeriod(){
-  var val = document.getElementById('tb-period').innerText;
+  var val = document.getElementById('tb-period').value;
   document.getElementById('cover-period').innerText = val;
   ['hdr-period-1','hdr-period-2','hdr-period-3'].forEach(function(id){
     document.getElementById(id).innerText = val;
   });
-  document.querySelectorAll('.fp').forEach(function(el){ el.innerText = val; });
+  var phrase = quarterPhrase(val);
+  document.querySelectorAll('.fp').forEach(function(el){ el.innerText = phrase; });
 }
 
 function getPct(c,t){
@@ -439,7 +466,7 @@ function calcPcts(){
 
 function saveData(){
   var data={};
-  data['period']=document.getElementById('tb-period').innerText;
+  data['period']=document.getElementById('tb-period').value;
   ['date-1','date-2','date-3'].forEach(function(id){ data[id]=document.getElementById(id).innerText; });
   data['cover-title']=document.getElementById('cover-title').innerText;
   // tables
@@ -468,9 +495,11 @@ function loadData(){
   var saved=localStorage.getItem(STORE_KEY); if(!saved) return;
   var data=JSON.parse(saved);
   if(data['period']){
-    document.getElementById('tb-period').innerText=data['period'];
+    document.getElementById('tb-period').value=data['period'];
     document.getElementById('cover-period').innerText=data['period'];
     ['hdr-period-1','hdr-period-2','hdr-period-3'].forEach(function(id){ document.getElementById(id).innerText=data['period']; });
+    var phrase=quarterPhrase(data['period']);
+    document.querySelectorAll('.fp').forEach(function(el){ el.innerText=phrase; });
   }
   ['date-1','date-2','date-3'].forEach(function(id){ if(data[id]) document.getElementById(id).innerText=data[id]; });
   if(data['cover-title']) document.getElementById('cover-title').innerText=data['cover-title'];
@@ -499,7 +528,7 @@ function loadData(){
 
 window.addEventListener('DOMContentLoaded', function(){
   loadData();
-  document.getElementById('tb-period').addEventListener('input', syncPeriod);
+  document.getElementById('tb-period').addEventListener('change', syncPeriod);
 });
 </script>
 </body>
