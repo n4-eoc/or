@@ -220,7 +220,7 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
   </div>
   <div class="basis-note">
     <span>الأساس الشهري: 24 ساعة/يوم × 30 يوم = <b id="base-hours">720</b> ساعة تقديم خدمة أساسية</span>
-    <span>المحدّثة = الأساس − عدد ساعات التوقف عن العمل</span>
+    <span>النسبة % = (عدد ساعات التوقف عن العمل ÷ إجمالي ساعات تقديم الخدمة) × 100</span>
   </div>
   <div class="tbl-area">
     <table id="tbl-qfr6">
@@ -231,32 +231,32 @@ tr.total-row td{background:linear-gradient(135deg,#003D5C,#005B82)!important;col
           <th>اسم المستشفى</th>
           <th style="width:150px;">عدد ساعات التوقف عن العمل</th>
           <th style="width:170px;">إجمالي ساعات تقديم الخدمة المتاحة (المحدثة)</th>
-          <th style="width:70px;">النسبة %</th>
+          <th style="width:70px;">نسبة التوقف %</th>
         </tr>
       </thead>
       <tbody id="body-qfr6">
-        <tr><td>1</td><td class="hosp" contenteditable="false">مستشفى الملك سلمان التخصصي</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>2</td><td class="hosp" contenteditable="false">مستشفى الملك خالد</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>3</td><td class="hosp" contenteditable="false">مستشفى حائل العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>4</td><td class="hosp" contenteditable="false">مستشفى الولادة والأطفال</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى شراف للرعاية العاجلة</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>12</td><td class="hosp" contenteditable="false">مستشفى الشملي العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>13</td><td class="hosp" contenteditable="false">مستشفى السليمي العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>14</td><td class="hosp" contenteditable="false">مستشفى الحائط العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr><td>15</td><td class="hosp" contenteditable="false">مستشفى سميراء العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">100</td></tr>
-        <tr class="total-row"><td colspan="2">الإجمالي</td><td id="tot-qfr-1">0</td><td id="tot-qfr-2">10800</td><td id="tot-qfr-3">100</td></tr>
+        <tr><td>1</td><td class="hosp" contenteditable="false">مستشفى الملك سلمان التخصصي</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>2</td><td class="hosp" contenteditable="false">مستشفى الملك خالد</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>3</td><td class="hosp" contenteditable="false">مستشفى حائل العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>4</td><td class="hosp" contenteditable="false">مستشفى الولادة والأطفال</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>5</td><td class="hosp" contenteditable="false">مجمع إرادة والصحة النفسية</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>6</td><td class="hosp" contenteditable="false">مستشفى أجا للرعاية المديدة</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>7</td><td class="hosp" contenteditable="false">مستشفى شراف للرعاية العاجلة</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>8</td><td class="hosp" contenteditable="false">مستشفى موقق العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>9</td><td class="hosp" contenteditable="false">مستشفى بقعاء العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>10</td><td class="hosp" contenteditable="false">مستشفى الغزالة العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>11</td><td class="hosp" contenteditable="false">مستشفى الشنان العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>12</td><td class="hosp" contenteditable="false">مستشفى الشملي العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>13</td><td class="hosp" contenteditable="false">مستشفى السليمي العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>14</td><td class="hosp" contenteditable="false">مستشفى الحائط العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr><td>15</td><td class="hosp" contenteditable="false">مستشفى سميراء العام</td><td class="num" contenteditable="false">0</td><td class="base">720</td><td class="pct g">0</td></tr>
+        <tr class="total-row"><td colspan="2">الإجمالي</td><td id="tot-qfr-1">0</td><td id="tot-qfr-2">10800</td><td id="tot-qfr-3">0</td></tr>
       </tbody>
     </table>
     <div class="legend">
-      <div class="leg-item"><div class="leg-box" style="background:#28a745;">✓</div> &gt;=90%</div>
-      <div class="leg-item"><div class="leg-box" style="background:#ffc107;color:#333;">!</div> &lt;90%</div>
-      <div class="leg-item"><div class="leg-box" style="background:#dc3545;">✗</div> &lt;50%</div>
+      <div class="leg-item"><div class="leg-box" style="background:#28a745;">✓</div> 0-25%</div>
+      <div class="leg-item"><div class="leg-box" style="background:#ffc107;color:#333;">!</div> 26-50%</div>
+      <div class="leg-item"><div class="leg-box" style="background:#dc3545;">✗</div> 51-100%</div>
     </div>
   </div>
   <div class="doc-footer">
@@ -291,14 +291,14 @@ function syncPeriod(){
   document.getElementById('hdr-period-1').innerText = val;
 }
 
-function pctClass(p){ return p>=90?'g': p>=50?'y':'r'; }
+function pctClass(p){ return p<=25?'g': p<=50?'y':'r'; }
 
 function calcRow(tr){
   if(!tr || tr.classList.contains('total-row')) return;
   var stop = parseFloat(tr.querySelector('.num').innerText) || 0;
   if(stop > BASE_HOURS) stop = BASE_HOURS;
   var updated = BASE_HOURS - stop;
-  var pct = Math.round((updated / BASE_HOURS) * 100);
+  var pct = Math.round((stop / BASE_HOURS) * 100);
   var baseTd = tr.querySelector('.base');
   var pctTd = tr.querySelector('.pct');
   baseTd.innerText = updated;
@@ -316,7 +316,7 @@ function calcTotals(){
     n++;
   });
   var overallBase = BASE_HOURS * n;
-  var overallPct = overallBase ? Math.round((sUpd/overallBase)*100) : 100;
+  var overallPct = overallBase ? Math.round((sStop/overallBase)*100) : 0;
   document.getElementById('tot-qfr-1').innerText = sStop;
   document.getElementById('tot-qfr-2').innerText = sUpd;
   document.getElementById('tot-qfr-3').innerText = overallPct;
@@ -338,4 +338,40 @@ function saveData(){
   if(body){
     body.querySelectorAll('tr:not(.total-row)').forEach(function(tr,ri){
       var h=tr.querySelector('.hosp'), stop=tr.querySelector('.num');
-    
+      if(h) data['h-'+ri]=h.innerText;
+      if(stop) data['s-'+ri]=stop.innerText;
+    });
+  }
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  alert('✅ تم الحفظ بنجاح');
+}
+
+function loadData(){
+  var saved=localStorage.getItem(STORE_KEY); if(!saved){ calcAll(); return; }
+  var data=JSON.parse(saved);
+  if(data['period']){
+    document.getElementById('tb-period').value=data['period'];
+    document.getElementById('cover-period').innerText=data['period'];
+    document.getElementById('hdr-period-1').innerText=data['period'];
+  }
+  if(data['date-1']) document.getElementById('date-1').innerText=data['date-1'];
+  if(data['cover-title']) document.getElementById('cover-title').innerText=data['cover-title'];
+  var body=document.getElementById('body-qfr6');
+  if(body){
+    body.querySelectorAll('tr:not(.total-row)').forEach(function(tr,ri){
+      var h=tr.querySelector('.hosp'), stop=tr.querySelector('.num');
+      if(h&&data['h-'+ri]) h.innerText=data['h-'+ri];
+      if(stop&&data['s-'+ri]) stop.innerText=data['s-'+ri];
+    });
+  }
+  calcAll();
+}
+
+window.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('base-hours').innerText = BASE_HOURS;
+  loadData();
+  document.getElementById('tb-period').addEventListener('change', syncPeriod);
+});
+</script>
+</body>
+</html>
